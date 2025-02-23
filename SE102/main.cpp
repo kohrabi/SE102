@@ -24,7 +24,6 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 
 WARNING: This one file example has a hell LOT of *sinful* programming practices
 ================================================================ */
-
 #include <windows.h>
 
 #include <d3d10.h>
@@ -60,31 +59,41 @@ ID3D10RenderTargetView* pRenderTargetView = NULL;
 int BackBufferWidth = 0;
 int BackBufferHeight = 0;
 
-#define TEXTURE_PATH_BRICK L"brick.png"
-#define BRICK_START_X 8.0f
-#define BRICK_START_Y 200.0f
+#define TEXTURE_PATH_POOL L"pool.png"
+#define POOL_START_X WINDOW_WIDTH / 2.0f
+#define POOL_START_Y WINDOW_HEIGHT / 2.0f
 
-#define BRICK_START_VX 0.2f
+#define POOL_START_VEL 0.2f
 
-#define BRICK_WIDTH 16.0f
-#define BRICK_HEIGHT 16.0f
+#define POOL_WIDTH 90.0f / 2.0f
+#define POOL_HEIGHT 84.0f / 2.0f
+#define MAX_POOL 10
 
-
-ID3D10Texture2D* texBrick = NULL;				// Texture object to store brick image
+ID3D10Texture2D* texPool = NULL;				// Texture object to store brick image
 ID3DX10Sprite* spriteObject = NULL;				// Sprite handling object 
 
-D3DX10_SPRITE spriteBrick;
+D3DX10_SPRITE spritePool;
 
-float brick_x = BRICK_START_X;
-float brick_vx = BRICK_START_VX;
-float brick_y = BRICK_START_Y;
+float pool_x[MAX_POOL] = { POOL_START_X };
+float pool_y[MAX_POOL] = { POOL_START_Y };
+float pool_vx[MAX_POOL] = { 0.0 };
+float pool_vy[MAX_POOL] = { 0.0 };
+bool canFire = true;
 
+
+bool keyState[256] = { false };
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
+		break;
+	case WM_KEYUP:
+		keyState[wParam] = false;
+		break;
+	case WM_KEYDOWN:
+		keyState[wParam] = true;
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -254,7 +263,21 @@ void InitDirectX(HWND hWnd)
 		10);
 	hr = spriteObject->SetProjectionTransform(&matProjection);
 
+	ID3D10BlendState* g_pBlendState = NULL;
+	D3D10_BLEND_DESC BlendState;
+	ZeroMemory(&BlendState, sizeof(D3D10_BLEND_DESC));
 
+	BlendState.BlendEnable[0] = TRUE;
+	BlendState.SrcBlend = D3D10_BLEND_SRC_ALPHA;
+	BlendState.DestBlend = D3D10_BLEND_INV_SRC_ALPHA;
+	BlendState.BlendOp = D3D10_BLEND_OP_ADD;
+	BlendState.SrcBlendAlpha = D3D10_BLEND_ZERO;
+	BlendState.DestBlendAlpha = D3D10_BLEND_ZERO;
+	BlendState.BlendOpAlpha = D3D10_BLEND_OP_ADD;
+	BlendState.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
+
+	pD3DDevice->CreateBlendState(&BlendState, &g_pBlendState);
+	pD3DDevice->OMSetBlendState(g_pBlendState, 0, 0xffffffff);
 
 
 	DebugOut((wchar_t*)L"[INFO] InitDirectX has been successful\n");
@@ -262,6 +285,7 @@ void InitDirectX(HWND hWnd)
 	return;
 }
 
+float random_float(float min, float max) { return ((float)rand() / RAND_MAX) * (max - min) + min; }
 /*
 	Load game resources. In this example, we only load a brick image
 */
@@ -271,7 +295,7 @@ void LoadResources()
 
 	// Loads the texture into a temporary ID3D10Resource object
 	HRESULT hr = D3DX10CreateTextureFromFile(pD3DDevice,
-		TEXTURE_PATH_BRICK,
+		TEXTURE_PATH_POOL,
 		NULL,
 		NULL,
 		&pD3D10Resource,
@@ -280,22 +304,22 @@ void LoadResources()
 	// Make sure the texture was loaded successfully
 	if (FAILED(hr))
 	{
-		DebugOut((wchar_t*)L"[ERROR] Failed to load texture file: %s \n", TEXTURE_PATH_BRICK);
+		DebugOut((wchar_t*)L"[ERROR] Failed to load texture file: %s \n", TEXTURE_PATH_POOL);
 		return;
 	}
 
 	// Translates the ID3D10Resource object into a ID3D10Texture2D object
-	pD3D10Resource->QueryInterface(__uuidof(ID3D10Texture2D), (LPVOID*)&texBrick);
+	pD3D10Resource->QueryInterface(__uuidof(ID3D10Texture2D), (LPVOID*)&texPool);
 	pD3D10Resource->Release();
 
-	if (!texBrick) {
+	if (!texPool) {
 		DebugOut((wchar_t*)L"[ERROR] Failed to convert from ID3D10Resource to ID3D10Texture2D \n");
 		return;
 	}
 
 	// Get the texture details
 	D3D10_TEXTURE2D_DESC desc;
-	texBrick->GetDesc(&desc);
+	texPool->GetDesc(&desc);
 
 	// Create a shader resource view of the texture
 	D3D10_SHADER_RESOURCE_VIEW_DESC SRVDesc;
@@ -311,74 +335,90 @@ void LoadResources()
 
 	ID3D10ShaderResourceView* gSpriteTextureRV = NULL;
 
-	pD3DDevice->CreateShaderResourceView(texBrick, &SRVDesc, &gSpriteTextureRV);
+	pD3DDevice->CreateShaderResourceView(texPool, &SRVDesc, &gSpriteTextureRV);
 
 	// Set the sprite�s shader resource view
-	spriteBrick.pTexture = gSpriteTextureRV;
+	spritePool.pTexture = gSpriteTextureRV;
 
 	// top-left location in U,V coords
-	spriteBrick.TexCoord.x = 0;
-	spriteBrick.TexCoord.y = 0;
+	spritePool.TexCoord.x = 0;
+	spritePool.TexCoord.y = 0;
 
 	// Determine the texture size in U,V coords
-	spriteBrick.TexSize.x = 1.0f;
-	spriteBrick.TexSize.y = 1.0f;
+	spritePool.TexSize.x = 1.0f;
+	spritePool.TexSize.y = 1.0f;
 
 	// Set the texture index. Single textures will use 0
-	spriteBrick.TextureIndex = 0;
+	spritePool.TextureIndex = 0;
 
 	// The color to apply to this sprite, full color applies white.
-	spriteBrick.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	spritePool.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
+	srand(time(NULL));
+	for (int i = 0; i < MAX_POOL; i++) {
+		pool_x[i] = BackBufferWidth / 2.0f + (float(i) - MAX_POOL / 2.0f - 1) * POOL_WIDTH;
+		pool_y[i] = BackBufferHeight / 2.0f + (float(i) - MAX_POOL / 2.0f - 1) * POOL_HEIGHT;
+		pool_vx[i] = POOL_START_VEL * random_float(-0.5f, 1.0f);
+		pool_vy[i] = POOL_START_VEL * random_float(-0.5f, 1.0f);
+	}
 
-	DebugOut((wchar_t*)L"[INFO] Texture loaded Ok: %s \n", TEXTURE_PATH_BRICK);
+	DebugOut((wchar_t*)L"[INFO] Texture loaded Ok: %s \n", TEXTURE_PATH_POOL);
 }
-
 /*
 	Update world status for this frame
 	dt: time period between beginning of last frame and beginning of this frame
 
 	IMPORTANT: no render-related code should be used inside this function.
 */
-float brick_vy = 0.1;
 void Update(DWORD dt)
 {
 	//Uncomment the whole function to see the brick moves and bounces back when hitting left and right edges
 	//brick_x++;
 
-	brick_x += brick_vx * dt;
-	brick_y += brick_vy * dt;
+	for (int i = 0; i < MAX_POOL; i++) {
 
-	// NOTE: BackBufferWidth is indeed related to rendering!!
-	float right_edge = BackBufferWidth - BRICK_WIDTH;
-	float bottom_edge = BackBufferHeight - BRICK_HEIGHT;
+		//if (keyState[VK_UP] && canFire) {
+		//	pool_x = POOL_START_X;
+		//	pool_y = POOL_START_Y;
+		//	pool_vy = POOL_START_VEL;
+		//	canFire = false;
+		//}
 
-	if (brick_x < 0 || brick_x > right_edge) {
+		pool_x[i] += pool_vx[i] * dt;
+		pool_y[i] += pool_vy[i] * dt;
 
-		brick_vx = -brick_vx;
+		// NOTE: BackBufferWidth is indeed related to rendering!!
+		float right_edge = BackBufferWidth - POOL_WIDTH;
+		float bottom_edge = BackBufferHeight - POOL_HEIGHT;
 
-		//Why not having these logics would make the brick disappear sometimes?  
-		if (brick_x < 0)
-		{
-			brick_x = 0;
+
+		if (pool_x[i] < 0 || pool_x[i] > right_edge) {
+
+			pool_vx[i] = -pool_vx[i];
+
+			////Why not having these logics would make the brick disappear sometimes?  
+			if (pool_x[i] < 0)
+			{
+				pool_x[i] = 0;
+			}
+			else if (pool_x[i] > right_edge )
+			{
+				pool_x[i] = right_edge;
+			}
 		}
-		else if (brick_x > right_edge )
-		{
-			brick_x = right_edge;
-		}
-	}
-	if (brick_y < 0 || brick_y > bottom_edge) {
+		if (pool_y[i] < 0 || pool_y[i] > bottom_edge) {
 
-		brick_vy = -brick_vy;
+			pool_vy[i] = -pool_vy[i];
 
-		//Why not having these logics would make the brick disappear sometimes?  
-		if (brick_y < 0)
-		{
-			brick_y = 0;
-		}
-		else if (brick_y > bottom_edge)
-		{
-			brick_y = bottom_edge;
+			//Why not having these logics would make the brick disappear sometimes?  
+			if (pool_y[i] < 0)
+			{
+				pool_y[i] = 0;
+			}
+			else if (pool_y[i] > bottom_edge)
+			{
+				pool_y[i] = bottom_edge;
+			}
 		}
 	}
 }
@@ -397,20 +437,23 @@ void Render()
 		// start drawing the sprites
 		spriteObject->Begin(D3DX10_SPRITE_SORT_TEXTURE);
 
-		// The translation matrix to be created
-		D3DXMATRIX matTranslation;
-		// Create the translation matrix
-		D3DXMatrixTranslation(&matTranslation, brick_x, (BackBufferHeight - brick_y), 0.1f);
+		for (int i = 0; i < MAX_POOL; i++) {
 
-		// Scale the sprite to its correct width and height
-		D3DXMATRIX matScaling;
-		D3DXMatrixScaling(&matScaling, BRICK_WIDTH, BRICK_HEIGHT, 1.0f);
+			// The translation matrix to be created
+			D3DXMATRIX matTranslation;
+			// Create the translation matrix
+			D3DXMatrixTranslation(&matTranslation, pool_x[i], pool_y[i], 0.1f);
 
-		// Setting the sprite�s position and size
-		spriteBrick.matWorld = (matScaling * matTranslation);
+			// Scale the sprite to its correct width and height
+			D3DXMATRIX matScaling;
+			D3DXMatrixScaling(&matScaling, POOL_WIDTH, POOL_HEIGHT, 1.0f);
 
-		spriteObject->DrawSpritesImmediate(&spriteBrick, 1, 0, 0);
+			// Setting the sprite position and size
+			spritePool.matWorld = (matScaling * matTranslation);
 
+			spriteObject->DrawSpritesImmediate(&spritePool, 1, 0, 0);
+
+		}
 		// Finish up and send the sprites to the hardware
 		spriteObject->End();
 
@@ -477,6 +520,7 @@ int Run()
 	int done = 0;
 	ULONGLONG frameStart = GetTickCount64();
 	ULONGLONG tickPerFrame = 1000 / MAX_FRAME_RATE;
+	OutputDebugStringW(L"My output string.");
 
 	while (!done)
 	{
@@ -543,6 +587,11 @@ int WINAPI WinMain(
 {
 	hWnd = CreateGameWindow(hInstance, nCmdShow, WINDOW_WIDTH, WINDOW_HEIGHT);
 	if (hWnd == 0) return 0;
+
+	//AllocConsole();
+	//freopen_s("CONIN$", "r", stdin);
+	//freopen_s("CONOUT$", "w", stdout);
+	//freopen_s("CONOUT$", "w", stderr);
 
 	InitDirectX(hWnd);
 
