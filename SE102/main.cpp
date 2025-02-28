@@ -67,7 +67,7 @@ int BackBufferHeight = 0;
 
 #define POOL_WIDTH 84.0f / 3.0f
 #define POOL_HEIGHT POOL_WIDTH
-#define MAX_POOL 10
+#define MAX_POOL 15
 #define POOL_FRICTION 0.98f
 
 ID3D10Texture2D* texPool = NULL;				// Texture object to store brick image
@@ -456,10 +456,10 @@ void Update(DWORD dt)
 				DebugOut(L"%d %f \n", i, leng);
 				pool_vx[j] += leng * direction_x;
 				pool_vy[j] += leng * direction_y;
-				pool_vx[i] *= 0.8f;
-				pool_vy[i] *= 0.8f;
-				pool_vx[j] *= 0.8f;
-				pool_vy[j] *= 0.8f;
+				/*pool_vx[i] *= 0.85f;
+				pool_vy[i] *= 0.85f;*/
+				pool_vx[j] *= 0.85f;
+				pool_vy[j] *= 0.85f;
 			}
 		}
 	}
