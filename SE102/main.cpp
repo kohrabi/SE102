@@ -65,9 +65,10 @@ int BackBufferHeight = 0;
 
 #define POOL_START_VEL 0.2f
 
-#define POOL_WIDTH 90.0f / 2.0f
-#define POOL_HEIGHT 84.0f / 2.0f
+#define POOL_WIDTH 84.0f / 3.0f
+#define POOL_HEIGHT POOL_WIDTH
 #define MAX_POOL 10
+#define POOL_FRICTION 0.98f
 
 ID3D10Texture2D* texPool = NULL;				// Texture object to store brick image
 ID3DX10Sprite* spriteObject = NULL;				// Sprite handling object 
@@ -82,6 +83,15 @@ bool canFire = true;
 
 
 bool keyState[256] = { false };
+bool leftMouseDown = false;
+
+POINT GetMousePosition(HWND hwnd)
+{
+	POINT mousePos;
+	GetCursorPos(&mousePos);          // Get mouse position in screen coordinates
+	ScreenToClient(hwnd, &mousePos);  // Convert to client area coordinates
+	return mousePos;
+}
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -94,6 +104,12 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_KEYDOWN:
 		keyState[wParam] = true;
+		break;
+	case WM_LBUTTONDOWN:
+		leftMouseDown = true;
+		break;
+	case WM_LBUTTONUP:
+		leftMouseDown = false;
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -370,10 +386,83 @@ void LoadResources()
 
 	IMPORTANT: no render-related code should be used inside this function.
 */
+bool choosing = false;
+float hitPool_x = -1;
+float hitPool_y = -1;
+int hitPool = -1;
+
+bool checkCollide(float x1, float y2, float x, float y, float radius) {
+	return (x - x1) * (x - x1) + (y - y2) * (y - y2) <= radius * radius;
+}
+
+
+float pointLength(float x, float y) {
+	return sqrt(x * x + y * y);
+}
+
+void normalizePoint(float& x, float& y) {
+	float distance = pointLength(x, y);
+	if (distance <= 0.001) return;
+	x /= distance;
+	y /= distance;
+}
+
 void Update(DWORD dt)
 {
 	//Uncomment the whole function to see the brick moves and bounces back when hitting left and right edges
 	//brick_x++;
+
+	POINT mousePos = GetMousePosition(hWnd);
+	mousePos.y = BackBufferHeight - mousePos.y;
+	if (leftMouseDown) {
+		if (!choosing) {
+			choosing = true;
+			for (int i = 0; i < MAX_POOL; i++) {
+				if (checkCollide(mousePos.x, mousePos.y, pool_x[i], pool_y[i], POOL_WIDTH)) {
+					hitPool_x = pool_x[i];
+					hitPool_y = pool_y[i];
+					hitPool = i;
+					break;
+				}
+			}
+		}
+	}
+	else { // Left mouse up
+		if (hitPool != -1) {
+			pool_vx[hitPool] = hitPool_x - mousePos.x;
+			pool_vy[hitPool] = hitPool_y - mousePos.y;
+			float distance = pointLength(pool_vx[hitPool], pool_vy[hitPool]);
+			pool_vx[hitPool] /= 100;
+			pool_vy[hitPool] /= 100;
+			pool_vx[hitPool] *= 1;
+			pool_vy[hitPool] *= 1;
+		}
+		hitPool = -1;
+		hitPool_x = -1;
+		hitPool_y = -1;
+		choosing = false;
+	}
+	
+	for (int i = 0; i < MAX_POOL; i++) {
+		for (int j = 0; j < MAX_POOL; j++) {
+			if (i == j) continue;
+			if (checkCollide(pool_x[i], pool_y[i], pool_x[j], pool_y[j], POOL_WIDTH)) {
+
+				float direction_x = 1.f * (pool_x[j] - pool_x[i]);
+				float direction_y = 1.0f * (pool_y[j] - pool_y[i]);
+				normalizePoint(direction_x, direction_y);
+				float leng = pointLength(pool_vx[i], pool_vy[i]);
+				DebugOut(L"Collide: %d %d \n", i, j);
+				DebugOut(L"%d %f \n", i, leng);
+				pool_vx[j] += leng * direction_x;
+				pool_vy[j] += leng * direction_y;
+				pool_vx[i] *= 0.8f;
+				pool_vy[i] *= 0.8f;
+				pool_vx[j] *= 0.8f;
+				pool_vy[j] *= 0.8f;
+			}
+		}
+	}
 
 	for (int i = 0; i < MAX_POOL; i++) {
 
@@ -383,9 +472,11 @@ void Update(DWORD dt)
 		//	pool_vy = POOL_START_VEL;
 		//	canFire = false;
 		//}
-
+		//DebugOut(L"MousePosition: %d %d\n", mousePos.x, mousePos.y);
 		pool_x[i] += pool_vx[i] * dt;
 		pool_y[i] += pool_vy[i] * dt;
+		pool_vx[i] *= POOL_FRICTION;
+		pool_vy[i] *= POOL_FRICTION;
 
 		// NOTE: BackBufferWidth is indeed related to rendering!!
 		float right_edge = BackBufferWidth - POOL_WIDTH;
@@ -446,7 +537,10 @@ void Render()
 
 			// Scale the sprite to its correct width and height
 			D3DXMATRIX matScaling;
-			D3DXMatrixScaling(&matScaling, POOL_WIDTH, POOL_HEIGHT, 1.0f);
+			float multiplier = 1.0f;
+			if (i == hitPool)
+				multiplier = 1.2f;
+			D3DXMatrixScaling(&matScaling, POOL_WIDTH * multiplier, POOL_HEIGHT * multiplier, 1.0f);
 
 			// Setting the sprite position and size
 			spritePool.matWorld = (matScaling * matTranslation);
