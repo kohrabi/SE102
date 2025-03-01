@@ -18,6 +18,15 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -32,5 +41,37 @@
     <Image Include="pool.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="mario.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="mario_full.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="misc.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="enemy-big.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="ship.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Bullet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

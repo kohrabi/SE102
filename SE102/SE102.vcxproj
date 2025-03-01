@@ -129,6 +129,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="debug.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +140,21 @@
   <ItemGroup>
     <Image Include="brick.ico" />
     <Image Include="brick.png" />
+    <Image Include="Bullet.png" />
+    <Image Include="enemy-big.png" />
+    <Image Include="mario.png" />
+    <Image Include="mario_full.png" />
+    <Image Include="misc.png" />
     <Image Include="pool.png">
       <DeploymentContent>false</DeploymentContent>
     </Image>
+    <Image Include="ship.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="debug.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
