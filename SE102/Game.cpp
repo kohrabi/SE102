@@ -16,6 +16,7 @@ void CGame::Init(HWND hWnd)
 
 	backBufferWidth = r.right + 1;
 	backBufferHeight = r.bottom + 1;
+	DebugOut(L"%d %d \n", r.right, r.bottom);
 
 	// Create & clear the DXGI_SWAP_CHAIN_DESC structure
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
@@ -92,6 +93,7 @@ void CGame::Init(HWND hWnd)
 		return;
 	}
 
+
 	D3DXMATRIX matProjection;
 
 	// Create the projection matrix using the values in the viewport
@@ -119,16 +121,75 @@ void CGame::Init(HWND hWnd)
 	StateDesc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
 	pD3DDevice->CreateBlendState(&StateDesc, &this->pBlendStateAlpha);
 
+
 	DebugOut((wchar_t*)L"[INFO] InitDirectX has been successful\n");
 
 	return;
+}
+
+void CGame::WindowResized(UINT width, UINT height)
+{
+	if (pSwapChain)
+	{
+		pD3DDevice->OMSetRenderTargets(0, NULL, NULL);
+
+		backBufferWidth = width;
+		backBufferHeight = height;
+
+		// Release all outstanding references to the swap chain's buffers.
+		pRenderTargetView->Release();
+
+		HRESULT hr;
+		// Preserve the existing buffer count and format.
+		// Automatically choose the width and height to match the client rect for HWNDs.
+		hr = pSwapChain->ResizeBuffers(1, backBufferWidth, backBufferHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+		if (hr != S_OK) {
+			DebugOut((wchar_t*)L"[ERROR] pSwapChain->ResizeBuffers has failed %s %d", _W(__FILE__), __LINE__);
+			DebugBreak();
+		}
+		// Perform error handling here!
+
+		// Get the back buffer from the swapchain
+		ID3D10Texture2D* pBackBuffer = nullptr;
+		hr = pSwapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (LPVOID*)&pBackBuffer);
+		if (hr != S_OK)
+		{
+			DebugOut((wchar_t*)L"[ERROR] pSwapChain->GetBuffer has failed %s %d", _W(__FILE__), __LINE__);
+			DebugBreak();
+		}
+
+		// create the render target view
+		hr = pD3DDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
+
+		pBackBuffer->Release();
+		if (hr != S_OK)
+		{
+			DebugOut((wchar_t*)L"[ERROR] CreateRenderTargetView has failed %s %d", _W(__FILE__), __LINE__);
+			DebugBreak();
+		}
+
+		pD3DDevice->OMSetRenderTargets(1, &pRenderTargetView, NULL);
+
+		// create and set the viewport
+		D3D10_VIEWPORT viewPort;
+		viewPort.Width = backBufferWidth;
+		viewPort.Height = backBufferHeight;
+		viewPort.MinDepth = 0.0f;
+		viewPort.MaxDepth = 1.0f;
+		viewPort.TopLeftX = 0;
+		viewPort.TopLeftY = 0;
+		pD3DDevice->RSSetViewports(1, &viewPort);
+
+		DebugOut(L"Viewport set to width=%d, height=%d, TopLeftX=%f, TopLeftY=%f\n",
+			viewPort.Width, viewPort.Height, viewPort.TopLeftX, viewPort.TopLeftY);
+	}
 }
 
 /*
 	Draw the whole texture or part of texture onto screen
 	NOTE: This function is OBSOLTED in this example. Use Sprite::Render instead 
 */
-void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect)
+void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect)
 {
 	if (tex == NULL) return; 
 
@@ -181,12 +242,16 @@ void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect)
 	// Create the translation matrix
 	D3DXMatrixTranslation(&matTranslation, x, (backBufferHeight - y), 0.1f);
 
+	D3DXMATRIX matRotation;
+	//D3DXMatrixIdentity(&matRotation);
+	D3DXMatrixRotationZ(&matRotation, rotation);
+
 	// Scale the sprite to its correct width and height because by default, DirectX draws it with width = height = 1.0f 
 	D3DXMATRIX matScaling;
-	D3DXMatrixScaling(&matScaling, (FLOAT)spriteWidth, (FLOAT)spriteHeight , 1.0f);
+	D3DXMatrixScaling(&matScaling, (FLOAT)spriteWidth, (FLOAT)spriteHeight, 1.0f);
 
 	// Setting the sprite’s position and size
-	sprite.matWorld = (matScaling * matTranslation);
+	sprite.matWorld = (matScaling * matRotation * matTranslation);
 
 	spriteObject->DrawSpritesImmediate(&sprite, 1, 0, 0);
 }

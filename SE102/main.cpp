@@ -23,6 +23,7 @@
 #include "Game.h"
 #include "GameObject.h"
 
+
 #define WINDOW_CLASS_NAME L"Game Window"
 #define MAIN_WINDOW_TITLE L"01 - Skeleton"
 #define WINDOW_ICON_PATH L"brick.ico"
@@ -71,6 +72,15 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_KEYUP:
 		CGame::GetInstance()->keyState[wParam] = false;
 		break;
+	case WM_SIZE:
+		{
+			RECT r;
+			GetClientRect(hWnd, &r);
+			UINT width = r.right + 1;
+			UINT height = r.bottom + 1;
+			CGame::GetInstance()->WindowResized(width, height);
+		}
+		return 0;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
@@ -100,20 +110,10 @@ void LoadResources()
 
 
 	for (int i = 1; i < 6; i++) {
-		game->objects.push_back(new CEnemy(50 * i, 10 * i, i * 0.05, i * 0.01, texEnemy));
+		game->objects.push_back(new CEnemy(50.f * i, 10.f * i, 0.0f, i * 0.05f, i * 0.01f, texEnemy));
 	}
-	game->objects.push_back(new CShip(10, 10, 0.2, 0.2, texShip));
-	//
-	// objects.push_back(mario);	
-	// for(int i = 0; i < 20; i++)		 
-	//	objects.push_back(new CBrick(0+i*texBrick->getWidth(), BRICK_Y, texBrick));
-	
-
-	//
-	// int x = BRICK_X;
-	// for(i)
-	//		... new CGameObject(x,.... 
-	//		x+=BRICK_WIDTH;
+	game->objects.push_back(new CShip(0.0f, 0.f, 0.0f, 0.0f, 0.0f, texShip));
+	game->objects.push_back(new CBrick(0.0f, 0.f, 0.0f, texBrick));
 }
 
 /*
@@ -134,20 +134,20 @@ void Update(DWORD dt)
 	for (int i = 0; i < game->objects.size(); i++)
 		if (!game->objects[i]->ShouldDestroy())
 			game->objects[i]->Update(dt);
-	for (int i = 0; i < game->objects.size(); i++) {
-		LPGAMEOBJECT objectA = game->objects[i];
-		for (int j = 0; j < game->objects.size(); j++) {
-			if (i == j) continue;
-			LPGAMEOBJECT objectB = game->objects[j];
-			if (typeid(objectA) == typeid(CBullet) && typeid(objectB) == typeid(CEnemy))
-			{
+	//for (int i = 0; i < game->objects.size(); i++) {
+	//	LPGAMEOBJECT objectA = game->objects[i];
+	//	for (int j = 0; j < game->objects.size(); j++) {
+	//		if (i == j) continue;
+	//		LPGAMEOBJECT objectB = game->objects[j];
+	//		if (typeid(objectA) == typeid(CBullet) && typeid(objectB) == typeid(CEnemy))
+	//		{
 
-				if (checkCircle(objectA->GetX(), objectB->GetY(), 30, objectB->GetX(), objectB->GetY(), 30)) {
+	//			if (checkCircle(objectA->GetX(), objectB->GetY(), 30, objectB->GetX(), objectB->GetY(), 30)) {
 
-				}
-			}
-		}
-	}
+	//			}
+	//		}
+	//	}
+	//}
 
 	/*mario->Update(dt);
 	brick->Update(dt);*/
@@ -187,7 +187,7 @@ void Render()
 		//mario->Render();
 
 		// Uncomment this line to see how to draw a porttion of a texture  
-		//g->Draw(10, 10, texMisc, 300, 117, 317, 134);
+		//g->Draw(10, 10, 0, texMisc, 300, 117, 317, 134);
 		//g->Draw(10, 10, texMario, 215, 120, 234, 137);
 
 		spriteHandler->End();

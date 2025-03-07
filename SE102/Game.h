@@ -34,20 +34,21 @@ public:
 	std::vector<LPGAMEOBJECT> objects;
 	LPTEXTURE texBullet = NULL;
 
+	void WindowResized(UINT width, UINT height);
 	//
 	// Draw a portion or ALL the texture at position (x,y) on the screen
 	// rect : if NULL, the whole texture will be drawn
 	//        if NOT NULL, only draw that portion of the texture 
-	void Draw(float x, float y, LPTEXTURE tex, RECT *rect = NULL);
+	void Draw(float x, float y, float rotation, LPTEXTURE tex, RECT *rect = NULL);
 
-	void Draw(float x, float y, LPTEXTURE tex, int l, int t, int r, int b)
+	void Draw(float x, float y, float rotation, LPTEXTURE tex, int l, int t, int r, int b)
 	{
 		RECT rect; 
 		rect.left = l;
 		rect.top = t;
 		rect.right = r;
 		rect.bottom = b;
-		this->Draw(x, y, tex, &rect);
+		this->Draw(x, y, rotation, tex, &rect);
 	}
 
 	LPTEXTURE LoadTexture(LPCWSTR texturePath);

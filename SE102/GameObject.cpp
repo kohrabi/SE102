@@ -3,20 +3,23 @@
 #include "debug.h"
 #include "Game.h"
 #include "GameObject.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 /*
 	Initialize game object 
 */
-CGameObject::CGameObject(float x, float y, LPTEXTURE tex)
+CGameObject::CGameObject(float x, float y, float rotation, LPTEXTURE tex)
 {
-	this->x = x;
-	this->y = y;
+	this->position.x = x;
+	this->position.y = y;
+	this->rotation = rotation;
 	this->texture = tex;
 }
 
 void CGameObject::Render()
 {
-	CGame::GetInstance()->Draw(x, y, texture);
+	CGame::GetInstance()->Draw(position.x, position.y, rotation, texture);
 }
 
 CGameObject::~CGameObject()
@@ -30,17 +33,17 @@ CGameObject::~CGameObject()
 void CMario::Update(DWORD dt)
 {
 	int BackBufferWidth = CGame::GetInstance()->GetBackBufferWidth();
-	if (x <= 0 || x >= BackBufferWidth - MARIO_WIDTH) {
+	if (position.x <= 0 || position.x >= BackBufferWidth - MARIO_WIDTH) {
 		
-		vx = -vx;
+		velocity.x = -velocity.x;
 
-		if (x <= 0)
+		if (position.x <= 0)
 		{
-			x = 0;
+			position.x = 0;
 		}
-		else if (x >= BackBufferWidth - MARIO_WIDTH)
+		else if (position.x >= BackBufferWidth - MARIO_WIDTH)
 		{
-			x = (float)(BackBufferWidth - MARIO_WIDTH);
+			position.x = (float)(BackBufferWidth - MARIO_WIDTH);
 		}
 	}
 	CMoveableObject::Update(dt);
@@ -57,27 +60,27 @@ void CEnemy::Update(DWORD dt)
 	int imageWidth = texture->getWidth();
 
 	CMoveableObject::Update(dt);
-	if (y <= 0 || y >= BackBufferHeight + imageHeight) {
+	if (position.y <= 0 || position.y >= BackBufferHeight + imageHeight) {
 
-		if (y <= 0)
-			y = (float)(BackBufferHeight + imageHeight);
-		else if (y >= BackBufferHeight + imageHeight)
-			y = 0;
+		if (position.y <= 0)
+			position.y = (float)(BackBufferHeight + imageHeight);
+		else if (position.y >= BackBufferHeight + imageHeight)
+			position.y = 0;
 	}
-	if (x <= 0 || x >= BackBufferWidth + imageWidth) {
+	if (position.x <= 0 || position.x >= BackBufferWidth + imageWidth) {
 
-		if (x <= 0)
-			x = (float)(BackBufferWidth + imageWidth);
-		else if (x >= BackBufferWidth + imageWidth)
-			x = 0;
+		if (position.x <= 0)
+			position.x = (float)(BackBufferWidth + imageWidth);
+		else if (position.x >= BackBufferWidth + imageWidth)
+			position.x = 0;
 	}
 }
 
 float clampf(float value, float minV, float maxV) { return min(max(value, minV), maxV); }
 
-#define SHIP_VEL 0.02
-#define SHIP_MAX_VEL 0.9
-#define SHOOT_TIME 2
+#define SHIP_VEL 0.02f
+#define SHIP_MAX_VEL 0.9f
+#define SHOOT_TIME 0.02f
 void CShip::Update(DWORD dt)
 {
 	CGame* game = CGame::GetInstance();
@@ -98,33 +101,35 @@ void CShip::Update(DWORD dt)
 		boost = 3.f;
 	}
 	
-	vx = clampf(vx + inputX * SHIP_VEL, -SHIP_MAX_VEL * boost, SHIP_MAX_VEL * boost);
-	vy = clampf(vy + inputY * SHIP_VEL, -SHIP_MAX_VEL * boost, SHIP_MAX_VEL * boost);
-	vx *= 0.9f;
-	vy *= 0.9f;
+	velocity.x = clampf(velocity.x + inputX * SHIP_VEL, -SHIP_MAX_VEL * boost, SHIP_MAX_VEL * boost);
+	velocity.y = clampf(velocity.y + inputY * SHIP_VEL, -SHIP_MAX_VEL * boost, SHIP_MAX_VEL * boost);
+	velocity.x *= 0.9f;
+	velocity.y *= 0.9f;
+
+	rotation += M_PI / 15.0f;
 
 	int BackBufferHeight = game->GetBackBufferHeight();
 	int BackBufferWidth = game->GetBackBufferWidth();
 	int imageHeight = texture->getHeight();
 	int imageWidth = texture->getWidth();
 
-	if (y <= 0 || y >= BackBufferHeight + imageHeight) {
-		if (y <= 0)
-			y = (float)(BackBufferHeight + imageHeight);
-		else if (y >= BackBufferHeight + imageHeight)
-			y = 0;
+	if (position.y <= 0 || position.y >= BackBufferHeight + imageHeight) {
+		if (position.y <= 0)
+			position.y = (float)(BackBufferHeight + imageHeight);
+		else if (position.y >= BackBufferHeight + imageHeight)
+			position.y = 0;
 	}
-	if (x <= 0 || x >= BackBufferWidth + imageWidth) {
-		if (x <= 0)
-			x = (float)(BackBufferWidth + imageWidth);
-		else if (x >= BackBufferWidth + imageWidth)
-			x = 0;
+	if (position.x <= 0 || position.x >= BackBufferWidth + imageWidth) {
+		if (position.x <= 0)
+			position.x = (float)(BackBufferWidth + imageWidth);
+		else if (position.x >= BackBufferWidth + imageWidth)
+			position.x = 0;
 	}
 
-	if (shootTimer > 0) shootTimer -= dt;
-	//DebugOut(L"%f", dt);
+	if (shootTimer > 0) shootTimer -= dt / 1000.f;
 	if (game->keyState[VK_SPACE] && shootTimer <= 0.0f) {
-		game->objects.push_back(new CBullet(x, y, 0, -0.5, game->texBullet));
+		DebugOut(L"%f %f\n", position.x, position.y);
+		game->objects.push_back(new CBullet(position.x, position.y, 0.0f, 0, -0.5f, game->texBullet));
 		shootTimer = SHOOT_TIME;
 	}
 	CMoveableObject::Update(dt);
@@ -136,15 +141,15 @@ void CBullet::Update(DWORD dt)
 
 	int BackBufferHeight = game->GetBackBufferHeight();
 	int imageHeight = texture->getHeight();
-
-	if (y <= 0 || y >= BackBufferHeight + imageHeight) {
+	/*
+	if (position.y <= 0 || position.y >= BackBufferHeight + imageHeight) {
 		destroy = true;
-	}
+	}*/
 	CMoveableObject::Update(dt);
 }
 
 void CMoveableObject::Update(DWORD dt)
 {
-	x += vx * dt;
-	y += vy * dt;
+	position.x += velocity.x * dt;
+	position.y += velocity.y * dt;
 }
