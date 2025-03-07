@@ -19,6 +19,8 @@ class CGame
 
 	int backBufferWidth = 0;					// Backbuffer width & height, will be set during Direct3D initialization
 	int backBufferHeight = 0;
+	int viewportWidth = 0;
+	int viewportHeight = 0;
 
 	ID3D10Device* pD3DDevice = NULL;
 	IDXGISwapChain* pSwapChain = NULL;
@@ -59,9 +61,21 @@ public:
 	ID3DX10Sprite* GetSpriteHandler() { return this->spriteObject; }
 	ID3D10BlendState* GetAlphaBlending() { return pBlendStateAlpha; };
 
+	POINT GetMousePosition(HWND hwnd)
+	{
+		POINT mousePos;
+		GetCursorPos(&mousePos);          // Get mouse position in screen coordinates
+		ScreenToClient(hwnd, &mousePos);  // Convert to client area coordinates
+		return mousePos;
+	}
+
 	int GetBackBufferWidth() { return backBufferWidth; }
 	int GetBackBufferHeight() { return backBufferHeight; }
+
+	int GetViewportWidth() { return viewportWidth; }
+	int GetViewportHeight() { return viewportHeight; }
 	bool keyState[256];
+	bool leftMouseDown;
 
 	static CGame * GetInstance();
 

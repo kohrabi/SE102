@@ -16,7 +16,8 @@ void CGame::Init(HWND hWnd)
 
 	backBufferWidth = r.right + 1;
 	backBufferHeight = r.bottom + 1;
-	DebugOut(L"%d %d \n", r.right, r.bottom);
+	viewportWidth = backBufferWidth;
+	viewportHeight = backBufferHeight;
 
 	// Create & clear the DXGI_SWAP_CHAIN_DESC structure
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
@@ -133,11 +134,10 @@ void CGame::WindowResized(UINT width, UINT height)
 	{
 		pD3DDevice->OMSetRenderTargets(0, NULL, NULL);
 
-		backBufferWidth = width;
-		backBufferHeight = height;
-
 		// Release all outstanding references to the swap chain's buffers.
 		pRenderTargetView->Release();
+		backBufferWidth = width;
+		backBufferHeight = height;
 
 		HRESULT hr;
 		// Preserve the existing buffer count and format.
@@ -170,18 +170,64 @@ void CGame::WindowResized(UINT width, UINT height)
 
 		pD3DDevice->OMSetRenderTargets(1, &pRenderTargetView, NULL);
 
+
+		// 4:3 scale
+		const float targetWidth = 320.f;
+		const float targetHeight = 240.f;
+		float targetAspectRatio = targetWidth / targetHeight;
+		float windowAspectRatio = (float)width / (float)height;
+
+		viewportWidth = width;
+		viewportHeight = height;
+		UINT viewportX = 0, viewportY = 0;
+
+		// ChatGPT'ed
+		if (windowAspectRatio > targetAspectRatio) {
+			// Window is wider than target - letterbox left and right
+			viewportHeight = height;
+			viewportWidth = (UINT)(targetAspectRatio * viewportHeight);
+			viewportX = (width - viewportWidth) / 2;
+			viewportY = 0;
+		}
+		else {
+			// Window is taller than target - letterbox top and bottom
+			viewportWidth = width;
+			viewportHeight = (UINT)(viewportWidth / targetAspectRatio);
+			viewportX = 0;
+			viewportY = (height - viewportHeight) / 2;
+		}
+
 		// create and set the viewport
-		D3D10_VIEWPORT viewPort;
-		viewPort.Width = backBufferWidth;
-		viewPort.Height = backBufferHeight;
-		viewPort.MinDepth = 0.0f;
-		viewPort.MaxDepth = 1.0f;
-		viewPort.TopLeftX = 0;
-		viewPort.TopLeftY = 0;
-		pD3DDevice->RSSetViewports(1, &viewPort);
+		D3D10_VIEWPORT viewport;
+		viewport.Width = (UINT)viewportWidth;
+		viewport.Height = (UINT)viewportHeight;
+		viewport.MinDepth = 0.0f;
+		viewport.MaxDepth = 1.0f;
+		viewport.TopLeftX = viewportX;
+		viewport.TopLeftY = viewportY;
+		pD3DDevice->RSSetViewports(1, &viewport);
+
+		D3DXMATRIX matProjection;
+
+		// Create the projection matrix using the values in the viewport
+		D3DXMatrixOrthoOffCenterLH(&matProjection,
+			(float)0,
+			(float)viewport.Width,
+			(float)0,
+			(float)viewport.Height,
+			0.1f,
+			10);
+		//D3DXMatrixOrthoOffCenterLH(&matProjection,
+		//	(float)viewport.TopLeftX,
+		//	(float)viewport.Width,
+		//	(float)viewport.Height,
+		//	(float)viewport.Height,
+		//	0.1f,
+		//	10);
+		hr = spriteObject->SetProjectionTransform(&matProjection);
 
 		DebugOut(L"Viewport set to width=%d, height=%d, TopLeftX=%f, TopLeftY=%f\n",
-			viewPort.Width, viewPort.Height, viewPort.TopLeftX, viewPort.TopLeftY);
+			viewport.Width, viewport.Height, viewport.TopLeftX, viewport.TopLeftY);
 	}
 }
 

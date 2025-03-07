@@ -32,7 +32,7 @@ CGameObject::~CGameObject()
 
 void CMario::Update(DWORD dt)
 {
-	int BackBufferWidth = CGame::GetInstance()->GetBackBufferWidth();
+	int BackBufferWidth = CGame::GetInstance()->GetViewportWidth();
 	if (position.x <= 0 || position.x >= BackBufferWidth - MARIO_WIDTH) {
 		
 		velocity.x = -velocity.x;
@@ -54,8 +54,8 @@ void CEnemy::Update(DWORD dt)
 	if (texture == NULL) return;
 	CGame* game = CGame::GetInstance();
 
-	int BackBufferHeight = game->GetBackBufferHeight();
-	int BackBufferWidth = game->GetBackBufferWidth();
+	int BackBufferHeight = game->GetViewportHeight();
+	int BackBufferWidth = game->GetViewportWidth();
 	int imageHeight = texture->getHeight();
 	int imageWidth = texture->getWidth();
 
@@ -108,8 +108,8 @@ void CShip::Update(DWORD dt)
 
 	rotation += M_PI / 15.0f;
 
-	int BackBufferHeight = game->GetBackBufferHeight();
-	int BackBufferWidth = game->GetBackBufferWidth();
+	int BackBufferHeight = game->GetViewportHeight();
+	int BackBufferWidth = game->GetViewportWidth();
 	int imageHeight = texture->getHeight();
 	int imageWidth = texture->getWidth();
 
@@ -139,7 +139,7 @@ void CBullet::Update(DWORD dt)
 {
 	CGame* game = CGame::GetInstance();
 
-	int BackBufferHeight = game->GetBackBufferHeight();
+	int BackBufferHeight = game->GetViewportHeight();
 	int imageHeight = texture->getHeight();
 	/*
 	if (position.y <= 0 || position.y >= BackBufferHeight + imageHeight) {

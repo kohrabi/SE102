@@ -72,15 +72,23 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_KEYUP:
 		CGame::GetInstance()->keyState[wParam] = false;
 		break;
-	case WM_SIZE:
-		{
-			RECT r;
-			GetClientRect(hWnd, &r);
-			UINT width = r.right + 1;
-			UINT height = r.bottom + 1;
-			CGame::GetInstance()->WindowResized(width, height);
-		}
-		return 0;
+	//case WM_SIZE:
+	//	{
+	//		RECT r;
+	//		GetClientRect(hWnd, &r);
+	//		UINT wR = r.right + 1;
+	//		UINT hR = r.bottom + 1;
+	//		UINT width = LOWORD(lParam);
+	//		UINT height = HIWORD(lParam);
+	//		CGame::GetInstance()->WindowResized(width, height);
+	//	}
+	//	return 0;
+	case WM_LBUTTONDOWN:
+		CGame::GetInstance()->leftMouseDown = true;
+		break;
+	case WM_LBUTTONUP:
+		CGame::GetInstance()->leftMouseDown = false;
+		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
