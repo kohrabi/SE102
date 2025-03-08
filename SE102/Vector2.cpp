@@ -24,6 +24,13 @@ void Vector2::normalize()
 	y /= leng;
 }
 
+Vector2 Vector2::normalizeVector2() const
+{
+	Vector2 newVector = *this;
+	newVector.normalize();
+	return newVector;
+}
+
 float Vector2::distance(const Vector2& b) const
 {
 	return (b - *this).length();

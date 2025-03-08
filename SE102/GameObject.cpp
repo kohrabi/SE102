@@ -19,7 +19,13 @@ CGameObject::CGameObject(float x, float y, float rotation, LPTEXTURE tex)
 
 void CGameObject::Render()
 {
-	CGame::GetInstance()->Draw(position.x, position.y, rotation, texture);
+	if (textureRegion.right - textureRegion.left == 0) {
+		CGame::GetInstance()->Draw(position.x, position.y, rotation, texture);
+	}
+	else {
+		CGame::GetInstance()->Draw(position.x, position.y, rotation, texture, &textureRegion);
+	}
+
 }
 
 CGameObject::~CGameObject()
@@ -152,4 +158,61 @@ void CMoveableObject::Update(DWORD dt)
 {
 	position.x += velocity.x * dt;
 	position.y += velocity.y * dt;
+}
+
+#include "CTankEnemy.h"
+void CTankBullet::Update(DWORD dt)
+{
+	CGame* game = CGame::GetInstance();
+
+	int backBufferHeight = game->GetViewportHeight();
+	int imageHeight = texture->getWidth();
+	if (textureRegion.bottom - textureRegion.top != 0)
+		imageHeight = textureRegion.bottom - textureRegion.top;
+	if (position.y <= 0 || position.y >= backBufferHeight - imageHeight) {
+		destroy = true;
+	}
+
+	int backBufferWidth = game->GetViewportWidth();
+	int imageWidth = texture->getWidth();
+	if (textureRegion.right - textureRegion.left != 0)
+		imageWidth = textureRegion.right - textureRegion.left;
+	if (position.x <= 0 || position.x >= backBufferWidth - imageWidth) {
+		destroy = true;
+	}
+
+	if (!destroy) {
+		for (int i = 0; i < game->objects.size(); i++) {
+			auto objectA = game->objects[i];
+			if (objectA->ShouldDestroy() || objectA == this)
+				continue;
+			if (objectA->GetType() == TYPE_ENEMY) {
+				auto tank = (CTankEnemy*)objectA;
+				if (tank->IsPlayer() == isPlayer)
+					continue;
+				if (tank->checkPointInside(position)) {
+					tank->Destroy();
+					destroy = true;
+				}
+			}
+			if (objectA->GetType() == TYPE_BULLET && (objectA->GetPosition() - position).length() <= 0.01f)
+			{
+				DebugOut(L"%f\n", (objectA->GetPosition() - position).length());
+				destroy = true;
+				objectA->Destroy();
+			}
+		}
+	}
+
+	CMoveableObject::Update(dt);
+}
+
+RECT GetTextureRegion(int x, int y, int xSize, int ySize)
+{
+	RECT r;
+	r.left = x * xSize;
+	r.right = (x + 1) * xSize;
+	r.bottom = (y + 1)*ySize;
+	r.top = (y) * ySize;
+	return r;
 }

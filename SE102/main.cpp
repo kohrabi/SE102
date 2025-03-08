@@ -22,21 +22,17 @@
 #include "debug.h"
 #include "Game.h"
 #include "GameObject.h"
+#include "CTank.h"
+#include "CPlayer.h"
+#include "CTankEnemy.h"
+#include "CTankEnemyRed.h"
 
 
 #define WINDOW_CLASS_NAME L"Game Window"
 #define MAIN_WINDOW_TITLE L"01 - Skeleton"
-#define WINDOW_ICON_PATH L"brick.ico"
+#define TEXTURE_PATH_BTSPRITES L"btSprites.png"
 
-#define TEXTURE_PATH_BRICK L"brick.png"
-#define TEXTURE_PATH_MARIO L"mario.png"
-#define TEXTURE_PATH_SHIP L"ship.png"
-#define TEXTURE_PATH_ENEMY L"enemy-big.png"
-#define TEXTURE_PATH_BULLET L"Bullet.png"
-
-#define TEXTURE_PATH_MISC L"misc.png"
-
-#define BACKGROUND_COLOR D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.0f)
+#define BACKGROUND_COLOR D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f)
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 
@@ -68,9 +64,11 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_KEYDOWN:
 		CGame::GetInstance()->keyState[wParam] = true;
+		CGame::GetInstance()->keyJustPressed[wParam] = true;
 		break;
 	case WM_KEYUP:
 		CGame::GetInstance()->keyState[wParam] = false;
+		CGame::GetInstance()->keyJustPressed[wParam] = false;
 		break;
 	//case WM_SIZE:
 	//	{
@@ -102,12 +100,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void LoadResources()
 {
 	CGame * game = CGame::GetInstance();
-	texBrick = game->LoadTexture(TEXTURE_PATH_BRICK);
-	texMario = game->LoadTexture(TEXTURE_PATH_MARIO);
-	texMisc = game->LoadTexture(TEXTURE_PATH_MISC);
-	texShip = game->LoadTexture(TEXTURE_PATH_SHIP);
-	texEnemy = game->LoadTexture(TEXTURE_PATH_ENEMY);
-	game->texBullet = game->LoadTexture(TEXTURE_PATH_BULLET);
+	game->texBTSprites = game->LoadTexture(TEXTURE_PATH_BTSPRITES);
 	//game->objects = std::vector(0);
 
 	// Load a sprite sheet as a texture to try drawing a portion of a texture. See function Render 
@@ -116,12 +109,14 @@ void LoadResources()
 	//mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX, MARIO_START_VY, texMario);
 	//brick = new CBrick(0, 0, texBrick);
 
-
-	for (int i = 1; i < 6; i++) {
-		game->objects.push_back(new CEnemy(50.f * i, 10.f * i, 0.0f, i * 0.05f, i * 0.01f, texEnemy));
+	CPlayer* tank = new CPlayer(50.f, 50.f, 0.f, 0.f, 0.f, game->texBTSprites);
+	game->objects.push_back(tank);
+	for (int i = 0; i < 1; i++) {
+		game->objects.push_back(new CTankEnemyRed(35.f * i, 32.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
 	}
-	game->objects.push_back(new CShip(0.0f, 0.f, 0.0f, 0.0f, 0.0f, texShip));
-	game->objects.push_back(new CBrick(0.0f, 0.f, 0.0f, texBrick));
+	for (int i = 0; i < 7; i++) {
+		game->objects.push_back(new CTankEnemy(20.f * i, 30.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
+	}
 }
 
 /*
@@ -140,8 +135,29 @@ void Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 
 	for (int i = 0; i < game->objects.size(); i++)
-		if (!game->objects[i]->ShouldDestroy())
-			game->objects[i]->Update(dt);
+		//if (!game->objects[i]->ShouldDestroy())
+		game->objects[i]->Update(dt);	
+
+	/*for (int i = 0; i < game->objects.size(); i++) {
+		LPGAMEOBJECT objectA = game->objects[i];
+		if (objectA->ShouldDestroy())
+			continue;
+		for (int j = 0; j < game->objects.size(); j++) {
+			if (i == j)
+				continue;
+			LPGAMEOBJECT objectB = game->objects[j];
+			if (objectB->ShouldDestroy())
+				continue;
+			auto& test = typeid(*objectA);
+			if (std::is_same_v<decltype(objectA), CTank*> && std::is_same_v<decltype(*objectB), CTankBullet*>) {
+				DebugOut(L"Hello\n");
+			}
+		}
+
+	}*/
+
+	for (int i = 0; i < 256; i++)
+		game->keyJustPressed[i] = false;
 	//for (int i = 0; i < game->objects.size(); i++) {
 	//	LPGAMEOBJECT objectA = game->objects[i];
 	//	for (int j = 0; j < game->objects.size(); j++) {
@@ -160,7 +176,7 @@ void Update(DWORD dt)
 	/*mario->Update(dt);
 	brick->Update(dt);*/
 
-	DebugOutTitle(L"01 - Skeleton %f", dt);
+	DebugOutTitle(L"01 - Skeleton %f", dt); 
 }
 
 /*
@@ -214,7 +230,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 	wc.lpfnWndProc = (WNDPROC)WinProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hIcon = (HICON)LoadImage(hInstance, WINDOW_ICON_PATH, IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+	wc.hIcon = (HICON)LoadImage(hInstance, NULL, IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 	wc.lpszMenuName = NULL;
@@ -295,6 +311,7 @@ int WINAPI WinMain(
 	_In_ int nCmdShow
 ) 
 {
+	srand(time(NULL));
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	CGame * game = CGame::GetInstance();

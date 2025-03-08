@@ -6,12 +6,20 @@
 #include "Texture.h"
 #include "Vector2.h"
 
+
+#define TYPE_GAME_OBJECT 1
+#define TYPE_TANK 2
+#define TYPE_PLAYER 3
+#define TYPE_BULLET 4
+#define TYPE_ENEMY 5
+
 class CGameObject
 {
 protected: 
 	Vector2 position = Vector2::Zero;
 	float rotation = 0.0f;
 	bool destroy = false;
+	RECT textureRegion = {};
 
 	// This should be a pointer to an object containing all graphic/sound/audio assets for rendering this object. 
 	// For now, just a pointer to a single texture
@@ -26,7 +34,17 @@ public:
 	bool ShouldDestroy() { return destroy;  }
 	Vector2 GetPosition() const { return position; }
 	float GetRotation() const { return rotation; }
+	virtual int GetType() const { return TYPE_GAME_OBJECT; }
 
+	void Destroy() { 
+		destroy = true; }
+	void SetTextureRegion(int l, int r, int t, int b) {
+		textureRegion.left = l;
+		textureRegion.right = r;
+		textureRegion.top = t;
+		textureRegion.bottom = b;
+
+	}
 	void SetRotation(float newVal) { rotation = newVal; }
 
 	CGameObject(float x = 0.0f, float y = 0.0f, float rotation = 0.0f, LPTEXTURE texture = NULL);
@@ -92,8 +110,6 @@ class CEnemy : public CMoveableObject
 public:
 	CEnemy(float x, float y, float rotation, float vx, float vy, LPTEXTURE texture) : CMoveableObject(x, y, rotation, vx, vy, texture)
 	{
-		this->velocity.x = vx;
-		this->velocity.y = vy;
 		float width = texture->getWidth() / 2.0f;
 		float height = texture->getHeight() / 2.0f;
 		//aabb.bottomLeftX = x - width;
@@ -103,3 +119,22 @@ public:
 	};
 	void Update(DWORD dt) override;
 };
+
+class CTankBullet : public CMoveableObject {
+private: 
+	bool isPlayer = false;
+public:
+	CTankBullet(float x, float y, float rotation, float vx, float vy, LPTEXTURE texture, bool player = false) : CMoveableObject(x, y, rotation, vx, vy, texture)
+	{
+		textureRegion.left = 322;
+		textureRegion.right = 325;
+		textureRegion.top = 101;
+		textureRegion.bottom = 106;
+		isPlayer = player;
+	};
+
+	int GetType() const override { return TYPE_BULLET; }
+	void Update(DWORD dt) override;
+};
+
+RECT GetTextureRegion(int x, int y, int xSize, int ySize);

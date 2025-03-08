@@ -210,11 +210,18 @@ void CGame::WindowResized(UINT width, UINT height)
 		D3DXMATRIX matProjection;
 
 		// Create the projection matrix using the values in the viewport
-		D3DXMatrixOrthoOffCenterLH(&matProjection,
+		/*D3DXMatrixOrthoOffCenterLH(&matProjection,
 			(float)0,
 			(float)viewport.Width,
 			(float)0,
 			(float)viewport.Height,
+			0.1f,
+			10);*/
+		D3DXMatrixOrthoOffCenterLH(&matProjection,
+			(float)0,
+			(float)targetWidth,
+			(float)0,
+			(float)targetHeight,
 			0.1f,
 			10);
 		//D3DXMatrixOrthoOffCenterLH(&matProjection,

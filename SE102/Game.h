@@ -35,6 +35,7 @@ public:
 
 	std::vector<LPGAMEOBJECT> objects;
 	LPTEXTURE texBullet = NULL;
+	LPTEXTURE texBTSprites = NULL;
 
 	void WindowResized(UINT width, UINT height);
 	//
@@ -75,6 +76,7 @@ public:
 	int GetViewportWidth() { return viewportWidth; }
 	int GetViewportHeight() { return viewportHeight; }
 	bool keyState[256];
+	bool keyJustPressed[256];
 	bool leftMouseDown;
 
 	static CGame * GetInstance();
