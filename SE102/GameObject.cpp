@@ -29,9 +29,7 @@ void CGameObject::Render()
 }
 
 CGameObject::~CGameObject()
-{
-	if (texture != NULL) delete texture;
-}
+{}
 
 #define MARIO_VX 0.1f
 #define MARIO_WIDTH 14
@@ -58,7 +56,7 @@ void CMario::Update(DWORD dt)
 void CEnemy::Update(DWORD dt)
 {
 	if (texture == NULL) return;
-	CGame* game = CGame::GetInstance();
+	CGame* const game = CGame::GetInstance();
 
 	int BackBufferHeight = game->GetViewportHeight();
 	int BackBufferWidth = game->GetViewportWidth();
@@ -89,7 +87,7 @@ float clampf(float value, float minV, float maxV) { return min(max(value, minV),
 #define SHOOT_TIME 0.02f
 void CShip::Update(DWORD dt)
 {
-	CGame* game = CGame::GetInstance();
+	CGame* const game = CGame::GetInstance();
 
 	float inputX = 0;
 	float inputY = 0;
@@ -143,7 +141,7 @@ void CShip::Update(DWORD dt)
 
 void CBullet::Update(DWORD dt)
 {
-	CGame* game = CGame::GetInstance();
+	CGame* const game = CGame::GetInstance();
 
 	int BackBufferHeight = game->GetViewportHeight();
 	int imageHeight = texture->getHeight();
@@ -163,8 +161,9 @@ void CMoveableObject::Update(DWORD dt)
 #include "CTankEnemy.h"
 void CTankBullet::Update(DWORD dt)
 {
-	CGame* game = CGame::GetInstance();
-
+	if (destroy)
+		return;
+	CGame* const game = CGame::GetInstance();
 	int backBufferHeight = game->GetViewportHeight();
 	int imageHeight = texture->getWidth();
 	if (textureRegion.bottom - textureRegion.top != 0)
@@ -182,7 +181,8 @@ void CTankBullet::Update(DWORD dt)
 	}
 
 	if (!destroy) {
-		for (int i = 0; i < game->objects.size(); i++) {
+		size_t size = game->objects.size();
+		for (int i = 0; i < size; i++) {
 			auto objectA = game->objects[i];
 			if (objectA->ShouldDestroy() || objectA == this)
 				continue;
@@ -192,14 +192,16 @@ void CTankBullet::Update(DWORD dt)
 					continue;
 				if (tank->checkPointInside(position)) {
 					tank->Destroy();
-					destroy = true;
+					Destroy();
+					break;
 				}
 			}
-			if (objectA->GetType() == TYPE_BULLET && (objectA->GetPosition() - position).length() <= 0.01f)
+			if (objectA->GetType() == TYPE_BULLET && (objectA->GetPosition() - position).length() <= 1.0f)
 			{
 				DebugOut(L"%f\n", (objectA->GetPosition() - position).length());
-				destroy = true;
+				Destroy();
 				objectA->Destroy();
+				break;
 			}
 		}
 	}

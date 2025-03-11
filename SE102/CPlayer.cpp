@@ -3,18 +3,18 @@
 
 void CPlayer::Update(DWORD dt)
 {
-	CGame* game = CGame::GetInstance();
+	CGame* const game = CGame::GetInstance();
 
 	Vector2 inputDir = Vector2();
 	if (game->keyState[VK_LEFT])
-		inputDir.x = -1;
-	else if (game->keyState[VK_RIGHT])
-		inputDir.x = 1;
+		inputDir.x += -1;
+	if (game->keyState[VK_RIGHT])
+		inputDir.x += 1;
 
 	if (game->keyState[VK_UP])
-		inputDir.y = -1;
-	else if (game->keyState[VK_DOWN])
-		inputDir.y = 1;
+		inputDir.y += -1;
+	if (game->keyState[VK_DOWN])
+		inputDir.y += 1;
 
 	if (abs(inputDir.x) == 1 && abs(inputDir.y) == 1) {
 		inputDir = Vector2::Zero;

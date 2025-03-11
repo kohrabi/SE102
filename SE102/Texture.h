@@ -38,10 +38,11 @@ public:
 	int getWidth() { return this->_width; }
 	int getHeight() { return this->_height; }
 
-	~CTexture()
-	{
-		if (_rsview!=NULL) this->_rsview->Release();
-		if (_tex!=NULL) this->_tex->Release();
+	~CTexture() = delete; // Ay man you gonna have to cleanup the texture for yourself dude. I aint loading a texture for every fucking object
+
+	void Cleanup() {
+		if (_rsview != NULL) this->_rsview->Release();
+		if (_tex != NULL) this->_tex->Release();
 	}
 };
 

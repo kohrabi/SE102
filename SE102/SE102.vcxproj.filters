@@ -42,6 +42,9 @@
     <ClCompile Include="CTankEnemyRed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CTankEnemyGreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -104,6 +107,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CTankEnemyRed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CTankEnemyGreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

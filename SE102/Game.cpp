@@ -1,7 +1,7 @@
 #include "debug.h"
 #include "Game.h"
 
-CGame * CGame::__instance = NULL;
+CGame* CGame::__instance = NULL;
 
 /*
 	Initialize DirectX, create a Direct3D device for rendering within the window, initial Sprite library for 
@@ -375,7 +375,7 @@ CGame::~CGame()
 
 }
 
-CGame *CGame::GetInstance()
+CGame* const CGame::GetInstance()
 {
 	if (__instance == NULL) __instance = new CGame();
 	return __instance;

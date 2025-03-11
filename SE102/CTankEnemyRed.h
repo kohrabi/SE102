@@ -12,10 +12,13 @@ public:
 		LeftTextureRect = GetTextureRegion(2 + 8, 8, 16, 16);
 		DownTextureRect = GetTextureRegion(4 + 8, 8, 16, 16);
 		this->timeOffset = timeOffset;
+		lookDir = Vector2(-1, 0);
+		//moveDir = Vector2(-1, 0);
 		textureRegion = UpTextureRect;
 		shootTimer = 1.5f;
 	}
+
 	int GetType() const override { return TYPE_ENEMY; }
 
-	void Update(DWORD dt) override;
+	void OnDestroy() override;
 };

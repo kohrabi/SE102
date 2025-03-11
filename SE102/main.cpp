@@ -26,6 +26,7 @@
 #include "CPlayer.h"
 #include "CTankEnemy.h"
 #include "CTankEnemyRed.h"
+#include "CTankEnemyGreen.h"
 
 
 #define WINDOW_CLASS_NAME L"Game Window"
@@ -99,7 +100,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 */
 void LoadResources()
 {
-	CGame * game = CGame::GetInstance();
+	CGame* const game = CGame::GetInstance();
 	game->texBTSprites = game->LoadTexture(TEXTURE_PATH_BTSPRITES);
 	//game->objects = std::vector(0);
 
@@ -109,14 +110,25 @@ void LoadResources()
 	//mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX, MARIO_START_VY, texMario);
 	//brick = new CBrick(0, 0, texBrick);
 
+	int backBufferWidth = game->GetBackBufferWidth();
+	int backBufferHeight = game->GetBackBufferHeight();
+
 	CPlayer* tank = new CPlayer(50.f, 50.f, 0.f, 0.f, 0.f, game->texBTSprites);
 	game->objects.push_back(tank);
-	for (int i = 0; i < 1; i++) {
-		game->objects.push_back(new CTankEnemyRed(35.f * i, 32.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
+	for (int i = 1; i < 2; i++) {
+		game->objects.push_back(new CTankEnemyRed(200 * i, 50.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
 	}
-	for (int i = 0; i < 7; i++) {
-		game->objects.push_back(new CTankEnemy(20.f * i, 30.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
-	}
+	//for (int i = 0; i < 1; i++) {
+	//	game->objects.push_back(new CTankEnemyGreen(backBufferWidth - 35.f * i, backBufferHeight - 32.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
+	//}
+	//for (int i = 0; i < 7; i++) {
+	//	game->objects.push_back(new CTankEnemy(20.f * i, 30.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
+	//}
+}
+
+void UnloadResources() {
+	CGame* const game = CGame::GetInstance();
+	game->texBTSprites->Cleanup();
 }
 
 /*
@@ -132,11 +144,19 @@ bool checkCircle(float ax, float ay, float radiusA, float cx, float cy, float ra
 }
 void Update(DWORD dt)
 {
-	CGame* game = CGame::GetInstance();
+	CGame* const game = CGame::GetInstance();
 
-	for (int i = 0; i < game->objects.size(); i++)
-		//if (!game->objects[i]->ShouldDestroy())
-		game->objects[i]->Update(dt);	
+	for (int i = 0; i < game->objects.size(); ) {
+		if (!game->objects[i]->ShouldDestroy()) {
+			game->objects[i]->Update(dt);
+			i++;
+		}
+		else {
+			LPGAMEOBJECT object = game->objects[i];
+			game->objects.erase(game->objects.begin() + i);
+			delete object;
+		}
+	}	
 
 	/*for (int i = 0; i < game->objects.size(); i++) {
 		LPGAMEOBJECT objectA = game->objects[i];
@@ -184,7 +204,7 @@ void Update(DWORD dt)
 */
 void Render()
 {
-	CGame* g = CGame::GetInstance();
+	CGame* const g = CGame::GetInstance();
 
 	ID3D10Device* pD3DDevice = g->GetDirect3DDevice();
 	IDXGISwapChain* pSwapChain = g->GetSwapChain();
@@ -300,6 +320,8 @@ int Run()
 		else
 			Sleep((DWORD)(tickPerFrame - dt));
 	}
+
+	UnloadResources();
 
 	return 1;
 }

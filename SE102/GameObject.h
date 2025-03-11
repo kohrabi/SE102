@@ -37,7 +37,11 @@ public:
 	virtual int GetType() const { return TYPE_GAME_OBJECT; }
 
 	void Destroy() { 
-		destroy = true; }
+		if (destroy)
+			return;
+		destroy = true; 
+		OnDestroy();
+	}
 	void SetTextureRegion(int l, int r, int t, int b) {
 		textureRegion.left = l;
 		textureRegion.right = r;
@@ -49,6 +53,7 @@ public:
 
 	CGameObject(float x = 0.0f, float y = 0.0f, float rotation = 0.0f, LPTEXTURE texture = NULL);
 
+	virtual void OnDestroy() {}
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render();
 

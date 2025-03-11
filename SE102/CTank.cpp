@@ -21,7 +21,7 @@ void CTank::Update(DWORD dt)
 	if (destroy)
 		return;
 	float dts = dt / 1000.f;
-	CGame* game = CGame::GetInstance();
+	CGame* const game = CGame::GetInstance();
 
 	if (abs(moveDir.x) == 1 && abs(moveDir.y) == 1) {
 		moveDir = Vector2::Zero;
@@ -47,16 +47,16 @@ void CTank::Update(DWORD dt)
 		canFire = false;
 	}
 
-	if (moveDir.x == 1) {
+	if (lookDir.x == 1) {
 		textureRegion = RightTextureRect;
 	}
-	else if (moveDir.x == -1) {
+	else if (lookDir.x == -1) {
 		textureRegion = LeftTextureRect;
 	}
-	else if (moveDir.y == -1) {
+	else if (lookDir.y == -1) {
 		textureRegion = UpTextureRect;
 	}
-	else if (moveDir.y == 1) {
+	else if (lookDir.y == 1) {
 		textureRegion = DownTextureRect;
 	}
 
