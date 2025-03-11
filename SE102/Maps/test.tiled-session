@@ -5,22 +5,26 @@
     },
     "activeFile": "test.tmx",
     "expandedProjectPaths": [
+        "."
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "btSprites.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 3,
             "scaleInEditor": 5.5
         },
         "test.tmx": {
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 268.75,
-                "y": 137.25
+                "x": 168,
+                "y": 188.25
             }
         }
     },
+    "last.exportedFilePath": "D:/Code/VS/SE102/SE102/Maps",
     "last.imagePath": "D:/Code/VS/SE102/SE102",
+    "map.lastUsedExportFilter": "All Files (*)",
     "map.lastUsedFormat": "tmx",
     "openFiles": [
         "test.tmx",

@@ -143,10 +143,18 @@
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Contents\Maps\btSprites.tsx" />
-    <None Include="Contents\Maps\test.tiled-project" />
-    <None Include="Contents\Maps\test.tiled-session" />
-    <None Include="Contents\Maps\test.tmx" />
+    <None Include="Maps\btSprites.tsx">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Maps\test.tiled-project">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Maps\test.tiled-session">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Maps\test.tmx">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

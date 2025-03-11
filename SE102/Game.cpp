@@ -84,6 +84,23 @@ void CGame::Init(HWND hWnd)
 	viewPort.TopLeftY = 0;
 	pD3DDevice->RSSetViewports(1, &viewPort);
 
+	D3D10_SAMPLER_DESC desc;
+	desc.Filter = D3D10_FILTER_MIN_MAG_POINT_MIP_LINEAR; 
+	desc.AddressU = D3D10_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressV = D3D10_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressW = D3D10_TEXTURE_ADDRESS_CLAMP;
+	desc.MipLODBias = 0;
+	desc.MaxAnisotropy = 1;
+	desc.ComparisonFunc = D3D10_COMPARISON_NEVER;
+	desc.BorderColor[0] = 1.0f;
+	desc.BorderColor[1] = 1.0f;
+	desc.BorderColor[2] = 1.0f;
+	desc.BorderColor[3] = 1.0f;
+	desc.MinLOD = -FLT_MAX;
+	desc.MaxLOD = FLT_MAX;
+
+	pD3DDevice->CreateSamplerState(&desc, &this->pPointSamplerState);
+
 
 	// create the sprite object to handle sprite drawing 
 	hr = D3DX10CreateSprite(pD3DDevice, 0, &spriteObject);
@@ -126,6 +143,13 @@ void CGame::Init(HWND hWnd)
 	DebugOut((wchar_t*)L"[INFO] InitDirectX has been successful\n");
 
 	return;
+}
+
+void CGame::SetPointSamplerState()
+{
+	pD3DDevice->VSSetSamplers(0, 1, &pPointSamplerState);
+	pD3DDevice->GSSetSamplers(0, 1, &pPointSamplerState);
+	pD3DDevice->PSSetSamplers(0, 1, &pPointSamplerState);
 }
 
 void CGame::WindowResized(UINT width, UINT height)

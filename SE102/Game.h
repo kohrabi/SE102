@@ -26,12 +26,15 @@ class CGame
 	IDXGISwapChain* pSwapChain = NULL;
 	ID3D10RenderTargetView* pRenderTargetView = NULL;
 	ID3D10BlendState* pBlendStateAlpha = NULL;			// To store alpha blending state
+	ID3D10SamplerState* pPointSamplerState;
 
 	ID3DX10Sprite* spriteObject = NULL;				// Sprite handling object 
 
 public:
 	// Init DirectX, Sprite Handler
 	void Init(HWND hWnd);
+
+	void SetPointSamplerState();
 
 	std::vector<LPGAMEOBJECT> objects;
 	LPTEXTURE texBullet = NULL;

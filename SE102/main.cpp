@@ -119,6 +119,16 @@ void LoadResources()
 	int backBufferHeight = game->GetBackBufferHeight();
 
 	if (tMap.load(TEST_TILE_TMX)) {
+		const auto& tilesets = tMap.getTilesets();
+		LPTEXTURE tilesetTexture;
+		for (const auto& tileset : tilesets)
+		{
+			string texturePathString = tileset.getImagePath().substr(tileset.getImagePath().find_last_of('/') + 1);
+			wstring texturePath = wstring(texturePathString.begin(), texturePathString.end());
+			tilesetTexture = game->LoadTexture(texturePath.c_str());
+			//read out tile set properties, load textures etc...
+		}
+
 		const auto& layers = tMap.getLayers();
 		for (const auto& layer : layers) {
 			if (layer->getType() == tmx::Layer::Type::Object)
@@ -133,15 +143,23 @@ void LoadResources()
 			else if (layer->getType() == tmx::Layer::Type::Tile)
 			{
 				const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+				const auto& tiles = tilesets.back().getTiles();
+				const auto& layerSize = tileLayer.getSize();
+				int i = -1;
+				for (const auto& tile : tileLayer.getTiles()) {
+					i++;
+					if (tile.ID == 0)
+						continue;
+					auto imagePosition = tiles[tile.ID - 1].imagePosition;
+					auto tileSize = tiles[tile.ID - 1].imageSize;
+					game->objects.push_back(new CTile(tileSize.x * (i % (layerSize.x)), tileSize.y * floorf(i / layerSize.y), game->texBTSprites,
+						imagePosition.x, imagePosition.x + tileSize.x,
+						imagePosition.y, imagePosition.y + tileSize.y));
+				}
 				//read out tile layer properties etc...
 			}
 		}
 
-		const auto& tilesets = tMap.getTilesets();
-		for (const auto& tileset : tilesets)
-		{
-			//read out tile set properties, load textures etc...
-		}
 	}
 
 	CPlayer* tank = new CPlayer(50.f, 50.f, 0.f, 0.f, 0.f, game->texBTSprites);

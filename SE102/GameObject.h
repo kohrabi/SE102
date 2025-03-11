@@ -61,6 +61,14 @@ public:
 };
 typedef CGameObject * LPGAMEOBJECT;
 
+class CTile : public CGameObject {
+public:
+	CTile(float x, float y, LPTEXTURE texture, int l, int r, int t, int b) :CGameObject(x, y, 0.0f, texture) {
+		SetTextureRegion(l, r, t, b);
+	}
+	void Update(DWORD dt) override {}
+};
+
 class CMoveableObject : public CGameObject {
 protected:
 	Vector2 velocity;
