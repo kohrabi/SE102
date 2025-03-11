@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{9cab8e6d-81db-48ef-8f60-e87366e40027}</ProjectGuid>
-    <RootNamespace>SE102</RootNamespace>
+    <ProjectGuid>{70a3eb5d-ceb9-4353-9964-7023b6c07a44}</ProjectGuid>
+    <RootNamespace>SDL2Example</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -104,12 +104,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Code\VS\SE102\libs\tmxlite\tmxlite\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../tmxlite/include;../extlibs/sdl2/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d10.lib;dinput8.lib;dxguid.lib;DXGI.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../extlibs/sdl2/lib/x64;../tmxlite/x64/bin/DebugStatic;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;libtmxlite-s-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -120,77 +122,29 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Code\VS\SE102\libs\tmxlite\tmxlite\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../tmxlite/include;../extlibs/sdl2/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d10.lib;dinput8.lib;dxguid.lib;DXGI.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../extlibs/sdl2/lib/x64;../tmxlite/x64/bin/ReleaseStatic;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;libtmxlite-s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CTankEnemy.cpp" />
-    <ClCompile Include="CPlayer.cpp" />
-    <ClCompile Include="CTank.cpp" />
-    <ClCompile Include="CTankEnemyGreen.cpp" />
-    <ClCompile Include="CTankEnemyRed.cpp" />
-    <ClCompile Include="debug.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MapLayer.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Contents\Maps\btSprites.tsx" />
-    <None Include="Contents\Maps\test.tiled-project" />
-    <None Include="Contents\Maps\test.tiled-session" />
-    <None Include="Contents\Maps\test.tmx" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="brick.ico" />
-    <Image Include="brick.png" />
-    <Image Include="btSprites.png" />
-    <Image Include="Bullet.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="enemy-big.png" />
-    <Image Include="mario.png" />
-    <Image Include="mario_full.png" />
-    <Image Include="misc.png" />
-    <Image Include="pool.png">
-      <DeploymentContent>false</DeploymentContent>
-    </Image>
-    <Image Include="ship.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="contents.h" />
-    <ClInclude Include="CTankEnemy.h" />
-    <ClInclude Include="CPlayer.h" />
-    <ClInclude Include="CTank.h" />
-    <ClInclude Include="CTankEnemyGreen.h" />
-    <ClInclude Include="CTankEnemyRed.h" />
-    <ClInclude Include="debug.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Vector2.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\libs\tmxlite\tmxlite\tmxlite.vcxproj">
-      <Project>{0bc0c535-febb-4a83-8197-af74fa26e100}</Project>
-    </ProjectReference>
+    <ClInclude Include="src\MapLayer.hpp" />
+    <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="src\Texture.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.DXSDK.D3DX.9.29.952.8\build\native\Microsoft.DXSDK.D3DX.targets" Condition="Exists('..\packages\Microsoft.DXSDK.D3DX.9.29.952.8\build\native\Microsoft.DXSDK.D3DX.targets')" />
   </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.DXSDK.D3DX.9.29.952.8\build\native\Microsoft.DXSDK.D3DX.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.DXSDK.D3DX.9.29.952.8\build\native\Microsoft.DXSDK.D3DX.targets'))" />
-  </Target>
 </Project>

@@ -27,12 +27,16 @@
 #include "CTankEnemy.h"
 #include "CTankEnemyRed.h"
 #include "CTankEnemyGreen.h"
+#include "contents.h"
 
+#include <tmxlite/Map.hpp>
+#include <tmxlite/Layer.hpp>
+#include <tmxlite/TileLayer.hpp>
+#include <tmxlite/ObjectGroup.hpp>
+#include <iostream>
 
 #define WINDOW_CLASS_NAME L"Game Window"
 #define MAIN_WINDOW_TITLE L"01 - Skeleton"
-#define TEXTURE_PATH_BTSPRITES L"btSprites.png"
-
 #define BACKGROUND_COLOR D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f)
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
@@ -56,6 +60,7 @@ LPTEXTURE texBrick = NULL;
 LPTEXTURE texMisc = NULL;
 LPTEXTURE texShip = NULL;
 LPTEXTURE texEnemy = NULL;
+tmx::Map tMap;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -112,6 +117,32 @@ void LoadResources()
 
 	int backBufferWidth = game->GetBackBufferWidth();
 	int backBufferHeight = game->GetBackBufferHeight();
+
+	if (tMap.load(TEST_TILE_TMX)) {
+		const auto& layers = tMap.getLayers();
+		for (const auto& layer : layers) {
+			if (layer->getType() == tmx::Layer::Type::Object)
+			{
+				const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
+				const auto& objects = objectLayer.getObjects();
+				for (const auto& object : objects)
+				{
+					//do stuff with object properties
+				}
+			}
+			else if (layer->getType() == tmx::Layer::Type::Tile)
+			{
+				const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+				//read out tile layer properties etc...
+			}
+		}
+
+		const auto& tilesets = tMap.getTilesets();
+		for (const auto& tileset : tilesets)
+		{
+			//read out tile set properties, load textures etc...
+		}
+	}
 
 	CPlayer* tank = new CPlayer(50.f, 50.f, 0.f, 0.f, 0.f, game->texBTSprites);
 	game->objects.push_back(tank);
@@ -333,8 +364,15 @@ int WINAPI WinMain(
 	_In_ int nCmdShow
 ) 
 {
+	FILE* fp;
+	AllocConsole();
+	// Redirect STDOUT if the console has an output handle
+	freopen_s(&fp, "CONOUT$", "w", stdout);
+	freopen_s(&fp, "CONOUT$", "w", stderr);
+
 	srand(time(NULL));
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 
 	CGame * game = CGame::GetInstance();
 	game->Init(hWnd);
