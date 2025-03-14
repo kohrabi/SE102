@@ -1,34 +1,32 @@
 #include "CTankEnemy.h"
 
-#define MOVE_DIR_CHANGE_TIME 1.0f
-#define SHOOT_TIME 5.f
 
 void CTankEnemy::Update(DWORD dt)
 {
 	float dts = dt / 1000.0f;
-	//if (moveChangeDirTimer > 0) moveChangeDirTimer -= dts;
-	//else {
-	//	moveChangeDirTimer = MOVE_DIR_CHANGE_TIME + timeOffset;
-	//	int dir = rand() % 4;
-	//	switch (dir) {
-	//	case 0:
-	//		moveDir.x = 1;
-	//		moveDir.y = 0;
-	//		break;
-	//	case 1:
-	//		moveDir.x = -1;
-	//		moveDir.y = 0;
-	//		break;
-	//	case 2:
-	//		moveDir.x = 0;
-	//		moveDir.y = 1;
-	//		break;
-	//	case 3:
-	//		moveDir.x = 0;
-	//		moveDir.y = -1;
-	//		break;
-	//	}
-	//}
+	if (moveChangeDirTimer > 0) moveChangeDirTimer -= dts;
+	else {
+		moveChangeDirTimer = MOVE_DIR_CHANGE_TIME + timeOffset;
+		int dir = rand() % 4;
+		switch (dir) {
+		case 0:
+			moveDir.x = 1;
+			moveDir.y = 0;
+			break;
+		case 1:
+			moveDir.x = -1;
+			moveDir.y = 0;
+			break;
+		case 2:
+			moveDir.x = 0;
+			moveDir.y = 1;
+			break;
+		case 3:
+			moveDir.x = 0;
+			moveDir.y = -1;
+			break;
+		}
+	}
 
 	fire = false;
 	if (canFire) {

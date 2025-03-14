@@ -4,8 +4,9 @@
     ],
     "extensionsPath": "extensions",
     "folders": [
-        ".",
         "."
+    ],
+    "properties": [
     ],
     "propertyTypes": [
     ]

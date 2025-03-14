@@ -45,13 +45,18 @@
     <ClCompile Include="CTankEnemyGreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CTankSpawner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Maps\btSprites.tsx" />
     <None Include="Maps\test.tiled-project" />
     <None Include="Maps\test.tiled-session" />
     <None Include="Maps\test.tmx" />
+    <None Include="Maps\btSprites.tsx" />
+    <None Include="Maps\btSpritesEntity.tsx" />
+    <None Include="Maps\TankSpawner.tx" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="brick.ico">
@@ -120,6 +125,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CTankSpawner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

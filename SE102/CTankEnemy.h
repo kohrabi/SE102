@@ -3,6 +3,9 @@
 #include "CTank.h"
 #include "GameObject.h"
 
+#define MOVE_DIR_CHANGE_TIME 1.0f
+#define SHOOT_TIME 5.f
+
 class CTankEnemy : public CTank {
 protected:
 	float moveChangeDirTimer = 0.0f;

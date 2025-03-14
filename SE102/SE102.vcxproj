@@ -136,6 +136,7 @@
     <ClCompile Include="CTank.cpp" />
     <ClCompile Include="CTankEnemyGreen.cpp" />
     <ClCompile Include="CTankEnemyRed.cpp" />
+    <ClCompile Include="CTankSpawner.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -143,9 +144,9 @@
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Maps\btSprites.tsx">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
+    <None Include="Maps\btSprites.tsx" />
+    <None Include="Maps\btSpritesEntity.tsx" />
+    <None Include="Maps\TankSpawner.tx" />
     <None Include="Maps\test.tiled-project">
       <DeploymentContent>true</DeploymentContent>
     </None>
@@ -180,6 +181,7 @@
     <ClInclude Include="CTank.h" />
     <ClInclude Include="CTankEnemyGreen.h" />
     <ClInclude Include="CTankEnemyRed.h" />
+    <ClInclude Include="CTankSpawner.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

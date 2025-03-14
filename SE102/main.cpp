@@ -28,6 +28,7 @@
 #include "CTankEnemyRed.h"
 #include "CTankEnemyGreen.h"
 #include "contents.h"
+#include "CTankSpawner.h"
 
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Layer.hpp>
@@ -38,8 +39,8 @@
 #define WINDOW_CLASS_NAME L"Game Window"
 #define MAIN_WINDOW_TITLE L"01 - Skeleton"
 #define BACKGROUND_COLOR D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f)
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH 224
+#define SCREEN_HEIGHT 246
 
 
 using namespace std;
@@ -109,14 +110,6 @@ void LoadResources()
 
 	if (tMap.load(TEST_TILE_TMX)) {
 		const auto& tilesets = tMap.getTilesets();
-		LPTEXTURE tilesetTexture;
-		for (const auto& tileset : tilesets)
-		{
-			string texturePathString = tileset.getImagePath().substr(tileset.getImagePath().find_last_of('/') + 1);
-			wstring texturePath = wstring(texturePathString.begin(), texturePathString.end());
-			tilesetTexture = game->LoadTexture(texturePath.c_str());
-			//read out tile set properties, load textures etc...
-		}
 
 		const auto& layers = tMap.getLayers();
 		for (const auto& layer : layers) {
@@ -126,26 +119,51 @@ void LoadResources()
 				const auto& objects = objectLayer.getObjects();
 				for (const auto& object : objects)
 				{
+					const auto& aabb = object.getAABB();
+					if (object.getClass() == "CPlayer")
+					{
+						CPlayer* tank = new CPlayer(
+							aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f,
+							0.f, 0.f, 0.f, game->texBTSprites);
+						game->objects.push_back(tank);
+					}
+					else if (object.getClass() == "CTankSpawner") {
+						float timeOffset = 0.0f;
+						for (const auto& proper : object.getProperties()) {
+							if (proper.getName() == "timeOffset")
+								timeOffset = proper.getFloatValue();
+						}
+
+						CTankSpawner* tank = new CTankSpawner(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f, timeOffset, NULL);
+						game->objects.push_back(tank);
+					}
 					//do stuff with object properties
 				}
 			}
 			else if (layer->getType() == tmx::Layer::Type::Tile)
 			{
+				// Fix long ass loading
 				const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
-				const auto& tiles = tilesets.back().getTiles();
 				const auto& layerSize = tileLayer.getSize();
 				int i = -1;
 				for (const auto& tile : tileLayer.getTiles()) {
 					i++;
 					if (tile.ID == 0)
 						continue;
+					auto tiles = tilesets[0].getTiles();
+					for (auto& tileset : tilesets)
+						if (tile.ID <= tileset.getLastGID())
+						{
+							tiles = tileset.getTiles();
+							break;
+						}
 					auto imagePosition = tiles[tile.ID - 1].imagePosition;
 					auto tileSize = tiles[tile.ID - 1].imageSize;
 					if (tileSize.x == 0 || tileSize.y == 0) {
 						std::cout << "Tile size is zero";
 						continue;
 					}
-					Vector2 offset(tileSize.x / 2.0f, 0.0f);
+					Vector2 offset(tileSize.x / 2.0f, tileSize.y / 2.0f);
 					game->objects.push_back(new CTile(tileSize.x * (i % (layerSize.x)) + offset.x, tileSize.y * floorf(i / layerSize.y) + offset.y, game->texBTSprites,
 						imagePosition.x / tileSize.x, imagePosition.y / tileSize.y, tileSize.x, tileSize.y));
 				}
@@ -155,10 +173,8 @@ void LoadResources()
 
 	}
 
-	CPlayer* tank = new CPlayer(50.f, 50.f, 0.f, 0.f, 0.f, game->texBTSprites);
-	game->objects.push_back(tank);
 	for (int i = 1; i < 2; i++) {
-		game->objects.push_back(new CTankEnemyRed(200.f * i, 50.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
+		game->objects.push_back(new CTankEnemyRed(10.f * i, 50.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
 	}
 	//for (int i = 0; i < 1; i++) {
 	//	game->objects.push_back(new CTankEnemyGreen(backBufferWidth - 35.f * i, backBufferHeight - 32.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
