@@ -66,23 +66,25 @@ void CTank::Update(DWORD dt)
 	int imageHeight = texture->getHeight();
 	if (textureRegion.bottom - textureRegion.top != 0)
 		imageHeight = textureRegion.bottom - textureRegion.top;
+	imageHeight /= 2;
 
 	int imageWidth = texture->getWidth();
 	
 	if (textureRegion.right - textureRegion.left != 0)
 		imageWidth = textureRegion.right - textureRegion.left;
+	imageWidth /= 2;
 
 	CMoveableObject::Update(dt);
 
-	if (position.y <= imageHeight / 2 || position.y >= BackBufferHeight - imageHeight) {
-		if (position.y <= imageHeight / 2)
-			position.y = imageHeight / 2;
+	if (position.y <= imageHeight || position.y >= BackBufferHeight - imageHeight) {
+		if (position.y <= imageHeight)
+			position.y = imageHeight;
 		else if (position.y >= BackBufferHeight - imageHeight)
 			position.y = (float)(BackBufferHeight - imageHeight);
 	}
-	if (position.x <= imageWidth / 2 || position.x >= BackBufferWidth - imageWidth) {
-		if (position.x <= imageWidth / 2)
-			position.x = imageWidth / 2;
+	if (position.x <= imageWidth || position.x >= BackBufferWidth - imageWidth) {
+		if (position.x <= imageWidth)
+			position.x = imageWidth;
 		else if (position.x >= BackBufferWidth - imageWidth)
 			position.x = (float)(BackBufferWidth - imageWidth);
 	}

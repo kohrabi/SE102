@@ -85,7 +85,7 @@ void CGame::Init(HWND hWnd)
 	pD3DDevice->RSSetViewports(1, &viewPort);
 
 	D3D10_SAMPLER_DESC desc;
-	desc.Filter = D3D10_FILTER_MIN_MAG_POINT_MIP_LINEAR; 
+	desc.Filter = D3D10_FILTER_MIN_MAG_MIP_POINT; 
 	desc.AddressU = D3D10_TEXTURE_ADDRESS_CLAMP;
 	desc.AddressV = D3D10_TEXTURE_ADDRESS_CLAMP;
 	desc.AddressW = D3D10_TEXTURE_ADDRESS_CLAMP;
@@ -317,7 +317,8 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect)
 	D3DXMATRIX matTranslation;
 
 	// Create the translation matrix
-	D3DXMatrixTranslation(&matTranslation, x, (backBufferHeight - y), 0.1f);
+	// ------------------------------------------ CURRENT FLOORING THE POSITION FOR PIXEL ART
+	D3DXMatrixTranslation(&matTranslation, floor(x), floor(backBufferHeight - y), 0.1f);
 
 	D3DXMATRIX matRotation;
 	//D3DXMatrixIdentity(&matRotation);

@@ -152,9 +152,13 @@ void LoadResources()
 						continue;
 					auto imagePosition = tiles[tile.ID - 1].imagePosition;
 					auto tileSize = tiles[tile.ID - 1].imageSize;
-					game->objects.push_back(new CTile(tileSize.x * (i % (layerSize.x)), tileSize.y * floorf(i / layerSize.y), game->texBTSprites,
-						imagePosition.x, imagePosition.x + tileSize.x,
-						imagePosition.y, imagePosition.y + tileSize.y));
+					if (tileSize.x == 0 || tileSize.y == 0) {
+						std::cout << "Tile size is zero";
+						continue;
+					}
+					Vector2 offset(tileSize.x / 2.0f, 0.0f);
+					game->objects.push_back(new CTile(tileSize.x * (i % (layerSize.x)) + offset.x, tileSize.y * floorf(i / layerSize.y) + offset.y, game->texBTSprites,
+						imagePosition.x / tileSize.x, imagePosition.y / tileSize.y, tileSize.x, tileSize.y));
 				}
 				//read out tile layer properties etc...
 			}
@@ -165,7 +169,7 @@ void LoadResources()
 	CPlayer* tank = new CPlayer(50.f, 50.f, 0.f, 0.f, 0.f, game->texBTSprites);
 	game->objects.push_back(tank);
 	for (int i = 1; i < 2; i++) {
-		game->objects.push_back(new CTankEnemyRed(200 * i, 50.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
+		game->objects.push_back(new CTankEnemyRed(200.f * i, 50.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
 	}
 	//for (int i = 0; i < 1; i++) {
 	//	game->objects.push_back(new CTankEnemyGreen(backBufferWidth - 35.f * i, backBufferHeight - 32.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
@@ -388,7 +392,7 @@ int WINAPI WinMain(
 	freopen_s(&fp, "CONOUT$", "w", stdout);
 	freopen_s(&fp, "CONOUT$", "w", stderr);
 
-	srand(time(NULL));
+	srand(time(nullptr));
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 

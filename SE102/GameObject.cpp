@@ -213,8 +213,8 @@ RECT GetTextureRegion(int x, int y, int xSize, int ySize)
 {
 	RECT r;
 	r.left = x * xSize;
-	r.right = (x + 1) * xSize;
-	r.bottom = (y + 1)*ySize;
+	r.right = (x + 1) * xSize - 1;
 	r.top = (y) * ySize;
+	r.bottom = (y + 1) * ySize - 1;
 	return r;
 }

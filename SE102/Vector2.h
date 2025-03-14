@@ -10,7 +10,7 @@ public:
 	static const Vector2 One;
 	
 	Vector2() : x(0), y(0) {}
-	Vector2(float _x) : x(_x), y(_x) {}
+	Vector2(float _xy) : x(_xy), y(_xy) {}
 	Vector2(float _x, float _y) : x(_x), y(_y) {}
 
 	Vector2& operator=(const Vector2& a) { x = a.x; y = a.y; return *this; }

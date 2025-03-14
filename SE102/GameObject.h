@@ -13,6 +13,9 @@
 #define TYPE_BULLET 4
 #define TYPE_ENEMY 5
 
+
+RECT GetTextureRegion(int x, int y, int xSize, int ySize);
+
 class CGameObject
 {
 protected: 
@@ -47,7 +50,6 @@ public:
 		textureRegion.right = r;
 		textureRegion.top = t;
 		textureRegion.bottom = b;
-
 	}
 	void SetRotation(float newVal) { rotation = newVal; }
 
@@ -63,8 +65,10 @@ typedef CGameObject * LPGAMEOBJECT;
 
 class CTile : public CGameObject {
 public:
-	CTile(float x, float y, LPTEXTURE texture, int l, int r, int t, int b) :CGameObject(x, y, 0.0f, texture) {
-		SetTextureRegion(l, r, t, b);
+	// Tile number xTile counting from 0
+	// Tile number yTile counting from 0
+	CTile(float x, float y, LPTEXTURE texture, int xTile, int yTile, int tileSizeX, int tileSizeY) : CGameObject(x, y, 0.0f, texture) {
+		textureRegion = GetTextureRegion(xTile, yTile, tileSizeX, tileSizeY);
 	}
 	void Update(DWORD dt) override {}
 };
@@ -149,5 +153,3 @@ public:
 	int GetType() const override { return TYPE_BULLET; }
 	void Update(DWORD dt) override;
 };
-
-RECT GetTextureRegion(int x, int y, int xSize, int ySize);
