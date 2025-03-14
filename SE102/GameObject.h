@@ -85,32 +85,6 @@ public:
 	virtual void Update(DWORD dt);
 };
 
-class CBrick : public CGameObject
-{
-public:
-	CBrick(float x, float y, float rotation, LPTEXTURE texture): CGameObject(x,y, rotation,texture) {}
-	void Update(DWORD dt) {}; 
-};
-
-class CMario : public CMoveableObject
-{
-public:
-	CMario(float x, float y, float rotation, float vx, float vy, LPTEXTURE texture) :CMoveableObject(x, y, rotation, vx, vy, texture)
-	{
-	};
-	void Update(DWORD dt) override;
-};
-
-class CShip: public CMoveableObject
-{
-	float shootTimer = 0.0f;
-public:
-	CShip(float x, float y, float rotation, float vx, float vy, LPTEXTURE texture) :CMoveableObject(x, y, rotation, vx, vy, texture)
-	{
-	};
-	void Update(DWORD dt) override;
-};
-
 class CBullet : public CMoveableObject
 {
 	float radius;
@@ -118,21 +92,6 @@ public:
 	CBullet(float x, float y, float rotation, float vx, float vy, LPTEXTURE texture) :CMoveableObject(x, y, rotation, vx, vy, texture)
 	{
 		this->radius = texture->getWidth() * 1.0f;
-	};
-	void Update(DWORD dt) override;
-};
-
-class CEnemy : public CMoveableObject
-{
-public:
-	CEnemy(float x, float y, float rotation, float vx, float vy, LPTEXTURE texture) : CMoveableObject(x, y, rotation, vx, vy, texture)
-	{
-		float width = texture->getWidth() / 2.0f;
-		float height = texture->getHeight() / 2.0f;
-		//aabb.bottomLeftX = x - width;
-		//aabb.bottomLeftY = y + height;
-		//aabb.topRightX = x + width;
-		//aabb.topRightY = y - height;
 	};
 	void Update(DWORD dt) override;
 };

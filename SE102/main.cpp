@@ -44,17 +44,6 @@
 
 using namespace std;
 
-CMario *mario;
-#define MARIO_START_X 10.0f
-#define MARIO_START_Y 100.0f
-#define MARIO_START_VX 0.1f
-#define MARIO_START_VY 0.1f
-
-
-CBrick *brick;
-#define BRICK_X 10.0f
-#define BRICK_Y 120.0f
-
 LPTEXTURE texMario = NULL;
 LPTEXTURE texBrick = NULL;
 LPTEXTURE texMisc = NULL;
@@ -211,43 +200,8 @@ void Update(DWORD dt)
 		}
 	}	
 
-	/*for (int i = 0; i < game->objects.size(); i++) {
-		LPGAMEOBJECT objectA = game->objects[i];
-		if (objectA->ShouldDestroy())
-			continue;
-		for (int j = 0; j < game->objects.size(); j++) {
-			if (i == j)
-				continue;
-			LPGAMEOBJECT objectB = game->objects[j];
-			if (objectB->ShouldDestroy())
-				continue;
-			auto& test = typeid(*objectA);
-			if (std::is_same_v<decltype(objectA), CTank*> && std::is_same_v<decltype(*objectB), CTankBullet*>) {
-				DebugOut(L"Hello\n");
-			}
-		}
-
-	}*/
-
 	for (int i = 0; i < 256; i++)
 		game->keyJustPressed[i] = false;
-	//for (int i = 0; i < game->objects.size(); i++) {
-	//	LPGAMEOBJECT objectA = game->objects[i];
-	//	for (int j = 0; j < game->objects.size(); j++) {
-	//		if (i == j) continue;
-	//		LPGAMEOBJECT objectB = game->objects[j];
-	//		if (typeid(objectA) == typeid(CBullet) && typeid(objectB) == typeid(CEnemy))
-	//		{
-
-	//			if (checkCircle(objectA->GetX(), objectB->GetY(), 30, objectB->GetX(), objectB->GetY(), 30)) {
-
-	//			}
-	//		}
-	//	}
-	//}
-
-	/*mario->Update(dt);
-	brick->Update(dt);*/
 
 	DebugOutTitle(L"01 - Skeleton %f", dt); 
 }
@@ -279,9 +233,6 @@ void Render()
 			if (!g->objects[i]->ShouldDestroy())
 				g->objects[i]->Render();
 		}
-
-		//brick->Render();
-		//mario->Render();
 
 		// Uncomment this line to see how to draw a porttion of a texture  
 		//g->Draw(10, 10, 0, texMisc, 300, 117, 317, 134);

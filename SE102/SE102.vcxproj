@@ -183,6 +183,7 @@
     <ClInclude Include="debug.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="helper.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
