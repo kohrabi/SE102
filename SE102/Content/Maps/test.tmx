@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.11" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="26" height="26" tilewidth="8" tileheight="8" infinite="0" nextlayerid="7" nextobjectid="49">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="26" height="26" tilewidth="8" tileheight="8" infinite="0" nextlayerid="7" nextobjectid="49">
  <editorsettings>
   <chunksize width="8" height="8"/>
  </editorsettings>
@@ -37,8 +37,16 @@
  </layer>
  <objectgroup id="5" name="Object Layer 1">
   <object id="43" template="TankSpawner.tx" type="CTankSpawner" x="0" y="16"/>
-  <object id="46" template="TankSpawner.tx" x="96" y="16"/>
-  <object id="47" template="TankSpawner.tx" x="192" y="16"/>
+  <object id="46" template="TankSpawner.tx" x="96" y="16">
+   <properties>
+    <property name="timeOffset" type="float" value="6"/>
+   </properties>
+  </object>
+  <object id="47" template="TankSpawner.tx" x="192" y="16">
+   <properties>
+    <property name="timeOffset" type="float" value="9"/>
+   </properties>
+  </object>
   <object id="48" template="Player.tx" type="CPlayer" x="64" y="208"/>
  </objectgroup>
 </map>

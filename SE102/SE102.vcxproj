@@ -144,35 +144,26 @@
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Maps\btSprites.tsx" />
-    <None Include="Maps\btSpritesEntity.tsx" />
-    <None Include="Maps\TankSpawner.tx" />
-    <None Include="Maps\test.tiled-project">
+    <None Include="Content\Maps\btSprites.tsx" />
+    <None Include="Content\Maps\btSpritesEntity.tsx" />
+    <None Include="Content\Maps\Player.tx" />
+    <None Include="Content\Maps\TankSpawner.tx" />
+    <None Include="Content\Maps\test.tiled-project">
       <DeploymentContent>true</DeploymentContent>
     </None>
-    <None Include="Maps\test.tiled-session">
+    <None Include="Content\Maps\test.tiled-session">
       <DeploymentContent>true</DeploymentContent>
     </None>
-    <None Include="Maps\test.tmx">
+    <None Include="Content\Maps\test.tmx">
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="brick.ico" />
-    <Image Include="brick.png" />
-    <Image Include="btSprites.png" />
-    <Image Include="Bullet.png">
+    <Image Include="btSprites.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
     <Image Include="enemy-big.png" />
-    <Image Include="mario.png" />
-    <Image Include="mario_full.png" />
-    <Image Include="misc.png" />
-    <Image Include="pool.png">
-      <DeploymentContent>false</DeploymentContent>
-    </Image>
-    <Image Include="ship.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="contents.h" />

@@ -51,39 +51,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Maps\test.tiled-project" />
-    <None Include="Maps\test.tiled-session" />
-    <None Include="Maps\test.tmx" />
-    <None Include="Maps\btSprites.tsx" />
-    <None Include="Maps\btSpritesEntity.tsx" />
-    <None Include="Maps\TankSpawner.tx" />
+    <None Include="Content\Maps\test.tiled-project" />
+    <None Include="Content\Maps\test.tiled-session" />
+    <None Include="Content\Maps\test.tmx" />
+    <None Include="Content\Maps\btSprites.tsx" />
+    <None Include="Content\Maps\btSpritesEntity.tsx" />
+    <None Include="Content\Maps\TankSpawner.tx" />
+    <None Include="Content\Maps\Player.tx" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="brick.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="brick.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="pool.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="mario.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="mario_full.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="misc.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="enemy-big.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="ship.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Bullet.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="btSprites.png">
