@@ -19,16 +19,21 @@
 #include <vector>
 #include <typeinfo>
 
-#include "debug.h"
-#include "Game.h"
-#include "GameObject.h"
-#include "CTank.h"
-#include "CPlayer.h"
-#include "CTankEnemy.h"
-#include "CTankEnemyRed.h"
-#include "CTankEnemyGreen.h"
+#include "Engine/debug.h"
+#include "Engine/Game.h"
+#include "Engine/GameObject.h"
+#include "GameObjects/CTank.h"
+#include "GameObjects/CPlayer.h"
+#include "GameObjects/CTankEnemy.h"
+#include "GameObjects/CTankEnemyRed.h"
+#include "GameObjects/CTankEnemyGreen.h"
 #include "contents.h"
-#include "CTankSpawner.h"
+#include "GameObjects/CTankSpawner.h"
+#include "Engine/Graphics/Textures.h"
+#include "Engine/Graphics/Sprites.h"
+#include "Engine/Graphics/Animations.h"
+#include "GameObjects/CTile.h"
+
 
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Layer.hpp>
@@ -96,15 +101,79 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void LoadResources()
 {
 	CGame* const game = CGame::GetInstance();
-	game->texBTSprites = game->LoadTexture(TEXTURE_PATH_BTSPRITES);
-	//game->objects = std::vector(0);
+	CTextures* const textures = CTextures::GetInstance();
+	CSprites* const sprites = CSprites::GetInstance();
+	CAnimations* const animations = CAnimations::GetInstance();
 
-	// Load a sprite sheet as a texture to try drawing a portion of a texture. See function Render 
-	//texMisc = game->LoadTexture(MISC_TEXTURE_PATH);
+	textures->Add(TEXTURE_PATH_BTSPRITES);
 
-	//mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX, MARIO_START_VY, texMario);
-	//brick = new CBrick(0, 0, texBrick);
+	auto texBTSprites = textures->Get(TEXTURE_PATH_BTSPRITES);
+	sprites->Add(TANK_BULLET_SPRITE_ID, 322, 102, 325, 105, texBTSprites);
+	sprites->Add(PLAYER_MOVEUP_FRAME1, GetTextureRegion(0, 0, 16, 16), texBTSprites);
+	sprites->Add(PLAYER_MOVEUP_FRAME2, GetTextureRegion(1, 0, 16, 16), texBTSprites);
 
+	CAnimation* ani = new CAnimation(200);
+	ani->Add(PLAYER_MOVEUP_FRAME1);
+	ani->Add(PLAYER_MOVEUP_FRAME2);
+	animations->Add(PLAYER_MOVEUP_ANIMATION, ani);
+
+	sprites->Add(PLAYER_MOVELEFT_FRAME1, GetTextureRegion(2, 0, 16, 16), texBTSprites);
+	sprites->Add(PLAYER_MOVELEFT_FRAME2, GetTextureRegion(3, 0, 16, 16), texBTSprites);
+	
+	ani = new CAnimation(200);
+	ani->Add(PLAYER_MOVELEFT_FRAME1);
+	ani->Add(PLAYER_MOVELEFT_FRAME2);
+	animations->Add(PLAYER_MOVELEFT_ANIMATION, ani);
+
+	sprites->Add(PLAYER_MOVEDOWN_FRAME1, GetTextureRegion(4, 0, 16, 16), texBTSprites);
+	sprites->Add(PLAYER_MOVEDOWN_FRAME2, GetTextureRegion(5, 0, 16, 16), texBTSprites);
+
+	ani = new CAnimation(200);
+	ani->Add(PLAYER_MOVEDOWN_FRAME1);
+	ani->Add(PLAYER_MOVEDOWN_FRAME2);
+	animations->Add(PLAYER_MOVEDOWN_ANIMATION, ani);
+
+	sprites->Add(PLAYER_MOVERIGHT_FRAME1, GetTextureRegion(6, 0, 16, 16), texBTSprites);
+	sprites->Add(PLAYER_MOVERIGHT_FRAME2, GetTextureRegion(7, 0, 16, 16), texBTSprites);
+
+	ani = new CAnimation(200);
+	ani->Add(PLAYER_MOVERIGHT_FRAME1);
+	ani->Add(PLAYER_MOVERIGHT_FRAME2);
+	animations->Add(PLAYER_MOVERIGHT_ANIMATION, ani);
+
+
+	sprites->Add(ENEMY_MOVEUP_FRAME1, GetTextureRegion(0 + 8, 0, 16, 16), texBTSprites);
+	sprites->Add(ENEMY_MOVEUP_FRAME2, GetTextureRegion(1 + 8, 0, 16, 16), texBTSprites);
+
+	ani = new CAnimation(200);
+	ani->Add(ENEMY_MOVEUP_FRAME1);
+	ani->Add(ENEMY_MOVEUP_FRAME2);
+	animations->Add(ENEMY_MOVEUP_ANIMATION, ani);
+
+	sprites->Add(ENEMY_MOVELEFT_FRAME1, GetTextureRegion(2 + 8, 0, 16, 16), texBTSprites);
+	sprites->Add(ENEMY_MOVELEFT_FRAME2, GetTextureRegion(3 + 8, 0, 16, 16), texBTSprites);
+
+	ani = new CAnimation(200);
+	ani->Add(ENEMY_MOVELEFT_FRAME1);
+	ani->Add(ENEMY_MOVELEFT_FRAME2);
+	animations->Add(ENEMY_MOVELEFT_ANIMATION, ani);
+
+	sprites->Add(ENEMY_MOVEDOWN_FRAME1, GetTextureRegion(4 + 8, 0, 16, 16), texBTSprites);
+	sprites->Add(ENEMY_MOVEDOWN_FRAME2, GetTextureRegion(5 + 8, 0, 16, 16), texBTSprites);
+
+	ani = new CAnimation(200);
+	ani->Add(ENEMY_MOVEDOWN_FRAME1);
+	ani->Add(ENEMY_MOVEDOWN_FRAME2);
+	animations->Add(ENEMY_MOVEDOWN_ANIMATION, ani);
+
+	sprites->Add(ENEMY_MOVERIGHT_FRAME1, GetTextureRegion(6 + 8, 0, 16, 16), texBTSprites);
+	sprites->Add(ENEMY_MOVERIGHT_FRAME2, GetTextureRegion(7 + 8, 0, 16, 16), texBTSprites);
+
+	ani = new CAnimation(200);
+	ani->Add(ENEMY_MOVERIGHT_FRAME1);
+	ani->Add(ENEMY_MOVERIGHT_FRAME2);
+	animations->Add(ENEMY_MOVERIGHT_ANIMATION, ani);
+	
 	int backBufferWidth = game->GetBackBufferWidth();
 	int backBufferHeight = game->GetBackBufferHeight();
 
@@ -122,9 +191,7 @@ void LoadResources()
 					const auto& aabb = object.getAABB();
 					if (object.getClass() == "CPlayer")
 					{
-						CPlayer* tank = new CPlayer(
-							aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f,
-							0.f, 0.f, 0.f, game->texBTSprites);
+						CPlayer* tank = new CPlayer(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f, 0.f, 0.f);
 						game->objects.push_back(tank);
 					}
 					else if (object.getClass() == "CTankSpawner") {
@@ -134,7 +201,7 @@ void LoadResources()
 								timeOffset = proper.getFloatValue();
 						}
 
-						CTankSpawner* tank = new CTankSpawner(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f, timeOffset, NULL);
+						CTankSpawner* tank = new CTankSpawner(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f, timeOffset);
 						game->objects.push_back(tank);
 					}
 					//do stuff with object properties
@@ -159,7 +226,8 @@ void LoadResources()
 								auto imagePosition = tilesetTiles[tiles[idx].ID - 1].imagePosition;
 								auto tileSize = tilesetTiles[tiles[idx].ID - 1].imageSize;
 								Vector2 offset(tileSize.x / 2.0f, tileSize.y / 2.0f);
-								game->objects.push_back(new CTile(mapTileSize.x * i + offset.x, mapTileSize.y * j + offset.y, game->texBTSprites,
+								game->objects.push_back(new CTile(mapTileSize.x * i + offset.x, mapTileSize.y * j + offset.y, 
+									textures->Get(STRING_TO_WSTRING(tileset.getImagePath())),
 									imagePosition.x / mapTileSize.x, imagePosition.y / mapTileSize.y, mapTileSize.x, mapTileSize.y));
 							}
 						}
@@ -173,8 +241,6 @@ void LoadResources()
 }
 
 void UnloadResources() {
-	CGame* const game = CGame::GetInstance();
-	game->texBTSprites->Cleanup();
 }
 
 /*
@@ -193,14 +259,18 @@ void Update(DWORD dt)
 	CGame* const game = CGame::GetInstance();
 
 	for (int i = 0; i < game->objects.size(); ) {
-		if (!game->objects[i]->ShouldDestroy()) {
-			game->objects[i]->Update(dt);
-			i++;
-		}
-		else {
+		if (game->objects[i]->ShouldDestroy()) {
 			LPGAMEOBJECT object = game->objects[i];
 			game->objects.erase(game->objects.begin() + i);
 			delete object;
+			continue;	
+		}
+		i++;
+	}
+
+	for (int i = 0; i < game->objects.size(); i++) {
+		if (!game->objects[i]->ShouldDestroy()) {
+			game->objects[i]->Update(dt);
 		}
 	}	
 

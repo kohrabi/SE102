@@ -18,52 +18,58 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="debug.cpp">
+    <ClCompile Include="Engine\debug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
+    <ClCompile Include="Engine\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
+    <ClCompile Include="Engine\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vector2.cpp">
+    <ClCompile Include="Engine\Math\Vector2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CTank.cpp">
+    <ClCompile Include="GameObjects\CTank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CPlayer.cpp">
+    <ClCompile Include="GameObjects\CPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CTankEnemy.cpp">
+    <ClCompile Include="GameObjects\CTankEnemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CTankEnemyRed.cpp">
+    <ClCompile Include="GameObjects\CTankEnemyRed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CTankEnemyGreen.cpp">
+    <ClCompile Include="GameObjects\CTankEnemyGreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CTankSpawner.cpp">
+    <ClCompile Include="GameObjects\CTankSpawner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp">
+    <ClCompile Include="Engine\Graphics\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Animations.cpp">
+    <ClCompile Include="Engine\Graphics\Animations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mario.cpp">
+    <ClCompile Include="GameObjects\Mario.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite.cpp">
+    <ClCompile Include="Engine\Graphics\Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sprites.cpp">
+    <ClCompile Include="Engine\Graphics\Sprites.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Textures.cpp">
+    <ClCompile Include="Engine\Graphics\Textures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\AnimationFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\CTankBullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -78,72 +84,81 @@
     <None Include="Content\Maps\Player.tx" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="enemy-big.png">
+    <Image Include="Content\enemy-big.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="btSprites.png">
+    <Image Include="Content\btSprites.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="debug.h">
+    <ClInclude Include="Engine\debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="Engine\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
+    <ClInclude Include="Engine\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="Engine\Graphics\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
+    <ClInclude Include="Engine\Math\Vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CTank.h">
+    <ClInclude Include="GameObjects\CTank.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CPlayer.h">
+    <ClInclude Include="GameObjects\CPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CTankEnemy.h">
+    <ClInclude Include="GameObjects\CTankEnemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CTankEnemyRed.h">
+    <ClInclude Include="GameObjects\CTankEnemyRed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CTankEnemyGreen.h">
+    <ClInclude Include="GameObjects\CTankEnemyGreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="contents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="helper.h">
+    <ClInclude Include="Engine\helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CTankSpawner.h">
+    <ClInclude Include="GameObjects\CTankSpawner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
+    <ClInclude Include="Engine\Graphics\Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationFrame.h">
+    <ClInclude Include="Engine\Graphics\AnimationFrame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Animations.h">
+    <ClInclude Include="Engine\Graphics\Animations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mario.h">
+    <ClInclude Include="GameObjects\Mario.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
+    <ClInclude Include="Engine\Graphics\Sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sprites.h">
+    <ClInclude Include="Engine\Graphics\Sprites.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Textures.h">
+    <ClInclude Include="Engine\Graphics\Textures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\AABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\CTankBullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\CTile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

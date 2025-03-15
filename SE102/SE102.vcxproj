@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Code\VS\SE102\libs\tmxlite\tmxlite\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Code\VS\SE102\libs\tmxlite\tmxlite\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Code\VS\SE102\libs\tmxlite\tmxlite\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Code\VS\SE102\libs\tmxlite\tmxlite\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -131,23 +131,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Animations.cpp" />
-    <ClCompile Include="CTankEnemy.cpp" />
-    <ClCompile Include="CPlayer.cpp" />
-    <ClCompile Include="CTank.cpp" />
-    <ClCompile Include="CTankEnemyGreen.cpp" />
-    <ClCompile Include="CTankEnemyRed.cpp" />
-    <ClCompile Include="CTankSpawner.cpp" />
-    <ClCompile Include="debug.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Engine\Graphics\Animation.cpp" />
+    <ClCompile Include="Engine\Graphics\AnimationFrame.cpp" />
+    <ClCompile Include="Engine\Graphics\Animations.cpp" />
+    <ClCompile Include="GameObjects\CTankBullet.cpp" />
+    <ClCompile Include="GameObjects\CTankEnemy.cpp" />
+    <ClCompile Include="GameObjects\CPlayer.cpp" />
+    <ClCompile Include="GameObjects\CTank.cpp" />
+    <ClCompile Include="GameObjects\CTankEnemyGreen.cpp" />
+    <ClCompile Include="GameObjects\CTankEnemyRed.cpp" />
+    <ClCompile Include="GameObjects\CTankSpawner.cpp" />
+    <ClCompile Include="Engine\debug.cpp" />
+    <ClCompile Include="Engine\Game.cpp" />
+    <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mario.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="Sprites.cpp" />
-    <ClCompile Include="Textures.cpp" />
-    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="GameObjects\Mario.cpp" />
+    <ClCompile Include="Engine\Graphics\Sprite.cpp" />
+    <ClCompile Include="Engine\Graphics\Sprites.cpp" />
+    <ClCompile Include="Engine\Graphics\Textures.cpp" />
+    <ClCompile Include="Engine\Math\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Maps\btSprites.tsx" />
@@ -166,32 +168,35 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="btSprites.png">
+    <Image Include="Content\btSprites.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="enemy-big.png" />
+    <Image Include="Content\enemy-big.png" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
-    <ClInclude Include="AnimationFrame.h" />
-    <ClInclude Include="Animations.h" />
+    <ClInclude Include="Engine\Graphics\Animation.h" />
+    <ClInclude Include="Engine\Graphics\AnimationFrame.h" />
+    <ClInclude Include="Engine\Graphics\Animations.h" />
     <ClInclude Include="contents.h" />
-    <ClInclude Include="CTankEnemy.h" />
-    <ClInclude Include="CPlayer.h" />
-    <ClInclude Include="CTank.h" />
-    <ClInclude Include="CTankEnemyGreen.h" />
-    <ClInclude Include="CTankEnemyRed.h" />
-    <ClInclude Include="CTankSpawner.h" />
-    <ClInclude Include="debug.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="helper.h" />
-    <ClInclude Include="Mario.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="Sprites.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="Textures.h" />
-    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Engine\Math\AABB.h" />
+    <ClInclude Include="GameObjects\CTankBullet.h" />
+    <ClInclude Include="GameObjects\CTankEnemy.h" />
+    <ClInclude Include="GameObjects\CPlayer.h" />
+    <ClInclude Include="GameObjects\CTank.h" />
+    <ClInclude Include="GameObjects\CTankEnemyGreen.h" />
+    <ClInclude Include="GameObjects\CTankEnemyRed.h" />
+    <ClInclude Include="GameObjects\CTankSpawner.h" />
+    <ClInclude Include="Engine\debug.h" />
+    <ClInclude Include="Engine\Game.h" />
+    <ClInclude Include="Engine\GameObject.h" />
+    <ClInclude Include="Engine\helper.h" />
+    <ClInclude Include="GameObjects\CTile.h" />
+    <ClInclude Include="GameObjects\Mario.h" />
+    <ClInclude Include="Engine\Graphics\Sprite.h" />
+    <ClInclude Include="Engine\Graphics\Sprites.h" />
+    <ClInclude Include="Engine\Graphics\Texture.h" />
+    <ClInclude Include="Engine\Graphics\Textures.h" />
+    <ClInclude Include="Engine\Math\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libs\tmxlite\tmxlite\tmxlite.vcxproj">
