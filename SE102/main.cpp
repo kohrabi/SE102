@@ -142,46 +142,34 @@ void LoadResources()
 			}
 			else if (layer->getType() == tmx::Layer::Type::Tile)
 			{
-				// Fix long ass loading
 				const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
 				const auto& layerSize = tileLayer.getSize();
-				int i = -1;
-				for (const auto& tile : tileLayer.getTiles()) {
-					i++;
-					if (tile.ID == 0)
-						continue;
-					auto tiles = tilesets[0].getTiles();
-					for (auto& tileset : tilesets)
-						if (tile.ID <= tileset.getLastGID())
-						{
-							tiles = tileset.getTiles();
-							break;
+				const auto& mapTileSize = tMap.getTileSize();
+				const auto& mapSize = tMap.getTileCount();
+				const auto& tiles = tileLayer.getTiles();
+
+				for (const auto& tileset : tilesets) {
+					const auto& tilesetTiles = tileset.getTiles();
+					for (int i = 0; i < mapSize.x; i++)
+					{
+						for (int j = 0; j < mapSize.y; j++) {
+							int idx = j * mapSize.x + i;
+							if (idx < tiles.size() && tiles[idx].ID >= tileset.getFirstGID() && tiles[idx].ID <= tileset.getLastGID()) {
+
+								auto imagePosition = tilesetTiles[tiles[idx].ID - 1].imagePosition;
+								auto tileSize = tilesetTiles[tiles[idx].ID - 1].imageSize;
+								Vector2 offset(tileSize.x / 2.0f, tileSize.y / 2.0f);
+								game->objects.push_back(new CTile(mapTileSize.x * i + offset.x, mapTileSize.y * j + offset.y, game->texBTSprites,
+									imagePosition.x / mapTileSize.x, imagePosition.y / mapTileSize.y, mapTileSize.x, mapTileSize.y));
+							}
 						}
-					auto imagePosition = tiles[tile.ID - 1].imagePosition;
-					auto tileSize = tiles[tile.ID - 1].imageSize;
-					if (tileSize.x == 0 || tileSize.y == 0) {
-						std::cout << "Tile size is zero";
-						continue;
 					}
-					Vector2 offset(tileSize.x / 2.0f, tileSize.y / 2.0f);
-					game->objects.push_back(new CTile(tileSize.x * (i % (layerSize.x)) + offset.x, tileSize.y * floorf(i / layerSize.y) + offset.y, game->texBTSprites,
-						imagePosition.x / tileSize.x, imagePosition.y / tileSize.y, tileSize.x, tileSize.y));
 				}
-				//read out tile layer properties etc...
 			}
 		}
 
 	}
 
-	for (int i = 1; i < 2; i++) {
-		game->objects.push_back(new CTankEnemyRed(10.f * i, 50.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
-	}
-	//for (int i = 0; i < 1; i++) {
-	//	game->objects.push_back(new CTankEnemyGreen(backBufferWidth - 35.f * i, backBufferHeight - 32.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
-	//}
-	//for (int i = 0; i < 7; i++) {
-	//	game->objects.push_back(new CTankEnemy(20.f * i, 30.f * i, 0.f, 0.f, 0.f, game->texBTSprites, 0.5f * i));
-	//}
 }
 
 void UnloadResources() {

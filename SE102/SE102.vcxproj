@@ -131,6 +131,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Animations.cpp" />
     <ClCompile Include="CTankEnemy.cpp" />
     <ClCompile Include="CPlayer.cpp" />
     <ClCompile Include="CTank.cpp" />
@@ -141,6 +143,10 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +172,9 @@
     <Image Include="enemy-big.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationFrame.h" />
+    <ClInclude Include="Animations.h" />
     <ClInclude Include="contents.h" />
     <ClInclude Include="CTankEnemy.h" />
     <ClInclude Include="CPlayer.h" />
@@ -177,7 +186,11 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="helper.h" />
+    <ClInclude Include="Mario.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Sprites.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Textures.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
