@@ -50,11 +50,6 @@
 
 using namespace std;
 
-LPTEXTURE texMario = NULL;
-LPTEXTURE texBrick = NULL;
-LPTEXTURE texMisc = NULL;
-LPTEXTURE texShip = NULL;
-LPTEXTURE texEnemy = NULL;
 tmx::Map tMap;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -64,12 +59,10 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 	case WM_KEYDOWN:
-		CGame::GetInstance()->keyState[wParam] = true;
-		CGame::GetInstance()->keyJustPressed[wParam] = true;
+		CGame::GetInstance()->SetKeyState((int)wParam, true);
 		break;
 	case WM_KEYUP:
-		CGame::GetInstance()->keyState[wParam] = false;
-		CGame::GetInstance()->keyJustPressed[wParam] = false;
+		CGame::GetInstance()->SetKeyState((int)wParam, false);
 		break;
 	//case WM_SIZE:
 	//	{
@@ -274,8 +267,6 @@ void Update(DWORD dt)
 		}
 	}	
 
-	for (int i = 0; i < 256; i++)
-		game->keyJustPressed[i] = false;
 
 	DebugOutTitle(L"01 - Skeleton %f", dt); 
 }
@@ -315,6 +306,8 @@ void Render()
 		spriteHandler->End();
 		pSwapChain->Present(0, 0);
 	}
+
+	g->SetPrevKeyState();
 }
 
 HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int ScreenHeight)
@@ -422,7 +415,7 @@ int WINAPI WinMain(
 
 
 	CGame * game = CGame::GetInstance();
-	game->Init(hWnd);
+	game->Init(hWnd, hInstance);
 
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 

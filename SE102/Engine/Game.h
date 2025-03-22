@@ -8,6 +8,8 @@
 #include "Engine/GameObject.h"
 
 #define MAX_FRAME_RATE 60
+#define KEYBOARD_BUFFER_SIZE 1024
+#define KEYBOARD_STATE_SIZE 256
 
 /*
 	Our simple game framework 
@@ -28,11 +30,15 @@ class CGame
 	ID3D10BlendState* pBlendStateAlpha = NULL;			// To store alpha blending state
 	ID3D10SamplerState* pPointSamplerState;
 
+	HINSTANCE hInstance;
+
 	ID3DX10Sprite* spriteObject = NULL;				// Sprite handling object 
+	bool keyState[256];
+	bool prevKeyState[256];
 
 public:
 	// Init DirectX, Sprite Handler
-	void Init(HWND hWnd);
+	void Init(HWND hWnd, HINSTANCE hInstance);
 
 	void SetPointSamplerState();
 
@@ -73,13 +79,21 @@ public:
 		return mousePos;
 	}
 
+	bool IsKeyDown(int keyCode) { return keyState[keyCode]; }
+	bool IsKeyJustPressed(int keyCode) { return keyState[keyCode] && !prevKeyState[keyCode]; }
+	bool IsKeyJustReleased(int keyCode) { return !keyState[keyCode] && prevKeyState[keyCode]; }
+
+	void SetKeyState(int keyCode, bool state) { keyState[keyCode] = state; }
+	void SetPrevKeyState() {
+		for (int i = 0; i < 256; i++)
+			prevKeyState[i] = keyState[i]; 
+	}
+
 	int GetBackBufferWidth() { return backBufferWidth; }
 	int GetBackBufferHeight() { return backBufferHeight; }
 
 	int GetViewportWidth() { return viewportWidth; }
 	int GetViewportHeight() { return viewportHeight; }
-	bool keyState[256];
-	bool keyJustPressed[256];
 	bool leftMouseDown;
 
 	static CGame* const GetInstance();

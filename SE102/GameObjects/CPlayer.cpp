@@ -7,14 +7,14 @@ void CPlayer::Update(DWORD dt)
 	CGame* const game = CGame::GetInstance();
 
 	Vector2 inputDir = Vector2();
-	if (game->keyState[VK_LEFT])
+	if (game->IsKeyDown(VK_LEFT))
 		inputDir.x += -1;
-	if (game->keyState[VK_RIGHT])
+	if (game->IsKeyDown(VK_RIGHT))
 		inputDir.x += 1;
 
-	if (game->keyState[VK_UP])
+	if (game->IsKeyDown(VK_UP))
 		inputDir.y += -1;
-	if (game->keyState[VK_DOWN])
+	if (game->IsKeyDown(VK_DOWN))
 		inputDir.y += 1;
 
 	if (abs(inputDir.x) == 1 && abs(inputDir.y) == 1) {
@@ -29,7 +29,7 @@ void CPlayer::Update(DWORD dt)
 	moveDir.y = inputDir.y;
 
 	fire = false;
-	if (game->keyJustPressed[VK_SPACE])
+	if (game->IsKeyDown(VK_SPACE))
 		fire = true;
 
 	CTank::Update(dt);

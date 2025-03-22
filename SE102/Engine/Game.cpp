@@ -8,8 +8,12 @@ CGame* CGame::__instance = NULL;
 	rendering 2D images
 	- hWnd: Application window handle
 */
-void CGame::Init(HWND hWnd)
+void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 {
+
+	this->hWnd = hWnd;
+	this->hInstance = hInstance;
+
 	// retrieve client area width & height so that we can create backbuffer height & width accordingly 
 	RECT r;
 	GetClientRect(hWnd, &r);
@@ -84,22 +88,22 @@ void CGame::Init(HWND hWnd)
 	viewPort.TopLeftY = 0;
 	pD3DDevice->RSSetViewports(1, &viewPort);
 
-	//D3D10_SAMPLER_DESC desc;
-	//desc.Filter = D3D10_FILTER_MIN_MAG_MIP_POINT; 
-	//desc.AddressU = D3D10_TEXTURE_ADDRESS_CLAMP;
-	//desc.AddressV = D3D10_TEXTURE_ADDRESS_CLAMP;
-	//desc.AddressW = D3D10_TEXTURE_ADDRESS_CLAMP;
-	//desc.MipLODBias = 0;
-	//desc.MaxAnisotropy = 1;
-	//desc.ComparisonFunc = D3D10_COMPARISON_NEVER;
-	//desc.BorderColor[0] = 1.0f;
-	//desc.BorderColor[1] = 1.0f;
-	//desc.BorderColor[2] = 1.0f;
-	//desc.BorderColor[3] = 1.0f;
-	//desc.MinLOD = -FLT_MAX;
-	//desc.MaxLOD = FLT_MAX;
+	D3D10_SAMPLER_DESC desc;
+	desc.Filter = D3D10_FILTER_MIN_MAG_MIP_POINT; 
+	desc.AddressU = D3D10_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressV = D3D10_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressW = D3D10_TEXTURE_ADDRESS_CLAMP;
+	desc.MipLODBias = 0;
+	desc.MaxAnisotropy = 1;
+	desc.ComparisonFunc = D3D10_COMPARISON_NEVER;
+	desc.BorderColor[0] = 1.0f;
+	desc.BorderColor[1] = 1.0f;
+	desc.BorderColor[2] = 1.0f;
+	desc.BorderColor[3] = 1.0f;
+	desc.MinLOD = -FLT_MAX;
+	desc.MaxLOD = FLT_MAX;
 
-	//pD3DDevice->CreateSamplerState(&desc, &this->pPointSamplerState);
+	pD3DDevice->CreateSamplerState(&desc, &this->pPointSamplerState);
 
 
 	// create the sprite object to handle sprite drawing 

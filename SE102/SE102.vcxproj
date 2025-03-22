@@ -145,7 +145,6 @@
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="GameObjects\Mario.cpp" />
     <ClCompile Include="Engine\Graphics\Sprite.cpp" />
     <ClCompile Include="Engine\Graphics\Sprites.cpp" />
     <ClCompile Include="Engine\Graphics\Textures.cpp" />
@@ -191,7 +190,6 @@
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\helper.h" />
     <ClInclude Include="GameObjects\CTile.h" />
-    <ClInclude Include="GameObjects\Mario.h" />
     <ClInclude Include="Engine\Graphics\Sprite.h" />
     <ClInclude Include="Engine\Graphics\Sprites.h" />
     <ClInclude Include="Engine\Graphics\Texture.h" />
