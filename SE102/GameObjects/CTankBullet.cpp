@@ -3,8 +3,9 @@
 #include "contents.h"
 #include "CTankEnemy.h"
 #include <Engine/debug.h>
+#include "CTile.h"
 
-void CTankBullet::Update(DWORD dt)
+void CTankBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (destroy)
 		return;
@@ -25,33 +26,7 @@ void CTankBullet::Update(DWORD dt)
 		destroy = true;
 	}
 
-	if (!destroy) {
-		size_t size = game->objects.size();
-		for (int i = 0; i < size; i++) {
-			auto objectA = game->objects[i];
-			if (objectA->ShouldDestroy() || objectA == this)
-				continue;
-			if (objectA->GetType() == TYPE_ENEMY) {
-				auto tank = (CTankEnemy*)objectA;
-				if (tank->IsPlayer() == isPlayer)
-					continue;
-				if (tank->checkPointInside(position)) {
-					tank->Destroy();
-					Destroy();
-					break;
-				}
-			}
-			if (objectA->GetType() == TYPE_BULLET && (objectA->GetPosition() - position).length() <= 3.0f)
-			{
-				DebugOut(L"%f\n", (objectA->GetPosition() - position).length());
-				Destroy();
-				objectA->Destroy();
-				break;
-			}
-		}
-	}
-
-	CMoveableObject::Update(dt);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CTankBullet::Render()
@@ -59,4 +34,22 @@ void CTankBullet::Render()
 	CSprites* const sprites = CSprites::GetInstance();
 
 	sprites->Get(TANK_BULLET_SPRITE_ID)->Draw(position.x, position.y);
+}
+
+void CTankBullet::OnNoCollision(DWORD dt)
+{
+	position.x += velocity.x * dt;
+	position.y += velocity.y * dt;
+}
+
+void CTankBullet::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	if (dynamic_cast<CTile*>(e->obj)) {
+		Destroy();
+		e->obj->Destroy();
+	}
+	if (isPlayer && dynamic_cast<CTankEnemy*>(e->obj)) {
+		Destroy();
+		e->obj->Destroy();
+	}
 }

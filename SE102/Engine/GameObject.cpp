@@ -17,12 +17,6 @@ CGameObject::CGameObject(float x, float y, float rotation)
 	this->rotation = rotation;
 }
 
-void CMoveableObject::Update(DWORD dt)
-{
-	position.x += velocity.x * dt;
-	position.y += velocity.y * dt;
-}
-
 RECT GetTextureRegion(int xTile, int yTile, int xSize, int ySize)
 {
 	RECT r;

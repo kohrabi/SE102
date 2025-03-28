@@ -11,6 +11,13 @@ public:
 		: CGameObject(x, y, rotation), spawnTime(spawnTime), spawnTimer(spawnTime)
 	{
 	};
-	virtual void Update(DWORD dt);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override {}
+
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
+		left = 0;
+		top = 0;
+		right = 0;
+		bottom = 0;
+	}
 };

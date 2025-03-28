@@ -12,7 +12,7 @@ protected:
 	float timeOffset = 0.0f;
 	float shootTimer = 0.0f;
 public:
-	CTankEnemy(float x, float y, float rotation, float vx, float vy, float timeOffset) : CTank(x, y, rotation, vx, vy) {
+	CTankEnemy(float x, float y, float rotation, float timeOffset) : CTank(x, y, rotation) {
 		this->timeOffset = timeOffset;
 		shootTimer = 1.5f;
 		CAnimations* const animations = CAnimations::GetInstance();
@@ -21,8 +21,9 @@ public:
 		MoveLeftAnimation = animations->Get(ENEMY_MOVELEFT_ANIMATION);
 		MoveDownAnimation = animations->Get(ENEMY_MOVEDOWN_ANIMATION);
 	}
-	int GetType() const override { return TYPE_ENEMY; }
 
-	void Update(DWORD dt) override;
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
+
+	static void LoadContent();
 };

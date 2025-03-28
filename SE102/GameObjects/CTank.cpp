@@ -1,5 +1,7 @@
 #include "CTank.h"
 #include "Engine/Game.h"
+#include <Engine/debug.h>
+#include "CTile.h"
 
 #define TANK_SPEED 1.4f
 #define BULLET_SPEED 0.2f
@@ -16,7 +18,9 @@ bool CTank::checkPointInside(Vector2 point) const
 	return (point.x <= newBox.right && point.x >= newBox.left) && (point.y <= newBox.bottom && point.y >= newBox.top);
 }
 
-void CTank::Update(DWORD dt)
+
+
+void CTank::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (destroy)
 		return;
@@ -33,31 +37,18 @@ void CTank::Update(DWORD dt)
 
 	velocity.x = moveDir.x * TANK_SPEED * dts;
 	velocity.y = moveDir.y * TANK_SPEED * dts;
-		
 
 	if (tankBullet != NULL) {
-		if (tankBullet->ShouldDestroy())
+		if (tankBullet->IsDestroyed())
 			canFire = true;
 	}
 
 	if (fire && canFire) {
-		tankBullet = new CTankBullet(position.x, position.y, 0.f, BULLET_SPEED * lookDir.x, BULLET_SPEED * lookDir.y, isPlayer);
+		tankBullet = new CTankBullet(position.x, position.y, 0.f, isPlayer);
+		tankBullet->SetVelocity(BULLET_SPEED * lookDir.x, BULLET_SPEED * lookDir.y);
 		game->objects.push_back(tankBullet);
 		fire = false;
 		canFire = false;
-	}
-
-	if (lookDir.x == 1) {
-		currentAnimation = MoveRightAnimation;
-	}
-	else if (lookDir.x == -1) {
-		currentAnimation = MoveLeftAnimation;
-	}
-	else if (lookDir.y == -1) {
-		currentAnimation = MoveUpAnimation;
-	}
-	else if (lookDir.y == 1) {
-		currentAnimation = MoveDownAnimation;
 	}
 
 	if (currentAnimation != NULL) {
@@ -76,7 +67,7 @@ void CTank::Update(DWORD dt)
 	int imageWidth = 16;
 	imageWidth /= 2;
 
-	CMoveableObject::Update(dt);
+	CCollision::GetInstance()->Process(this, dt, coObjects);
 
 	if (position.y <= imageHeight || position.y >= BackBufferHeight - imageHeight) {
 		if (position.y <= imageHeight)
@@ -95,5 +86,29 @@ void CTank::Update(DWORD dt)
 
 void CTank::Render()
 {
+	if (lookDir.x == 1) {
+		currentAnimation = MoveRightAnimation;
+	}
+	else if (lookDir.x == -1) {
+		currentAnimation = MoveLeftAnimation;
+	}
+	else if (lookDir.y == -1) {
+		currentAnimation = MoveUpAnimation;
+	}
+	else if (lookDir.y == 1) {
+		currentAnimation = MoveDownAnimation;
+	}
+
 	currentAnimation->Render(position.x, position.y);
+}
+
+void CTank::OnNoCollision(DWORD dt)
+{
+	float dts = dt / 1000.f;
+	position.x += velocity.x * dt;
+	position.y += velocity.y * dt;
+}
+
+void CTank::OnCollisionWith(LPCOLLISIONEVENT e)
+{
 }

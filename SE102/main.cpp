@@ -88,6 +88,34 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+
+void ClearScene(vector<LPGAMEOBJECT>& objects)
+{
+	for (auto it = objects.begin(); it != objects.end(); it++)
+	{
+		delete (*it);
+	}
+	objects.clear();
+}
+
+bool IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
+
+void PurgeDeletedObjects(vector<LPGAMEOBJECT>& objects)
+{
+	for (auto it = objects.begin(); it != objects.end(); it++)
+	{
+		LPGAMEOBJECT o = *it;
+		if (o->IsDestroyed())
+		{
+			delete o;
+			*it = NULL;
+		}
+	}
+	objects.erase(
+		std::remove_if(objects.begin(), objects.end(), IsGameObjectDeleted),
+		objects.end());
+}
+
 /*
 	Load all game resources. In this example, create a brick object and mario object
 */
@@ -95,77 +123,11 @@ void LoadResources()
 {
 	CGame* const game = CGame::GetInstance();
 	CTextures* const textures = CTextures::GetInstance();
-	CSprites* const sprites = CSprites::GetInstance();
-	CAnimations* const animations = CAnimations::GetInstance();
 
 	textures->Add(TEXTURE_PATH_BTSPRITES);
+	CPlayer::LoadContent();
+	CTankEnemy::LoadContent();
 
-	auto texBTSprites = textures->Get(TEXTURE_PATH_BTSPRITES);
-	sprites->Add(TANK_BULLET_SPRITE_ID, 322, 102, 325, 105, texBTSprites);
-	sprites->Add(PLAYER_MOVEUP_FRAME1, GetTextureRegion(0, 0, 16, 16), texBTSprites);
-	sprites->Add(PLAYER_MOVEUP_FRAME2, GetTextureRegion(1, 0, 16, 16), texBTSprites);
-
-	CAnimation* ani = new CAnimation(200);
-	ani->Add(PLAYER_MOVEUP_FRAME1);
-	ani->Add(PLAYER_MOVEUP_FRAME2);
-	animations->Add(PLAYER_MOVEUP_ANIMATION, ani);
-
-	sprites->Add(PLAYER_MOVELEFT_FRAME1, GetTextureRegion(2, 0, 16, 16), texBTSprites);
-	sprites->Add(PLAYER_MOVELEFT_FRAME2, GetTextureRegion(3, 0, 16, 16), texBTSprites);
-	
-	ani = new CAnimation(200);
-	ani->Add(PLAYER_MOVELEFT_FRAME1);
-	ani->Add(PLAYER_MOVELEFT_FRAME2);
-	animations->Add(PLAYER_MOVELEFT_ANIMATION, ani);
-
-	sprites->Add(PLAYER_MOVEDOWN_FRAME1, GetTextureRegion(4, 0, 16, 16), texBTSprites);
-	sprites->Add(PLAYER_MOVEDOWN_FRAME2, GetTextureRegion(5, 0, 16, 16), texBTSprites);
-
-	ani = new CAnimation(200);
-	ani->Add(PLAYER_MOVEDOWN_FRAME1);
-	ani->Add(PLAYER_MOVEDOWN_FRAME2);
-	animations->Add(PLAYER_MOVEDOWN_ANIMATION, ani);
-
-	sprites->Add(PLAYER_MOVERIGHT_FRAME1, GetTextureRegion(6, 0, 16, 16), texBTSprites);
-	sprites->Add(PLAYER_MOVERIGHT_FRAME2, GetTextureRegion(7, 0, 16, 16), texBTSprites);
-
-	ani = new CAnimation(200);
-	ani->Add(PLAYER_MOVERIGHT_FRAME1);
-	ani->Add(PLAYER_MOVERIGHT_FRAME2);
-	animations->Add(PLAYER_MOVERIGHT_ANIMATION, ani);
-
-
-	sprites->Add(ENEMY_MOVEUP_FRAME1, GetTextureRegion(0 + 8, 0, 16, 16), texBTSprites);
-	sprites->Add(ENEMY_MOVEUP_FRAME2, GetTextureRegion(1 + 8, 0, 16, 16), texBTSprites);
-
-	ani = new CAnimation(200);
-	ani->Add(ENEMY_MOVEUP_FRAME1);
-	ani->Add(ENEMY_MOVEUP_FRAME2);
-	animations->Add(ENEMY_MOVEUP_ANIMATION, ani);
-
-	sprites->Add(ENEMY_MOVELEFT_FRAME1, GetTextureRegion(2 + 8, 0, 16, 16), texBTSprites);
-	sprites->Add(ENEMY_MOVELEFT_FRAME2, GetTextureRegion(3 + 8, 0, 16, 16), texBTSprites);
-
-	ani = new CAnimation(200);
-	ani->Add(ENEMY_MOVELEFT_FRAME1);
-	ani->Add(ENEMY_MOVELEFT_FRAME2);
-	animations->Add(ENEMY_MOVELEFT_ANIMATION, ani);
-
-	sprites->Add(ENEMY_MOVEDOWN_FRAME1, GetTextureRegion(4 + 8, 0, 16, 16), texBTSprites);
-	sprites->Add(ENEMY_MOVEDOWN_FRAME2, GetTextureRegion(5 + 8, 0, 16, 16), texBTSprites);
-
-	ani = new CAnimation(200);
-	ani->Add(ENEMY_MOVEDOWN_FRAME1);
-	ani->Add(ENEMY_MOVEDOWN_FRAME2);
-	animations->Add(ENEMY_MOVEDOWN_ANIMATION, ani);
-
-	sprites->Add(ENEMY_MOVERIGHT_FRAME1, GetTextureRegion(6 + 8, 0, 16, 16), texBTSprites);
-	sprites->Add(ENEMY_MOVERIGHT_FRAME2, GetTextureRegion(7 + 8, 0, 16, 16), texBTSprites);
-
-	ani = new CAnimation(200);
-	ani->Add(ENEMY_MOVERIGHT_FRAME1);
-	ani->Add(ENEMY_MOVERIGHT_FRAME2);
-	animations->Add(ENEMY_MOVERIGHT_ANIMATION, ani);
 	
 	int backBufferWidth = game->GetBackBufferWidth();
 	int backBufferHeight = game->GetBackBufferHeight();
@@ -184,7 +146,7 @@ void LoadResources()
 					const auto& aabb = object.getAABB();
 					if (object.getClass() == "CPlayer")
 					{
-						CPlayer* tank = new CPlayer(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f, 0.f, 0.f);
+						CPlayer* tank = new CPlayer(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f);
 						game->objects.push_back(tank);
 					}
 					else if (object.getClass() == "CTankSpawner") {
@@ -240,19 +202,12 @@ void UnloadResources() {
 	Update world status for this frame
 	dt: time period between beginning of last frame and beginning of this frame
 */
-float PointDistance(float x, float y) {
-	return sqrt(x * x + y * y);
-}
-
-bool checkCircle(float ax, float ay, float radiusA, float cx, float cy, float radiusC) {
-	return PointDistance(cx - ax, cy - ay) <= radiusA + radiusC;
-}
 void Update(DWORD dt)
 {
 	CGame* const game = CGame::GetInstance();
 
 	for (int i = 0; i < game->objects.size(); ) {
-		if (game->objects[i]->ShouldDestroy()) {
+		if (game->objects[i]->IsDestroyed()) {
 			LPGAMEOBJECT object = game->objects[i];
 			game->objects.erase(game->objects.begin() + i);
 			delete object;
@@ -262,8 +217,8 @@ void Update(DWORD dt)
 	}
 
 	for (int i = 0; i < game->objects.size(); i++) {
-		if (!game->objects[i]->ShouldDestroy()) {
-			game->objects[i]->Update(dt);
+		if (!game->objects[i]->IsDestroyed()) {
+			game->objects[i]->Update(dt, &game->objects);
 		}
 	}	
 
@@ -283,29 +238,26 @@ void Render()
 	ID3D10RenderTargetView* pRenderTargetView = g->GetRenderTargetView();
 	ID3DX10Sprite* spriteHandler = g->GetSpriteHandler();
 
-	if (pD3DDevice != NULL)
-	{
-		// clear the background 
-		pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
+	// clear the background 
+	pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
 
-		spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
+	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
 
-		// Use Alpha blending for transparent sprites
-		FLOAT NewBlendFactor[4] = { 0,0,0,0 };
-		pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
+	// Use Alpha blending for transparent sprites
+	FLOAT NewBlendFactor[4] = { 0,0,0,0 };
+	pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
 
-		for (int i = 0; i < g->objects.size(); i++) {
-			if (!g->objects[i]->ShouldDestroy())
-				g->objects[i]->Render();
-		}
-
-		// Uncomment this line to see how to draw a porttion of a texture  
-		//g->Draw(10, 10, 0, texMisc, 300, 117, 317, 134);
-		//g->Draw(10, 10, texMario, 215, 120, 234, 137);
-
-		spriteHandler->End();
-		pSwapChain->Present(0, 0);
+	for (int i = 0; i < g->objects.size(); i++) {
+		if (!g->objects[i]->IsDestroyed())
+			g->objects[i]->Render();
 	}
+
+	// Uncomment this line to see how to draw a porttion of a texture  
+	//g->Draw(10, 10, 0, texMisc, 300, 117, 317, 134);
+	//g->Draw(10, 10, texMario, 215, 120, 234, 137);
+
+	spriteHandler->End();
+	pSwapChain->Present(0, 0);
 
 	g->SetPrevKeyState();
 }

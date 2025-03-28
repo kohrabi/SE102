@@ -11,6 +11,8 @@
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
+#define ID_TEX_BBOX -100		// special texture to draw object bounding box
+
 /*
 	Our simple game framework 
 */
@@ -23,6 +25,8 @@ class CGame
 	int backBufferHeight = 0;
 	int viewportWidth = 0;
 	int viewportHeight = 0;
+	float cam_x = 0.0f;
+	float cam_y = 0.0f;
 
 	ID3D10Device* pD3DDevice = NULL;
 	IDXGISwapChain* pSwapChain = NULL;
@@ -88,6 +92,9 @@ public:
 		for (int i = 0; i < 256; i++)
 			prevKeyState[i] = keyState[i]; 
 	}
+
+	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
+	void GetCamPos(float& x, float& y) { x = cam_x; y = cam_y; }
 
 	int GetBackBufferWidth() { return backBufferWidth; }
 	int GetBackBufferHeight() { return backBufferHeight; }

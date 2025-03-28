@@ -8,7 +8,7 @@
 #include "CTankBullet.h"
 #include "contents.h"
 
-class CTank : public CMoveableObject {
+class CTank : public CGameObject {
 protected:
 	LPANIMATION currentAnimation = NULL;
 	LPANIMATION MoveUpAnimation = NULL;
@@ -23,17 +23,28 @@ protected:
 	AABB collisionBox;
 	bool isPlayer = false;
 public:
-	CTank(float x, float y, float rotation, float vx, float vy) : CMoveableObject(x, y, rotation, vx, vy) {
+	CTank(float x, float y, float rotation) : CGameObject(x, y, rotation) {
 		collisionBox.left = 0;
 		collisionBox.right = 16;
 		collisionBox.top = 0;
 		collisionBox.bottom = 16;
 	}
-	int GetType() const override { return TYPE_TANK; }
 	bool IsPlayer() const { return isPlayer; }
 
 	bool checkPointInside(Vector2 point) const;
 	
-	void Update(DWORD dt) override;
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
+
+	int IsCollidable() override { return 1; }
+	void OnNoCollision(DWORD dt) override;
+	void OnCollisionWith(LPCOLLISIONEVENT e);
+	int IsBlocking() override { return 0; }
+
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
+		left =  position.x - 8;
+		top = position.y - 8;
+		right = position.x + 8;
+		bottom = position.y + 8;
+	}
 };

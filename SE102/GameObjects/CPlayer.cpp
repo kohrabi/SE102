@@ -2,7 +2,7 @@
 #include "Engine/Game.h"
 #include "Engine/Graphics/Textures.h"
 
-void CPlayer::Update(DWORD dt)
+void CPlayer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGame* const game = CGame::GetInstance();
 
@@ -29,10 +29,10 @@ void CPlayer::Update(DWORD dt)
 	moveDir.y = inputDir.y;
 
 	fire = false;
-	if (game->IsKeyDown(VK_SPACE))
+	if (game->IsKeyJustPressed(VK_SPACE))
 		fire = true;
 
-	CTank::Update(dt);
+	CTank::Update(dt, coObjects);
 }
 
 void CPlayer::Render()
@@ -40,13 +40,11 @@ void CPlayer::Render()
 	CTank::Render();
 }
 
-void CPlayer::LoadPlayerContent()
+void CPlayer::LoadContent()
 {
 	CTextures* const textures = CTextures::GetInstance();
 	CSprites* const sprites = CSprites::GetInstance();
 	CAnimations* const animations = CAnimations::GetInstance();
-
-	textures->Add(TEXTURE_PATH_BTSPRITES);
 
 	auto texBTSprites = textures->Get(TEXTURE_PATH_BTSPRITES);
 	sprites->Add(TANK_BULLET_SPRITE_ID, 322, 102, 325, 105, texBTSprites);
