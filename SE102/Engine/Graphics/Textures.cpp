@@ -3,6 +3,7 @@
 #include "Engine/debug.h"
 #include "Engine/Game.h"
 #include "textures.h"
+#include <Engine/Utils.h>
 
 CTextures * CTextures::__instance = NULL;
 
@@ -22,9 +23,15 @@ void CTextures::Add(wstring filePath)
 	textures[filePath] = CGame::GetInstance()->LoadTexture(filePath.c_str());
 }
 
-LPTEXTURE CTextures::Get(const wstring& filePath)
+LPTEXTURE CTextures::Get(const wstring& path)
 {
-	return textures.at(filePath);
+	return textures.at(path);
+}
+
+
+LPTEXTURE CTextures::Get(const string& path)
+{
+	return Get(ToLPCWSTR(path));
 }
 
 

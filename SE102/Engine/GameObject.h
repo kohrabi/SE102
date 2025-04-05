@@ -21,7 +21,7 @@ protected:
 
 	float rotation = 0.0f;
 
-	bool destroy = false;
+	bool isDeleted = false;
 
 	int nx;
 	int state;
@@ -29,32 +29,34 @@ public:
 	void SetPosition(float x, float y) { position.x = x; position.y = y; }
 	void SetVelocity(float vx, float vy) { velocity.x = vx, velocity.y = vy; }
 
-	bool IsDestroyed() { return destroy; }
+	bool IsDeleted() { return isDeleted; }
 	Vector2 GetPosition() const { return position; }
 	Vector2 GetVelocity() { return velocity; }
 	float GetRotation() const { return rotation; }
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
 
-	void Destroy() {
-		if (destroy)
-			return;
-		destroy = true;
-		OnDestroy();
-	}
 	void SetRotation(float newVal) { rotation = newVal; }
+	virtual void SetState(int state) { this->state = state; }
+
+	void Delete() {
+		if (isDeleted)
+			return;
+		isDeleted = true;
+		OnDelete();
+	}
 
 	CGameObject(float x = 0.0f, float y = 0.0f, float rotation = 0.0f);
 
-	virtual void OnDestroy() {}
+	virtual void OnDelete() {}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {}
 	virtual void Render() = 0;
+	void RenderBoundingBox();
 
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
-	virtual void SetState(int state) { this->state = state; }
 
 	//
 	// Collision ON or OFF ? This can change depending on object's state. For example: die
 	//
-	virtual int IsCollidable() { return !destroy; };
+	virtual int IsCollidable() { return !isDeleted; };
 
 	// When no collision has been detected (triggered by CCollision::Process)
 	virtual void OnNoCollision(DWORD dt) {};

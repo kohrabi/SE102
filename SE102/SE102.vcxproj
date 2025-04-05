@@ -135,6 +135,8 @@
     <ClCompile Include="Engine\Graphics\Animation.cpp" />
     <ClCompile Include="Engine\Graphics\AnimationFrame.cpp" />
     <ClCompile Include="Engine\Graphics\Animations.cpp" />
+    <ClCompile Include="Engine\PlayScene.cpp" />
+    <ClCompile Include="Engine\Utils.cpp" />
     <ClCompile Include="GameObjects\CTankBullet.cpp" />
     <ClCompile Include="GameObjects\CTankEnemy.cpp" />
     <ClCompile Include="GameObjects\CPlayer.cpp" />
@@ -168,6 +170,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Content\bbox.png" />
     <Image Include="Content\btSprites.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
@@ -180,6 +183,9 @@
     <ClInclude Include="Engine\Graphics\Animations.h" />
     <ClInclude Include="contents.h" />
     <ClInclude Include="Engine\Math\AABB.h" />
+    <ClInclude Include="Engine\PlayScene.h" />
+    <ClInclude Include="Engine\Scene.h" />
+    <ClInclude Include="Engine\Utils.h" />
     <ClInclude Include="GameObjects\CTankBullet.h" />
     <ClInclude Include="GameObjects\CTankEnemy.h" />
     <ClInclude Include="GameObjects\CPlayer.h" />

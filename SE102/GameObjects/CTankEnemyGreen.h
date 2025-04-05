@@ -11,5 +11,5 @@ public:
 		shootTimer = 1.5f;
 	}
 
-	void OnDestroy() override;
+	void OnDelete() override;
 };

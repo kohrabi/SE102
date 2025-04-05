@@ -5,6 +5,7 @@
 // Textures
 #define TEXTURE_PATH_BTSPRITES			L"Content/btSprites.png"
 #define TEXTURE_ID_BTSPRITES			100
+#define TEXTURE_PATH_BBOX				L"Content/bbox.png"
 
 // Sprites
 #pragma region PLAYER

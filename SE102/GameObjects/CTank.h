@@ -42,9 +42,9 @@ public:
 	int IsBlocking() override { return 0; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
-		left =  position.x - 8;
-		top = position.y - 8;
-		right = position.x + 8;
-		bottom = position.y + 8;
+		left =  position.x - 7;
+		top = position.y - 7;
+		right = position.x + 7;
+		bottom = position.y + 7;
 	}
 };

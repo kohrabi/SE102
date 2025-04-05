@@ -22,7 +22,7 @@ bool CTank::checkPointInside(Vector2 point) const
 
 void CTank::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (destroy)
+	if (isDeleted)
 		return;
 	float dts = dt / 1000.f;
 	CGame* const game = CGame::GetInstance();
@@ -39,7 +39,7 @@ void CTank::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	velocity.y = moveDir.y * TANK_SPEED * dts;
 
 	if (tankBullet != NULL) {
-		if (tankBullet->IsDestroyed())
+		if (tankBullet->IsDeleted())
 			canFire = true;
 	}
 
@@ -58,8 +58,8 @@ void CTank::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			currentAnimation->Stop();
 	}
 
-	int BackBufferHeight = game->GetViewportHeight();
-	int BackBufferWidth = game->GetViewportWidth();
+	int BackBufferHeight = game->GetBackBufferHeight();
+	int BackBufferWidth = game->GetBackBufferWidth();
 
 	int imageHeight = 16;
 	imageHeight /= 2;

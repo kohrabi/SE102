@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "test.tmx",
+    "activeFile": "btSpritesEntity.tsx",
     "expandedProjectPaths": [
         "."
     ],
@@ -34,13 +34,14 @@
     "map.lastUsedFormat": "tmx",
     "openFiles": [
         "test.tmx",
-        "btSprites.tsx"
+        "btSprites.tsx",
+        "btSpritesEntity.tsx"
     ],
     "project": "test.tiled-project",
-    "property.type": "file",
+    "property.type": "object",
     "recentFiles": [
-        "btSprites.tsx",
         "test.tmx",
+        "btSprites.tsx",
         "btSpritesEntity.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",

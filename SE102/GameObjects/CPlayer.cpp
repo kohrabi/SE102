@@ -38,6 +38,7 @@ void CPlayer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CPlayer::Render()
 {
 	CTank::Render();
+	RenderBoundingBox();
 }
 
 void CPlayer::LoadContent()

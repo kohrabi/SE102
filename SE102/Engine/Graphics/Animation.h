@@ -17,7 +17,7 @@ class CAnimation
 	vector<LPANIMATION_FRAME> frames;
 	bool stop = false;
 public:
-	CAnimation(int defaultTime) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = 0; }
+	CAnimation(int defaultTime = 100) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = 0; }
 	const LPANIMATION_FRAME& getCurrentAnimationFrame() { 
 		if (frames.size() <= currentFrame) {
 			throw new exception("How can i get the current frame. Frames is empty");

@@ -17,13 +17,14 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override {}
 	void Render() override {
 		CGame* const game = CGame::GetInstance();
-		game->Draw(position.x, position.y, 0.0f, texture, &textureRegion);
+		//game->Draw(position.x, position.y, 0.0f, texture, &textureRegion);
+		RenderBoundingBox();
 	}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
-		left = position.x - 2;
-		top = position.y - 2;
-		right = position. x + 2;
-		bottom = position.y + 2;
+		left = position.x - 4;
+		top = position.y - 4;
+		right = position. x + 4;
+		bottom = position.y + 4;
 	}
 };

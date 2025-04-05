@@ -72,6 +72,12 @@
     <ClCompile Include="Engine\Collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\PlayScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -88,6 +94,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Content\btSprites.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Content\bbox.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -159,6 +168,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PlayScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

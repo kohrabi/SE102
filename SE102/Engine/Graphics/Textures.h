@@ -22,6 +22,7 @@ public:
 	CTextures();
 	void Add(wstring filePath);
 	LPTEXTURE Get(const wstring& path);
+	LPTEXTURE Get(const string& path);
 
 	static CTextures * GetInstance();
 };

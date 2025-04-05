@@ -3,7 +3,9 @@
 #include <d3d10.h>
 #include <d3dx10.h>
 #include <vector>
+#include <unordered_map>
 
+#include "Scene.h"
 #include "Graphics/Texture.h"
 #include "Engine/GameObject.h"
 
@@ -23,8 +25,6 @@ class CGame
 
 	int backBufferWidth = 0;					// Backbuffer width & height, will be set during Direct3D initialization
 	int backBufferHeight = 0;
-	int viewportWidth = 0;
-	int viewportHeight = 0;
 	float cam_x = 0.0f;
 	float cam_y = 0.0f;
 
@@ -35,6 +35,13 @@ class CGame
 	ID3D10SamplerState* pPointSamplerState;
 
 	HINSTANCE hInstance;
+
+	unordered_map<int, LPSCENE> scenes;
+	int current_scene;
+	int next_scene = -1;
+
+	void _ParseSection_SETTINGS(string line);
+	void _ParseSection_SCENES(string line);
 
 	ID3DX10Sprite* spriteObject = NULL;				// Sprite handling object 
 	bool keyState[256];
@@ -50,21 +57,20 @@ public:
 	LPTEXTURE texBullet = NULL;
 	LPTEXTURE texBTSprites = NULL;
 
-	void WindowResized(UINT width, UINT height);
 	//
 	// Draw a portion or ALL the texture at position (x,y) on the screen
 	// rect : if NULL, the whole texture will be drawn
 	//        if NOT NULL, only draw that portion of the texture 
-	void Draw(float x, float y, float rotation, LPTEXTURE tex, RECT *rect = NULL);
+	void Draw(float x, float y, float rotation, LPTEXTURE tex, RECT *rect = NULL, float alpha = 1.0f, int sprite_width = 0, int sprite_height = 0);
 
-	void Draw(float x, float y, float rotation, LPTEXTURE tex, int l, int t, int r, int b)
+	void Draw(float x, float y, float rotation, LPTEXTURE tex, int l, int t, int r, int b, float alpha = 1.0f, int sprite_width = 0, int sprite_height = 0)
 	{
 		RECT rect; 
 		rect.left = l;
 		rect.top = t;
 		rect.right = r;
 		rect.bottom = b;
-		this->Draw(x, y, rotation, tex, &rect);
+		this->Draw(x, y, rotation, tex, &rect, alpha, sprite_width, sprite_height);
 	}
 
 	LPTEXTURE LoadTexture(LPCWSTR texturePath);
@@ -93,17 +99,23 @@ public:
 			prevKeyState[i] = keyState[i]; 
 	}
 
+	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+	void Load(LPCWSTR gameFile);
+	void SwitchScene();
+	void InitiateSwitchScene(int scene_id);
+
+	void _ParseSection_TEXTURES(string line);
+
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 	void GetCamPos(float& x, float& y) { x = cam_x; y = cam_y; }
 
 	int GetBackBufferWidth() { return backBufferWidth; }
 	int GetBackBufferHeight() { return backBufferHeight; }
 
-	int GetViewportWidth() { return viewportWidth; }
-	int GetViewportHeight() { return viewportHeight; }
 	bool leftMouseDown;
 
 	static CGame* const GetInstance();
 
 	~CGame();
 };
+typedef CGame* LPGAME;

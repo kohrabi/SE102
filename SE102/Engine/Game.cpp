@@ -1,5 +1,12 @@
 #include "debug.h"
 #include "Engine/Game.h"
+#include "Utils.h"
+#include "PlayScene.h"
+#include "Graphics/Sprites.h"
+#include "Graphics/Animations.h"
+#include "Graphics/Textures.h"
+
+#include <fstream>
 
 CGame* CGame::__instance = NULL;
 
@@ -20,8 +27,6 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 
 	backBufferWidth = r.right + 1;
 	backBufferHeight = r.bottom + 1;
-	viewportWidth = backBufferWidth;
-	viewportHeight = backBufferHeight;
 
 	// Create & clear the DXGI_SWAP_CHAIN_DESC structure
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
@@ -156,130 +161,26 @@ void CGame::SetPointSamplerState()
 	pD3DDevice->PSSetSamplers(0, 1, &pPointSamplerState);
 }
 
-void CGame::WindowResized(UINT width, UINT height)
-{
-	if (pSwapChain)
-	{
-		pD3DDevice->OMSetRenderTargets(0, NULL, NULL);
-
-		// Release all outstanding references to the swap chain's buffers.
-		pRenderTargetView->Release();
-		backBufferWidth = width;
-		backBufferHeight = height;
-
-		HRESULT hr;
-		// Preserve the existing buffer count and format.
-		// Automatically choose the width and height to match the client rect for HWNDs.
-		hr = pSwapChain->ResizeBuffers(1, backBufferWidth, backBufferHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
-		if (hr != S_OK) {
-			DebugOut((wchar_t*)L"[ERROR] pSwapChain->ResizeBuffers has failed %s %d", _W(__FILE__), __LINE__);
-			DebugBreak();
-		}
-		// Perform error handling here!
-
-		// Get the back buffer from the swapchain
-		ID3D10Texture2D* pBackBuffer = nullptr;
-		hr = pSwapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (LPVOID*)&pBackBuffer);
-		if (hr != S_OK)
-		{
-			DebugOut((wchar_t*)L"[ERROR] pSwapChain->GetBuffer has failed %s %d", _W(__FILE__), __LINE__);
-			DebugBreak();
-		}
-
-		// create the render target view
-		hr = pD3DDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView);
-
-		pBackBuffer->Release();
-		if (hr != S_OK)
-		{
-			DebugOut((wchar_t*)L"[ERROR] CreateRenderTargetView has failed %s %d", _W(__FILE__), __LINE__);
-			DebugBreak();
-		}
-
-		pD3DDevice->OMSetRenderTargets(1, &pRenderTargetView, NULL);
-
-
-		// 4:3 scale
-		const float targetWidth = 320.f;
-		const float targetHeight = 240.f;
-		float targetAspectRatio = targetWidth / targetHeight;
-		float windowAspectRatio = (float)width / (float)height;
-
-		viewportWidth = width;
-		viewportHeight = height;
-		UINT viewportX = 0, viewportY = 0;
-
-		// ChatGPT'ed
-		if (windowAspectRatio > targetAspectRatio) {
-			// Window is wider than target - letterbox left and right
-			viewportHeight = height;
-			viewportWidth = (UINT)(targetAspectRatio * viewportHeight);
-			viewportX = (width - viewportWidth) / 2;
-			viewportY = 0;
-		}
-		else {
-			// Window is taller than target - letterbox top and bottom
-			viewportWidth = width;
-			viewportHeight = (UINT)(viewportWidth / targetAspectRatio);
-			viewportX = 0;
-			viewportY = (height - viewportHeight) / 2;
-		}
-
-		// create and set the viewport
-		D3D10_VIEWPORT viewport;
-		viewport.Width = (UINT)viewportWidth;
-		viewport.Height = (UINT)viewportHeight;
-		viewport.MinDepth = 0.0f;
-		viewport.MaxDepth = 1.0f;
-		viewport.TopLeftX = viewportX;
-		viewport.TopLeftY = viewportY;
-		pD3DDevice->RSSetViewports(1, &viewport);
-
-		D3DXMATRIX matProjection;
-
-		// Create the projection matrix using the values in the viewport
-		/*D3DXMatrixOrthoOffCenterLH(&matProjection,
-			(float)0,
-			(float)viewport.Width,
-			(float)0,
-			(float)viewport.Height,
-			0.1f,
-			10);*/
-		D3DXMatrixOrthoOffCenterLH(&matProjection,
-			(float)0,
-			(float)targetWidth,
-			(float)0,
-			(float)targetHeight,
-			0.1f,
-			10);
-		//D3DXMatrixOrthoOffCenterLH(&matProjection,
-		//	(float)viewport.TopLeftX,
-		//	(float)viewport.Width,
-		//	(float)viewport.Height,
-		//	(float)viewport.Height,
-		//	0.1f,
-		//	10);
-		hr = spriteObject->SetProjectionTransform(&matProjection);
-
-		DebugOut(L"Viewport set to width=%d, height=%d, TopLeftX=%f, TopLeftY=%f\n",
-			viewport.Width, viewport.Height, viewport.TopLeftX, viewport.TopLeftY);
-	}
-}
-
 /*
 	Draw the whole texture or part of texture onto screen
 	NOTE: This function is OBSOLTED in this example. Use Sprite::Render instead 
 */
-void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect)
+void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, float alpha, int sprite_width, int sprite_height)
 {
 	if (tex == NULL) return; 
 
-	int spriteWidth = 0;
-	int spriteHeight = 0;
+	int spriteWidth = sprite_width;
+	int spriteHeight = sprite_height;
+
+	float cx, cy;
+	GetCamPos(cx, cy);
+
+	cx = (FLOAT)floor(cx);
+	cy = (FLOAT)floor(cy);
 
 	D3DX10_SPRITE sprite;
 
-	// Set the sprite’s shader resource view
+	// Set the spriteï¿½s shader resource view
 	sprite.pTexture = tex->getShaderResourceView();
 
 	if (rect==NULL) 
@@ -292,16 +193,16 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect)
 		sprite.TexSize.x = 1.0f;
 		sprite.TexSize.y = 1.0f;
 
-		spriteWidth = tex->getWidth();
-		spriteHeight = tex->getHeight();
+		if (spriteWidth==0) spriteWidth = tex->getWidth();
+		if (spriteHeight==0) spriteHeight = tex->getHeight();
 	}
 	else
 	{
 		sprite.TexCoord.x = rect->left / (float)tex->getWidth();
 		sprite.TexCoord.y = rect->top / (float)tex->getHeight();
 
-		spriteWidth = (rect->right - rect->left + 1);
-		spriteHeight = (rect->bottom - rect->top + 1);
+		if (spriteWidth == 0) spriteWidth = (rect->right - rect->left + 1);
+		if (spriteHeight == 0) spriteHeight = (rect->bottom - rect->top + 1);
 
 		sprite.TexSize.x = spriteWidth / (float)tex->getWidth();
 		sprite.TexSize.y = spriteHeight / (float)tex->getHeight();
@@ -311,7 +212,7 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect)
 	sprite.TextureIndex = 0;
 
 	// The color to apply to this sprite, full color applies white.
-	sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha);
 
 	//
 	// Build the rendering matrix based on sprite location 
@@ -322,7 +223,7 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect)
 
 	// Create the translation matrix
 	// ------------------------------------------ CURRENT FLOORING THE POSITION FOR PIXEL ART
-	D3DXMatrixTranslation(&matTranslation, roundf(x), roundf(backBufferHeight - y), 0.1f);
+	D3DXMatrixTranslation(&matTranslation, roundf(x - cx), roundf(backBufferHeight - y + cy), 0.1f);
 
 	D3DXMATRIX matRotation;
 	//D3DXMatrixIdentity(&matRotation);
@@ -332,7 +233,7 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect)
 	D3DXMATRIX matScaling;
 	D3DXMatrixScaling(&matScaling, (FLOAT)spriteWidth, (FLOAT)spriteHeight, 1.0f);
 
-	// Setting the sprite’s position and size
+	// Setting the spriteï¿½s position and size
 	sprite.matWorld = (matScaling * matRotation * matTranslation);
 
 	spriteObject->DrawSpritesImmediate(&sprite, 1, 0, 0);
@@ -399,9 +300,126 @@ LPTEXTURE CGame::LoadTexture(LPCWSTR texturePath)
 	return new CTexture(tex, gSpriteTextureRV);
 }
 
+#define MAX_GAME_LINE 1024
+
+
+#define GAME_FILE_SECTION_UNKNOWN -1
+#define GAME_FILE_SECTION_SETTINGS 1
+#define GAME_FILE_SECTION_SCENES 2
+#define GAME_FILE_SECTION_TEXTURES 3
+
+
+void CGame::_ParseSection_SETTINGS(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 2) return;
+	if (tokens[0] == "start")
+		next_scene = atoi(tokens[1].c_str());
+	else
+		DebugOut(L"[ERROR] Unknown game setting: %s\n", ToWSTR(tokens[0]).c_str());
+}
+
+void CGame::_ParseSection_SCENES(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 2) return;
+	int id = atoi(tokens[0].c_str());
+	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
+
+	LPSCENE scene = new CPlayScene(id, path);
+	scenes[id] = scene;
+}
+
+/*
+	Load game campaign file and load/initiate first scene
+*/
+void CGame::Load(LPCWSTR gameFile)
+{
+	DebugOut(L"[INFO] Start loading game file : %s\n", gameFile);
+
+	ifstream f{};
+	f.open(gameFile);
+	char str[MAX_GAME_LINE];
+
+	// current resource section flag
+	int section = GAME_FILE_SECTION_UNKNOWN;
+
+	while (f.getline(str, MAX_GAME_LINE))
+	{
+		string line(str);
+
+		if (line[0] == '#') continue;	// skip comment lines	
+
+		if (line == "[SETTINGS]") { section = GAME_FILE_SECTION_SETTINGS; continue; }
+		if (line == "[TEXTURES]") { section = GAME_FILE_SECTION_TEXTURES; continue; }
+		if (line == "[SCENES]") { section = GAME_FILE_SECTION_SCENES; continue; }
+		if (line[0] == '[') 
+		{ 
+			section = GAME_FILE_SECTION_UNKNOWN; 
+			DebugOut(L"[ERROR] Unknown section: %s\n", ToLPCWSTR(line));
+			continue; 
+		}
+
+		//
+		// data section
+		//
+		switch (section)
+		{
+		case GAME_FILE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
+		case GAME_FILE_SECTION_SCENES: _ParseSection_SCENES(line); break;
+		case GAME_FILE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
+		}
+	}
+	f.close();
+
+	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
+
+	SwitchScene();
+}
+
+void CGame::SwitchScene()
+{
+	if (next_scene < 0 || next_scene == current_scene) return; 
+
+	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
+
+	scenes[current_scene]->Unload();
+
+	CSprites::GetInstance()->Clear();
+	CAnimations::GetInstance()->Clear();
+
+	current_scene = next_scene;
+	LPSCENE s = scenes[next_scene];
+	s->Load();
+}
+
+void CGame::InitiateSwitchScene(int scene_id)
+{
+	next_scene = scene_id;
+}
+
+
+void CGame::_ParseSection_TEXTURES(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 2) return;
+
+	wstring path = ToWSTR(tokens[1]);
+
+	CTextures::GetInstance()->Add(path.c_str());
+}
+
+
 CGame::~CGame()
 {
-
+	pBlendStateAlpha->Release();
+	spriteObject->Release();
+	pRenderTargetView->Release();
+	pSwapChain->Release();
+	pD3DDevice->Release();
 }
 
 CGame* const CGame::GetInstance()

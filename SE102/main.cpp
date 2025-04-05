@@ -105,7 +105,7 @@ void PurgeDeletedObjects(vector<LPGAMEOBJECT>& objects)
 	for (auto it = objects.begin(); it != objects.end(); it++)
 	{
 		LPGAMEOBJECT o = *it;
-		if (o->IsDestroyed())
+		if (o->IsDeleted())
 		{
 			delete o;
 			*it = NULL;
@@ -128,6 +128,7 @@ void LoadResources()
 	CPlayer::LoadContent();
 	CTankEnemy::LoadContent();
 
+	textures->Add(TEXTURE_PATH_BBOX);
 	
 	int backBufferWidth = game->GetBackBufferWidth();
 	int backBufferHeight = game->GetBackBufferHeight();
@@ -206,18 +207,10 @@ void Update(DWORD dt)
 {
 	CGame* const game = CGame::GetInstance();
 
-	for (int i = 0; i < game->objects.size(); ) {
-		if (game->objects[i]->IsDestroyed()) {
-			LPGAMEOBJECT object = game->objects[i];
-			game->objects.erase(game->objects.begin() + i);
-			delete object;
-			continue;	
-		}
-		i++;
-	}
+	PurgeDeletedObjects(game->objects);
 
 	for (int i = 0; i < game->objects.size(); i++) {
-		if (!game->objects[i]->IsDestroyed()) {
+		if (!game->objects[i]->IsDeleted()) {
 			game->objects[i]->Update(dt, &game->objects);
 		}
 	}	
@@ -248,7 +241,7 @@ void Render()
 	pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
 
 	for (int i = 0; i < g->objects.size(); i++) {
-		if (!g->objects[i]->IsDestroyed())
+		if (!g->objects[i]->IsDeleted())
 			g->objects[i]->Render();
 	}
 
