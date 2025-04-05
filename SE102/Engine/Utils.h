@@ -16,4 +16,6 @@ using namespace std;
 vector<string> split(string line, string delimeter = "\t");
 wstring ToWSTR(string st);
 
-LPCWSTR ToLPCWSTR(string st);
+//LPCWSTR ToLPCWSTR(string st);
+wstring string_to_wstring(const string& str);
+//string wstring_to_string(const wstring& str);

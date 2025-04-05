@@ -3,11 +3,14 @@
 #include <d3dx10.h>
 
 #include <string>
+#include <wtypes.h>
 #include "Texture.h"
 
 using namespace std;
 
 #define STRING_TO_WSTRING(str) wstring(str.begin(), str.end())
+#define WSTRING_TO_STRING(wstr) string(wstr.begin(), wstr.end())
+
 
 /*
 	Manage texture database

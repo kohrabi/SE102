@@ -10,7 +10,7 @@ CSprites *CSprites::GetInstance()
 	return __instance;
 }
 
-void CSprites::Add(int id, RECT r, LPTEXTURE tex)
+void CSprites::Add(int id, const RECT& r, LPTEXTURE tex)
 {
 	Add(id, r.left, r.top, r.right, r.bottom, tex);
 }

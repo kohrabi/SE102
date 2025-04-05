@@ -7,11 +7,12 @@ class CTile : public CGameObject {
 private:
 	RECT textureRegion;
 	LPTEXTURE texture;
+	Vector2 tileSize;
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0
 	CTile(float x, float y, LPTEXTURE texture, int xTile, int yTile, int tileSizeX, int tileSizeY) 
-		: CGameObject(x, y, 0.0f), texture(texture)  {
+		: CGameObject(x, y, 0.0f), texture(texture), tileSize(tileSizeX, tileSizeY)  {
 		textureRegion = GetTextureRegion(xTile, yTile, tileSizeX, tileSizeY);
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override {}
@@ -22,9 +23,9 @@ public:
 	}
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
-		left = position.x - 4;
-		top = position.y - 4;
-		right = position. x + 4;
-		bottom = position.y + 4;
+		left = position.x - round(tileSize.x / 2);
+		top = position.y - round(tileSize.y / 2);
+		right = position. x + round(tileSize.x / 2);
+		bottom = position.y + round(tileSize.y / 2);
 	}
 };

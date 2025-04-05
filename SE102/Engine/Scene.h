@@ -1,6 +1,8 @@
 #pragma once
 
-#include "wtypes.h"
+#include <string>
+
+using namespace std;
 
 /*
 *  Abstract class for a game scene
@@ -9,10 +11,10 @@ class CScene
 {
 protected:
 	int id;
-	LPCWSTR sceneFilePath;
+	wstring sceneFilePath;
 
 public: 
-	CScene(int id, LPCWSTR filePath)
+	CScene(int id, wstring filePath)
 	{
 		this->id = id;
 		this->sceneFilePath = filePath;

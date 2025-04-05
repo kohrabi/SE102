@@ -247,10 +247,35 @@ LPTEXTURE CGame::LoadTexture(LPCWSTR texturePath)
 	ID3D10Resource* pD3D10Resource = NULL;
 	ID3D10Texture2D* tex = NULL;
 
+	// Retrieve image information first 
+	D3DX10_IMAGE_INFO imageInfo;
+	HRESULT hr = D3DX10GetImageInfoFromFile(texturePath, NULL, &imageInfo, NULL);
+	if (FAILED(hr))
+	{
+		DebugOut((wchar_t*)L"[ERROR] D3DX10GetImageInfoFromFile failed for  file: %s with error: %d\n", texturePath, hr);
+		return NULL;
+	}
+
+	D3DX10_IMAGE_LOAD_INFO info;
+	ZeroMemory(&info, sizeof(D3DX10_IMAGE_LOAD_INFO));
+	info.Width = imageInfo.Width;
+	info.Height = imageInfo.Height;
+	info.Depth = imageInfo.Depth;
+	info.FirstMipLevel = 0;
+	info.MipLevels = 1;
+	info.Usage = D3D10_USAGE_DEFAULT;
+	info.BindFlags = D3DX10_DEFAULT;
+	info.CpuAccessFlags = D3DX10_DEFAULT;
+	info.MiscFlags = D3DX10_DEFAULT;
+	info.Format = imageInfo.Format;
+	info.Filter = D3DX10_FILTER_NONE;
+	info.MipFilter = D3DX10_DEFAULT;
+	info.pSrcInfo = &imageInfo;
+
 	// Loads the texture into a temporary ID3D10Resource object
-	HRESULT hr = D3DX10CreateTextureFromFile(pD3DDevice,
+	hr = D3DX10CreateTextureFromFile(pD3DDevice,
 		texturePath,
-		NULL, //&info,
+		&info,
 		NULL,
 		&pD3D10Resource,
 		NULL);
@@ -326,7 +351,7 @@ void CGame::_ParseSection_SCENES(string line)
 
 	if (tokens.size() < 2) return;
 	int id = atoi(tokens[0].c_str());
-	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
+	wstring path = ToWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
 
 	LPSCENE scene = new CPlayScene(id, path);
 	scenes[id] = scene;
@@ -358,7 +383,7 @@ void CGame::Load(LPCWSTR gameFile)
 		if (line[0] == '[') 
 		{ 
 			section = GAME_FILE_SECTION_UNKNOWN; 
-			DebugOut(L"[ERROR] Unknown section: %s\n", ToLPCWSTR(line));
+			DebugOut(L"[ERROR] Unknown section: %s\n", ToWSTR(line).c_str());
 			continue; 
 		}
 

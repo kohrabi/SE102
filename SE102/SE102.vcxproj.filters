@@ -30,24 +30,6 @@
     <ClCompile Include="Engine\Math\Vector2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\CTank.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\CPlayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\CTankEnemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\CTankEnemyRed.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\CTankEnemyGreen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\CTankSpawner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,12 +45,6 @@
     <ClCompile Include="Engine\Graphics\Textures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\AnimationFrame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\CTankBullet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -81,21 +57,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Content\Maps\test.tiled-project" />
-    <None Include="Content\Maps\test.tiled-session" />
-    <None Include="Content\Maps\test.tmx" />
-    <None Include="Content\Maps\btSprites.tsx" />
-    <None Include="Content\Maps\btSpritesEntity.tsx" />
-    <None Include="Content\Maps\TankSpawner.tx" />
-    <None Include="Content\Maps\Player.tx" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Content\enemy-big.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Content\btSprites.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Content\bbox.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -116,28 +79,10 @@
     <ClInclude Include="Engine\Math\Vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\CTank.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\CPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\CTankEnemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\CTankEnemyRed.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\CTankEnemyGreen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="contents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\helper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\CTankSpawner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Animation.h">
@@ -159,9 +104,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\AABB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\CTankBullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\CTile.h">

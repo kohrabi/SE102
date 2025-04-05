@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include <string>
 //#include "Koopas.h"
 
 
@@ -22,7 +23,7 @@ protected:
 	void LoadAssets(LPCWSTR assetFile);
 	
 public: 
-	CPlayScene(int id, LPCWSTR filePath);
+	CPlayScene(int id, wstring filePath);
 
 	virtual void Load();
 	virtual void Update(DWORD dt);

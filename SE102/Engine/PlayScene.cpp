@@ -12,7 +12,7 @@
 
 using namespace std;
 
-CPlayScene::CPlayScene(int id, LPCWSTR filePath):
+CPlayScene::CPlayScene(int id, wstring filePath):
 	CScene(id, filePath)
 {
 	player = NULL;
@@ -40,7 +40,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	int t = atoi(tokens[2].c_str());
 	int r = atoi(tokens[3].c_str());
 	int b = atoi(tokens[4].c_str());
-	string texPath = tokens[5].c_str();
+	wstring texPath = ToWSTR(tokens[5]);
 
 	LPTEXTURE tex = CTextures::GetInstance()->Get(texPath);
 	if (tex == NULL)
@@ -265,10 +265,10 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 
 void CPlayScene::Load()
 {
-	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
+	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath.c_str());
 
 	ifstream f;
-	f.open(sceneFilePath);
+	f.open(sceneFilePath.c_str());
 
 	// current resource section flag
 	int section = SCENE_SECTION_UNKNOWN;					
@@ -295,7 +295,7 @@ void CPlayScene::Load()
 
 	f.close();
 
-	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
+	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath.c_str());
 }
 
 void CPlayScene::Update(DWORD dt)

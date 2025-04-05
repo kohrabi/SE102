@@ -48,14 +48,12 @@ class CGame
 	bool prevKeyState[256];
 
 public:
+	bool leftMouseDown;
+
 	// Init DirectX, Sprite Handler
 	void Init(HWND hWnd, HINSTANCE hInstance);
 
 	void SetPointSamplerState();
-
-	std::vector<LPGAMEOBJECT> objects;
-	LPTEXTURE texBullet = NULL;
-	LPTEXTURE texBTSprites = NULL;
 
 	//
 	// Draw a portion or ALL the texture at position (x,y) on the screen
@@ -100,6 +98,7 @@ public:
 	}
 
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+
 	void Load(LPCWSTR gameFile);
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
@@ -112,7 +111,6 @@ public:
 	int GetBackBufferWidth() { return backBufferWidth; }
 	int GetBackBufferHeight() { return backBufferHeight; }
 
-	bool leftMouseDown;
 
 	static CGame* const GetInstance();
 

@@ -21,33 +21,37 @@ char * string to wchar_t* string.
 */
 wstring ToWSTR(string st)
 {
-	const char *str = st.c_str();
-
-	size_t newsize = strlen(str) + 1;
-	wchar_t * wcstring = new wchar_t[newsize];
+	size_t newsize = st.length() + 1;
+	vector<wchar_t> buffer(newsize);
 	size_t convertedChars = 0;
-	mbstowcs_s(&convertedChars, wcstring, newsize, str, _TRUNCATE);
-
-	wstring wstr(wcstring);
-
-	// delete wcstring   // << can I ? 
-	return wstr;
+	mbstowcs_s(&convertedChars, buffer.data(), newsize, st.c_str(), _TRUNCATE);
+	return wstring(buffer.data());
 }
 
-/*
-	Convert char* string to wchar_t* string.
-*/
-LPCWSTR ToLPCWSTR(string st)
+///*
+//	Convert char* string to wchar_t* string.
+//*/
+//LPCWSTR ToLPCWSTR(string st)
+//{
+//	const char *str = st.c_str();
+//
+//	size_t newsize = strlen(str) + 1;
+//	wchar_t * wcstring = new wchar_t[newsize];
+//	size_t convertedChars = 0;
+//	mbstowcs_s(&convertedChars, wcstring, newsize, str, _TRUNCATE);
+//
+//	wstring *w = new wstring(wcstring);
+//
+//	// delete wcstring   // << can I ? 
+//	return w->c_str();
+//}
+
+wstring string_to_wstring(const string& str)
 {
-	const char *str = st.c_str();
-
-	size_t newsize = strlen(str) + 1;
-	wchar_t * wcstring = new wchar_t[newsize];
-	size_t convertedChars = 0;
-	mbstowcs_s(&convertedChars, wcstring, newsize, str, _TRUNCATE);
-
-	wstring *w = new wstring(wcstring);
-
-	// delete wcstring   // << can I ? 
-	return w->c_str();
+	return wstring(str.begin(), str.end());
 }
+
+//string wstring_to_string(const wstring& str)
+//{
+//	return string(str.begin(), str.end());
+//}

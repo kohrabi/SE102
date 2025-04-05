@@ -19,7 +19,7 @@ class CSprites
 	unordered_map<int, LPSPRITE> sprites;
 
 public:
-	void Add(int id, RECT r, LPTEXTURE tex);
+	void Add(int id, const RECT& r, LPTEXTURE tex);
 	void Add(int id, int left, int top, int right, int bottom, LPTEXTURE tex);
 	LPSPRITE Get(int id);
 	void Clear();

@@ -3,7 +3,8 @@
 #include "Engine/debug.h"
 #include "Engine/Game.h"
 #include "textures.h"
-#include <Engine/Utils.h>
+#include "Engine/Utils.h"
+#include <string>
 
 CTextures * CTextures::__instance = NULL;
 
@@ -31,7 +32,7 @@ LPTEXTURE CTextures::Get(const wstring& path)
 
 LPTEXTURE CTextures::Get(const string& path)
 {
-	return Get(ToLPCWSTR(path));
+	return Get(ToWSTR(path));
 }
 
 

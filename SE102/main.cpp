@@ -22,13 +22,7 @@
 #include "Engine/debug.h"
 #include "Engine/Game.h"
 #include "Engine/GameObject.h"
-#include "GameObjects/CTank.h"
-#include "GameObjects/CPlayer.h"
-#include "GameObjects/CTankEnemy.h"
-#include "GameObjects/CTankEnemyRed.h"
-#include "GameObjects/CTankEnemyGreen.h"
 #include "contents.h"
-#include "GameObjects/CTankSpawner.h"
 #include "Engine/Graphics/Textures.h"
 #include "Engine/Graphics/Sprites.h"
 #include "Engine/Graphics/Animations.h"
@@ -98,24 +92,6 @@ void ClearScene(vector<LPGAMEOBJECT>& objects)
 	objects.clear();
 }
 
-bool IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
-
-void PurgeDeletedObjects(vector<LPGAMEOBJECT>& objects)
-{
-	for (auto it = objects.begin(); it != objects.end(); it++)
-	{
-		LPGAMEOBJECT o = *it;
-		if (o->IsDeleted())
-		{
-			delete o;
-			*it = NULL;
-		}
-	}
-	objects.erase(
-		std::remove_if(objects.begin(), objects.end(), IsGameObjectDeleted),
-		objects.end());
-}
-
 /*
 	Load all game resources. In this example, create a brick object and mario object
 */
@@ -123,76 +99,71 @@ void LoadResources()
 {
 	CGame* const game = CGame::GetInstance();
 	CTextures* const textures = CTextures::GetInstance();
-
-	textures->Add(TEXTURE_PATH_BTSPRITES);
-	CPlayer::LoadContent();
-	CTankEnemy::LoadContent();
-
 	textures->Add(TEXTURE_PATH_BBOX);
 	
 	int backBufferWidth = game->GetBackBufferWidth();
 	int backBufferHeight = game->GetBackBufferHeight();
 
-	if (tMap.load(TEST_TILE_TMX)) {
-		const auto& tilesets = tMap.getTilesets();
+	//if (tMap.load(TEST_TILE_TMX)) {
+	//	const auto& tilesets = tMap.getTilesets();
 
-		const auto& layers = tMap.getLayers();
-		for (const auto& layer : layers) {
-			if (layer->getType() == tmx::Layer::Type::Object)
-			{
-				const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
-				const auto& objects = objectLayer.getObjects();
-				for (const auto& object : objects)
-				{
-					const auto& aabb = object.getAABB();
-					if (object.getClass() == "CPlayer")
-					{
-						CPlayer* tank = new CPlayer(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f);
-						game->objects.push_back(tank);
-					}
-					else if (object.getClass() == "CTankSpawner") {
-						float timeOffset = 0.0f;
-						for (const auto& proper : object.getProperties()) {
-							if (proper.getName() == "timeOffset")
-								timeOffset = proper.getFloatValue();
-						}
+	//	const auto& layers = tMap.getLayers();
+	//	for (const auto& layer : layers) {
+	//		if (layer->getType() == tmx::Layer::Type::Object)
+	//		{
+	//			const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
+	//			const auto& objects = objectLayer.getObjects();
+	//			for (const auto& object : objects)
+	//			{
+	//				const auto& aabb = object.getAABB();
+	//				if (object.getClass() == "CPlayer")
+	//				{
+	//					CPlayer* tank = new CPlayer(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f);
+	//					game->objects.push_back(tank);
+	//				}
+	//				else if (object.getClass() == "CTankSpawner") {
+	//					float timeOffset = 0.0f;
+	//					for (const auto& proper : object.getProperties()) {
+	//						if (proper.getName() == "timeOffset")
+	//							timeOffset = proper.getFloatValue();
+	//					}
 
-						CTankSpawner* tank = new CTankSpawner(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f, timeOffset);
-						game->objects.push_back(tank);
-					}
-					//do stuff with object properties
-				}
-			}
-			else if (layer->getType() == tmx::Layer::Type::Tile)
-			{
-				const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
-				const auto& layerSize = tileLayer.getSize();
-				const auto& mapTileSize = tMap.getTileSize();
-				const auto& mapSize = tMap.getTileCount();
-				const auto& tiles = tileLayer.getTiles();
+	//					CTankSpawner* tank = new CTankSpawner(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f, timeOffset);
+	//					game->objects.push_back(tank);
+	//				}
+	//				//do stuff with object properties
+	//			}
+	//		}
+	//		else if (layer->getType() == tmx::Layer::Type::Tile)
+	//		{
+	//			const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+	//			const auto& layerSize = tileLayer.getSize();
+	//			const auto& mapTileSize = tMap.getTileSize();
+	//			const auto& mapSize = tMap.getTileCount();
+	//			const auto& tiles = tileLayer.getTiles();
 
-				for (const auto& tileset : tilesets) {
-					const auto& tilesetTiles = tileset.getTiles();
-					for (int i = 0; i < mapSize.x; i++)
-					{
-						for (int j = 0; j < mapSize.y; j++) {
-							int idx = j * mapSize.x + i;
-							if (idx < tiles.size() && tiles[idx].ID >= tileset.getFirstGID() && tiles[idx].ID <= tileset.getLastGID()) {
+	//			for (const auto& tileset : tilesets) {
+	//				const auto& tilesetTiles = tileset.getTiles();
+	//				for (int i = 0; i < mapSize.x; i++)
+	//				{
+	//					for (int j = 0; j < mapSize.y; j++) {
+	//						int idx = j * mapSize.x + i;
+	//						if (idx < tiles.size() && tiles[idx].ID >= tileset.getFirstGID() && tiles[idx].ID <= tileset.getLastGID()) {
 
-								auto imagePosition = tilesetTiles[tiles[idx].ID - 1].imagePosition;
-								auto tileSize = tilesetTiles[tiles[idx].ID - 1].imageSize;
-								Vector2 offset(tileSize.x / 2.0f, tileSize.y / 2.0f);
-								game->objects.push_back(new CTile(mapTileSize.x * i + offset.x, mapTileSize.y * j + offset.y, 
-									textures->Get(STRING_TO_WSTRING(tileset.getImagePath())),
-									imagePosition.x / mapTileSize.x, imagePosition.y / mapTileSize.y, mapTileSize.x, mapTileSize.y));
-							}
-						}
-					}
-				}
-			}
-		}
+	//							auto imagePosition = tilesetTiles[tiles[idx].ID - 1].imagePosition;
+	//							auto tileSize = tilesetTiles[tiles[idx].ID - 1].imageSize;
+	//							Vector2 offset(tileSize.x / 2.0f, tileSize.y / 2.0f);
+	//							game->objects.push_back(new CTile(mapTileSize.x * i + offset.x, mapTileSize.y * j + offset.y, 
+	//								textures->Get(STRING_TO_WSTRING(tileset.getImagePath())),
+	//								imagePosition.x / mapTileSize.x, imagePosition.y / mapTileSize.y, mapTileSize.x, mapTileSize.y));
+	//						}
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
 
-	}
+	//}
 
 }
 
@@ -207,13 +178,7 @@ void Update(DWORD dt)
 {
 	CGame* const game = CGame::GetInstance();
 
-	PurgeDeletedObjects(game->objects);
-
-	for (int i = 0; i < game->objects.size(); i++) {
-		if (!game->objects[i]->IsDeleted()) {
-			game->objects[i]->Update(dt, &game->objects);
-		}
-	}	
+	CGame::GetInstance()->GetCurrentScene()->Update(dt);
 
 
 	DebugOutTitle(L"01 - Skeleton %f", dt); 
@@ -240,10 +205,7 @@ void Render()
 	FLOAT NewBlendFactor[4] = { 0,0,0,0 };
 	pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
 
-	for (int i = 0; i < g->objects.size(); i++) {
-		if (!g->objects[i]->IsDeleted())
-			g->objects[i]->Render();
-	}
+	CGame::GetInstance()->GetCurrentScene()->Render();
 
 	// Uncomment this line to see how to draw a porttion of a texture  
 	//g->Draw(10, 10, 0, texMisc, 300, 117, 317, 134);

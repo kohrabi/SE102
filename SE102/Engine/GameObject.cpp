@@ -5,7 +5,7 @@
 #include "Engine/GameObject.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include "GameObjects/CTankEnemy.h"
+#include "contents.h"
 #include "Graphics/Textures.h"
 
 /*
