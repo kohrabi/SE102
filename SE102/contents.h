@@ -1,7 +1,28 @@
 #pragma once
 
-// Maps
-#define TEST_TILE_TMX					"Content/Maps/test.tmx"
 // Textures
-#define TEXTURE_ID_BTSPRITES			100
+#define SCENES_LIST_PATH				L"Content/Scenes/scenes_list.txt"
 #define TEXTURE_PATH_BBOX				L"Content/bbox.png"
+
+#define MARIO_ID 10000
+    #define MARIO_ID_SPRITE_IDLE 11111
+
+    #define MARIO_ID_SPRITE_WALK 11121
+
+    #define MARIO_ID_SPRITE_JUMP 11131
+
+    #define MARIO_ID_SPRITE_RUNNING_FRAME_1 11141
+    #define MARIO_ID_SPRITE_RUNNING_FRAME_2 11142
+
+    #define MARIO_ID_SPRITE_RUNNING_FLY 11151
+
+    #define MARIO_ID_SPRITE_RUNNING_BRACE 11161
+
+    #define MARIO_ID_SPRITE_RUNNING_DIE 11171
+
+    #define MARIO_ID_ANIMATION_IDLE 400
+    #define MARIO_ID_ANIMATION_WALKING 500
+    #define MARIO_ID_ANIMATION_RUNNING 600
+    #define MARIO_ID_ANIMATION_JUMP 700
+    #define MARIO_ID_ANIMATION_BRACE 800
+    #define MARIO_ID_ANIMATION_DIE 999

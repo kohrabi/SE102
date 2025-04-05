@@ -21,6 +21,8 @@ CTextures *CTextures::GetInstance()
 
 void CTextures::Add(wstring filePath)
 {
+	if (textures.find(filePath) != textures.end())
+		return;
 	textures[filePath] = CGame::GetInstance()->LoadTexture(filePath.c_str());
 }
 

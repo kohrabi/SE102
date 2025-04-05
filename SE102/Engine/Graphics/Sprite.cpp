@@ -11,7 +11,7 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex
 	float texWidth = (float)tex->getWidth();
 	float texHeight = (float)tex->getHeight();
 
-	// Set the sprite’s shader resource view
+	// Set the spriteï¿½s shader resource view
 	sprite.pTexture = tex->getShaderResourceView();
 
 	sprite.TexCoord.x = this->left / texWidth;
@@ -29,10 +29,10 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex
 	D3DXMatrixScaling(&this->matScaling, (FLOAT)spriteWidth, (FLOAT)spriteHeight, 1.0f);
 }
 
-void CSprite::Draw(float x, float y)
+void CSprite::Draw(float x, float y, bool flipX, bool flipY)
 {
 	CGame* g = CGame::GetInstance();
-	g->Draw(x, y, 0.0f, texture, left, top, right, bottom);
+	g->Draw(x, y, 0.0f, texture, left, top, right, bottom, flipX, flipY);
 	//D3DXMATRIX matTranslation;
 	//D3DXMatrixTranslation(&matTranslation, roundf(x), roundf(g->GetBackBufferHeight() - y), 0.1f);
 	//this->sprite.matWorld = (this->matScaling * matTranslation);

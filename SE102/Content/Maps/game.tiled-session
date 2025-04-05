@@ -1,0 +1,64 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "1-1.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "1-1.tmx": {
+            "expandedGroupLayers": [
+                6
+            ],
+            "scale": 4,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 100.625,
+                "y": 265.875
+            }
+        },
+        "cloud.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "mario.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 4
+        },
+        "marioTiles32.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 3
+        },
+        "mariotiles.tsx": {
+            "scaleInDock": 2
+        },
+        "mariotiles32.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 2
+        }
+    },
+    "last.imagePath": "D:/Code/VS/SE102/SE102/Content",
+    "last.objectTemplatePath": "D:/Code/VS/SE102/SE102/Content/Maps",
+    "openFiles": [
+        "marioTiles32.tsx",
+        "1-1.tmx",
+        "cloud.tsx",
+        "mario.tsx"
+    ],
+    "project": "game.tiled-project",
+    "recentFiles": [
+        "marioTiles32.tsx",
+        "mario.tsx",
+        "cloud.tsx",
+        "1-1.tmx",
+        "mariotiles32.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.margin": 0,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

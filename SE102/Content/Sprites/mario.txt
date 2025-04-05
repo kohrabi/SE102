@@ -1,0 +1,45 @@
+# id	left	top	right	bottom	path_alias
+[ALIAS]
+Content/mario.png: 0
+
+[SPRITES]
+#####  BIG ###############
+# IDLE
+11111: 0 0 15 15 0
+# WALKING
+11121: 16 0 31 15 0
+
+#JUMP
+11131: 32 0 47 15 0
+
+#RUNNING 
+11141: 48 0 63 15 0
+11142: 64 0 79 15 0
+
+#FLY
+11151: 80 0 95 15 0
+
+#BRACE
+11161: 96 0 111 15 0
+
+#DIE
+11171: 272 0 287 15 0
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+400: 11111 100
+
+#WALKING 
+500: 11111 100 11121 100
+
+#RUNNING
+600: 11141 50 11142 50
+
+#JUMP
+700: 11131 100
+
+#BRACE  
+800: 11161 100
+
+#DIE
+999: 11171 100

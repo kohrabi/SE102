@@ -26,7 +26,6 @@
 #include "Engine/Graphics/Textures.h"
 #include "Engine/Graphics/Sprites.h"
 #include "Engine/Graphics/Animations.h"
-#include "GameObjects/CTile.h"
 
 
 #include <tmxlite/Map.hpp>
@@ -36,10 +35,9 @@
 #include <iostream>
 
 #define WINDOW_CLASS_NAME L"Game Window"
-#define MAIN_WINDOW_TITLE L"01 - Skeleton"
-#define BACKGROUND_COLOR D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f)
-#define SCREEN_WIDTH 224
-#define SCREEN_HEIGHT 246
+#define MAIN_WINDOW_TITLE L"MARIO"
+#define SCREEN_WIDTH 240
+#define SCREEN_HEIGHT 180
 
 
 using namespace std;
@@ -83,15 +81,6 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-void ClearScene(vector<LPGAMEOBJECT>& objects)
-{
-	for (auto it = objects.begin(); it != objects.end(); it++)
-	{
-		delete (*it);
-	}
-	objects.clear();
-}
-
 /*
 	Load all game resources. In this example, create a brick object and mario object
 */
@@ -100,9 +89,12 @@ void LoadResources()
 	CGame* const game = CGame::GetInstance();
 	CTextures* const textures = CTextures::GetInstance();
 	textures->Add(TEXTURE_PATH_BBOX);
+
+	game->Load(SCENES_LIST_PATH);
 	
 	int backBufferWidth = game->GetBackBufferWidth();
 	int backBufferHeight = game->GetBackBufferHeight();
+	game->SetCamPos(0, 100);
 
 	//if (tMap.load(TEST_TILE_TMX)) {
 	//	const auto& tilesets = tMap.getTilesets();
@@ -178,10 +170,25 @@ void Update(DWORD dt)
 {
 	CGame* const game = CGame::GetInstance();
 
-	CGame::GetInstance()->GetCurrentScene()->Update(dt);
+	game->GetCurrentScene()->Update(dt);
 
+	float cx, cy;
+	game->GetCamPos(cx, cy);
+	if (game->IsKeyDown(VK_UP)) {
+		cy -= 0.2f * dt;
+	}
+	if (game->IsKeyDown(VK_DOWN)) {
+		cy += 0.2f * dt;
+	}
+	if (game->IsKeyDown(VK_LEFT)) {
+		cx -= 0.2f * dt;
+	}
+	if (game->IsKeyDown(VK_RIGHT)) {
+		cx += 0.2f * dt;
+	}
+	game->SetCamPos(cx, cy);
 
-	DebugOutTitle(L"01 - Skeleton %f", dt); 
+	DebugOutTitle(L"01 - Skeleton %f", (double)((1.0 / (dt / 1000.0)))); 
 }
 
 /*
@@ -197,13 +204,14 @@ void Render()
 	ID3DX10Sprite* spriteHandler = g->GetSpriteHandler();
 
 	// clear the background 
-	pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
-
+	pD3DDevice->ClearRenderTargetView(pRenderTargetView, g->GetCurrentScene()->GetBackgroundColor());
+	
 	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
-
+	
 	// Use Alpha blending for transparent sprites
 	FLOAT NewBlendFactor[4] = { 0,0,0,0 };
 	pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
+	g->SetPointSamplerState();
 
 	CGame::GetInstance()->GetCurrentScene()->Render();
 
@@ -295,8 +303,9 @@ int Run()
 			Update((DWORD)dt);
 			Render();
 		}
-		else
+		else {
 			Sleep((DWORD)(tickPerFrame - dt));
+		}
 	}
 
 	UnloadResources();

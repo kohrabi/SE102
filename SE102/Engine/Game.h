@@ -9,7 +9,7 @@
 #include "Graphics/Texture.h"
 #include "Engine/GameObject.h"
 
-#define MAX_FRAME_RATE 60
+#define MAX_FRAME_RATE 120
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
@@ -59,16 +59,16 @@ public:
 	// Draw a portion or ALL the texture at position (x,y) on the screen
 	// rect : if NULL, the whole texture will be drawn
 	//        if NOT NULL, only draw that portion of the texture 
-	void Draw(float x, float y, float rotation, LPTEXTURE tex, RECT *rect = NULL, float alpha = 1.0f, int sprite_width = 0, int sprite_height = 0);
+	void Draw(float x, float y, float rotation, LPTEXTURE tex, RECT *rect = NULL, bool flipX = false, bool flipY = false, float alpha = 1.0f, int sprite_width = 0, int sprite_height = 0);
 
-	void Draw(float x, float y, float rotation, LPTEXTURE tex, int l, int t, int r, int b, float alpha = 1.0f, int sprite_width = 0, int sprite_height = 0)
+	void Draw(float x, float y, float rotation, LPTEXTURE tex, int l, int t, int r, int b, bool flipX = false, bool flipY = false, float alpha = 1.0f, int sprite_width = 0, int sprite_height = 0)
 	{
 		RECT rect; 
 		rect.left = l;
 		rect.top = t;
 		rect.right = r;
 		rect.bottom = b;
-		this->Draw(x, y, rotation, tex, &rect, alpha, sprite_width, sprite_height);
+		this->Draw(x, y, rotation, tex, &rect, flipX, flipY, alpha, sprite_width, sprite_height);
 	}
 
 	LPTEXTURE LoadTexture(LPCWSTR texturePath);

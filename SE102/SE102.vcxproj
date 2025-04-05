@@ -134,11 +134,13 @@
     <ClCompile Include="Engine\Collision.cpp" />
     <ClCompile Include="Engine\Graphics\Animation.cpp" />
     <ClCompile Include="Engine\Graphics\Animations.cpp" />
+    <ClCompile Include="Engine\Loaders\SpritesLoader.cpp" />
     <ClCompile Include="Engine\PlayScene.cpp" />
     <ClCompile Include="Engine\Utils.cpp" />
     <ClCompile Include="Engine\debug.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
+    <ClCompile Include="GameObjects\Mario.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Graphics\Sprite.cpp" />
     <ClCompile Include="Engine\Graphics\Sprites.cpp" />
@@ -150,6 +152,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Content\bbox.png" />
+    <Image Include="Content\mario.png" />
+    <Image Include="Content\mariotiles.png" />
+    <Image Include="Content\marioTiles32.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Collision.h" />
@@ -157,6 +162,8 @@
     <ClInclude Include="Engine\Graphics\AnimationFrame.h" />
     <ClInclude Include="Engine\Graphics\Animations.h" />
     <ClInclude Include="contents.h" />
+    <ClInclude Include="Engine\Loaders\Loader.h" />
+    <ClInclude Include="Engine\Loaders\SpritesLoader.h" />
     <ClInclude Include="Engine\Math\AABB.h" />
     <ClInclude Include="Engine\PlayScene.h" />
     <ClInclude Include="Engine\Scene.h" />
@@ -165,17 +172,28 @@
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\helper.h" />
-    <ClInclude Include="GameObjects\CTile.h" />
+    <ClInclude Include="GameObjects\Mario.h" />
+    <ClInclude Include="GameObjects\CollidableTile.h" />
     <ClInclude Include="Engine\Graphics\Sprite.h" />
     <ClInclude Include="Engine\Graphics\Sprites.h" />
     <ClInclude Include="Engine\Graphics\Texture.h" />
     <ClInclude Include="Engine\Graphics\Textures.h" />
     <ClInclude Include="Engine\Math\Vector2.h" />
+    <ClInclude Include="GameObjects\Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libs\tmxlite\tmxlite\tmxlite.vcxproj">
       <Project>{0bc0c535-febb-4a83-8197-af74fa26e100}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="1.1.txt" />
+    <Text Include="Content\Scenes\1-1.txt">
+      <DeploymentContent>true</DeploymentContent>
+    </Text>
+    <Text Include="Content\Scenes\scenes_list.txt">
+      <DeploymentContent>true</DeploymentContent>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

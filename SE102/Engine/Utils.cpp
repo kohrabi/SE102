@@ -9,7 +9,7 @@ vector<string> split(string line, string delimeter)
 	while ((next = line.find(delimeter, last)) != string::npos)
 	{
 		tokens.push_back(line.substr(last, next - last));
-		last = next + 1;
+		last = next + delimeter.length();
 	}
 	tokens.push_back(line.substr(last));
 

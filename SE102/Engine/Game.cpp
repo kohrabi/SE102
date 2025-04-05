@@ -95,9 +95,9 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 
 	D3D10_SAMPLER_DESC desc;
 	desc.Filter = D3D10_FILTER_MIN_MAG_MIP_POINT; 
-	desc.AddressU = D3D10_TEXTURE_ADDRESS_CLAMP;
-	desc.AddressV = D3D10_TEXTURE_ADDRESS_CLAMP;
-	desc.AddressW = D3D10_TEXTURE_ADDRESS_CLAMP;
+	desc.AddressU = D3D10_TEXTURE_ADDRESS_MIRROR;
+	desc.AddressV = D3D10_TEXTURE_ADDRESS_MIRROR;
+	desc.AddressW = D3D10_TEXTURE_ADDRESS_MIRROR;
 	desc.MipLODBias = 0;
 	desc.MaxAnisotropy = 1;
 	desc.ComparisonFunc = D3D10_COMPARISON_NEVER;
@@ -149,6 +149,7 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 	pD3DDevice->CreateBlendState(&StateDesc, &this->pBlendStateAlpha);
 
 
+
 	DebugOut((wchar_t*)L"[INFO] InitDirectX has been successful\n");
 
 	return;
@@ -156,8 +157,8 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 
 void CGame::SetPointSamplerState()
 {
-	pD3DDevice->VSSetSamplers(0, 1, &pPointSamplerState);
-	pD3DDevice->GSSetSamplers(0, 1, &pPointSamplerState);
+	// pD3DDevice->VSSetSamplers(0, 1, &pPointSamplerState);
+	// pD3DDevice->GSSetSamplers(0, 1, &pPointSamplerState);
 	pD3DDevice->PSSetSamplers(0, 1, &pPointSamplerState);
 }
 
@@ -165,7 +166,7 @@ void CGame::SetPointSamplerState()
 	Draw the whole texture or part of texture onto screen
 	NOTE: This function is OBSOLTED in this example. Use Sprite::Render instead 
 */
-void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, float alpha, int sprite_width, int sprite_height)
+void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, bool flipX, bool flipY, float alpha, int sprite_width, int sprite_height)
 {
 	if (tex == NULL) return; 
 
@@ -185,31 +186,59 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, fl
 
 	if (rect==NULL) 
 	{
-		// top-left location in U,V coords
-		sprite.TexCoord.x = 0;
-		sprite.TexCoord.y = 0;
-
-		// Determine the texture size in U,V coords
-		sprite.TexSize.x = 1.0f;
-		sprite.TexSize.y = 1.0f;
 
 		if (spriteWidth==0) spriteWidth = tex->getWidth();
 		if (spriteHeight==0) spriteHeight = tex->getHeight();
+
+		// top-left location in U,V coords
+		if (flipX) {
+			sprite.TexCoord.x = 1.0f;
+			sprite.TexSize.x = -1.0f;
+		}
+		else {
+			sprite.TexCoord.x = 0;
+			sprite.TexSize.x = 1.0f;
+		}
+
+		if (flipY) {
+			sprite.TexCoord.y = 1.0f;
+			sprite.TexSize.y = -1.0f;
+		}
+		else {
+			sprite.TexCoord.y = 0;
+			sprite.TexSize.y = 1.0f;
+		}
+
+		// Determine the texture size in U,V coords
 	}
 	else
 	{
-		sprite.TexCoord.x = rect->left / (float)tex->getWidth();
-		sprite.TexCoord.y = rect->top / (float)tex->getHeight();
-
 		if (spriteWidth == 0) spriteWidth = (rect->right - rect->left + 1);
 		if (spriteHeight == 0) spriteHeight = (rect->bottom - rect->top + 1);
+		
+		if (flipX) {
+			// Flip the UV from 0-1 to -1-0
+			sprite.TexCoord.x = rect->right / (float)tex->getWidth();
+			sprite.TexSize.x = -spriteWidth / (float)tex->getWidth();
+		}
+		else {
+			sprite.TexCoord.x = rect->left / (float)tex->getWidth();
+			sprite.TexSize.x = spriteWidth / (float)tex->getWidth();
+		}
 
-		sprite.TexSize.x = spriteWidth / (float)tex->getWidth();
-		sprite.TexSize.y = spriteHeight / (float)tex->getHeight();
+		if (flipY) {
+			sprite.TexCoord.y = rect->bottom / (float)tex->getHeight();
+			sprite.TexSize.y = -spriteHeight / (float)tex->getHeight();
+		}
+		else {
+			sprite.TexCoord.y = rect->top / (float)tex->getHeight();
+			sprite.TexSize.y = spriteHeight / (float)tex->getHeight();
+		}
 	}
 
 	// Set the texture index. Single textures will use 0
 	sprite.TextureIndex = 0;
+
 
 	// The color to apply to this sprite, full color applies white.
 	sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha);
@@ -235,6 +264,8 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, fl
 
 	// Setting the sprite�s position and size
 	sprite.matWorld = (matScaling * matRotation * matTranslation);
+
+	// SetPointSamplerState();
 
 	spriteObject->DrawSpritesImmediate(&sprite, 1, 0, 0);
 }

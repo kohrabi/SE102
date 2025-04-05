@@ -4,11 +4,14 @@
 
 #include "PlayScene.h"
 #include "Utils.h"
-#include "Graphics/Textures.h"
 #include "Graphics/Sprites.h"
 #include "debug.h"
 #include "Graphics/Animation.h"
 #include "Graphics/Animations.h"
+
+#include "GameObjects/Tile.h"
+#include "GameObjects/CollidableTile.h"
+#include "GameObjects/Mario.h"
 
 using namespace std;
 
@@ -20,254 +23,16 @@ CPlayScene::CPlayScene(int id, wstring filePath):
 
 
 #define SCENE_SECTION_UNKNOWN -1
-#define SCENE_SECTION_ASSETS	1
-#define SCENE_SECTION_OBJECTS	2
-
-#define ASSETS_SECTION_UNKNOWN -1
-#define ASSETS_SECTION_SPRITES 1
-#define ASSETS_SECTION_ANIMATIONS 2
+#define SCENE_SECTION_PROPERTIES 1
 
 #define MAX_SCENE_LINE 1024
-
-void CPlayScene::_ParseSection_SPRITES(string line)
-{
-	vector<string> tokens = split(line);
-
-	if (tokens.size() < 6) return; // skip invalid lines
-
-	int ID = atoi(tokens[0].c_str());
-	int l = atoi(tokens[1].c_str());
-	int t = atoi(tokens[2].c_str());
-	int r = atoi(tokens[3].c_str());
-	int b = atoi(tokens[4].c_str());
-	wstring texPath = ToWSTR(tokens[5]);
-
-	LPTEXTURE tex = CTextures::GetInstance()->Get(texPath);
-	if (tex == NULL)
-	{
-		DebugOut(L"[ERROR] Texture ID %s not found!\n", texPath.c_str());
-		return; 
-	}
-
-	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
-}
-
-void CPlayScene::_ParseSection_ASSETS(string line)
-{
-	vector<string> tokens = split(line);
-
-	if (tokens.size() < 1) return;
-
-	wstring path = ToWSTR(tokens[0]);
-	
-	LoadAssets(path.c_str());
-}
-
-void CPlayScene::_ParseSection_ANIMATIONS(string line)
-{
-	vector<string> tokens = split(line);
-
-	if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
-
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
-
-	LPANIMATION ani = new CAnimation();
-
-	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
-	{
-		int sprite_id = atoi(tokens[i].c_str());
-		int frame_time = atoi(tokens[i+1].c_str());
-		ani->Add(sprite_id, frame_time);
-	}
-
-	CAnimations::GetInstance()->Add(ani_id, ani);
-}
-
-/*
-	Parse a line in section [OBJECTS] 
-*/
-void CPlayScene::_ParseSection_OBJECTS(string line)
-{
-	vector<string> tokens = split(line);
-
-	// skip invalid lines - an object set must have at least id, x, y
-	if (tokens.size() < 2) return;
-
-	int object_type = atoi(tokens[0].c_str());
-	float x = (float)atof(tokens[1].c_str());
-	float y = (float)atof(tokens[2].c_str());
-
-	CGameObject *obj = NULL;
-
-	//switch (object_type)
-	//{
-	//case OBJECT_TYPE_MARIO:
-	//	if (player!=NULL) 
-	//	{
-	//		DebugOut(L"[ERROR] MARIO object was created before!\n");
-	//		return;
-	//	}
-	//	obj = new CMario(x,y); 
-	//	player = (CMario*)obj;  
-
-	//	obj->SetPosition(x, y);
-
-
-	//	objects.push_back(obj);
-
-	//	DebugOut(L"[INFO] Player object has been created!\n");
-	//	break;
-	//case OBJECT_TYPE_GOOMBA: {
-	//	obj = new CGoomba(x, y);
-
-	//	obj->SetPosition(x, y);
-
-
-	//	objects.push_back(obj);
-	//}
-	//break;
-	//case OBJECT_TYPE_BRICK:
-	//{
-	//	if (tokens.size() == 5) {
-	//		int count = (int)atoi(tokens[3].c_str());
-	//		float xDist = (float)atof(tokens[4].c_str());
-	//		for (int i = 0; i < count; i++) {
-	//			obj = new CBrick(x + i * xDist, y);
-	//		/*	obj->GetPosition(x, y);
-	//			obj->GetPosition(x, y);*/
-
-
-	//			objects.push_back(obj);
-	//		}
-	//	}
-	//	else {
-	//		obj = new CBrick(x, y);
-
-	//		obj->SetPosition(x, y);
-
-
-	//		objects.push_back(obj);
-	//	}
-	//}
-	//break;
-	//case OBJECT_TYPE_COIN: {
-	//	obj = new CCoin(x, y);
-
-	//	obj->SetPosition(x, y);
-
-
-	//	objects.push_back(obj);
-	//}
-	//break;
-
-	//case OBJECT_TYPE_PLATFORM:
-	//{
-
-	//	float cell_width = (float)atof(tokens[3].c_str());
-	//	float cell_height = (float)atof(tokens[4].c_str());
-	//	int length = atoi(tokens[5].c_str());
-	//	int sprite_begin = atoi(tokens[6].c_str());
-	//	int sprite_middle = atoi(tokens[7].c_str());
-	//	int sprite_end = atoi(tokens[8].c_str());
-
-	//	obj = new CPlatform(
-	//		x, y,
-	//		cell_width, cell_height, length,
-	//		sprite_begin, sprite_middle, sprite_end
-	//	);
-	//	obj->SetPosition(x, y);
-
-
-	//	objects.push_back(obj);
-
-	//	break;
-	//}
-
-	//case OBJECT_TYPE_PIPE:
-	//{
-
-	//	float cell_width = (float)atof(tokens[3].c_str());
-	//	float cell_height = (float)atof(tokens[4].c_str());
-	//	int length = atoi(tokens[5].c_str());
-	//	int sprite_begin = atoi(tokens[6].c_str());
-	//	int sprite_middle = atoi(tokens[7].c_str());
-
-	//	obj = new CPipe(
-	//		x, y,
-	//		cell_width, cell_height, length,
-	//		sprite_begin, sprite_middle
-	//	);
-	//	obj->SetPosition(x, y);
-
-
-	//	objects.push_back(obj);
-
-	//	break;
-	//}
-
-	//case OBJECT_TYPE_PORTAL:
-	//{
-	//	float r = (float)atof(tokens[3].c_str());
-	//	float b = (float)atof(tokens[4].c_str());
-	//	int scene_id = atoi(tokens[5].c_str());
-	//	obj = new CPortal(x, y, r, b, scene_id);
-	//	obj->SetPosition(x, y);
-
-
-	//	objects.push_back(obj);
-	//}
-	//break;
-
-
-	//default:
-	//	DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
-	//	return;
-	//}
-
-	// General object setup
-}
-
-void CPlayScene::LoadAssets(LPCWSTR assetFile)
-{
-	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
-
-	ifstream f;
-	f.open(assetFile);
-
-	int section = ASSETS_SECTION_UNKNOWN;
-
-	char str[MAX_SCENE_LINE];
-	while (f.getline(str, MAX_SCENE_LINE))
-	{
-		string line(str);
-
-		if (line[0] == '#') continue;	// skip comment lines	
-
-		if (line == "[SPRITES]") { section = ASSETS_SECTION_SPRITES; continue; };
-		if (line == "[ANIMATIONS]") { section = ASSETS_SECTION_ANIMATIONS; continue; };
-		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
-
-		//
-		// data section
-		//
-		switch (section)
-		{
-		case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
-		case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
-		}
-	}
-
-	f.close();
-
-	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
-}
 
 void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath.c_str());
 
 	ifstream f;
+	ofstream file("test.txt");
 	f.open(sceneFilePath.c_str());
 
 	// current resource section flag
@@ -279,23 +44,137 @@ void CPlayScene::Load()
 		string line(str);
 
 		if (line[0] == '#') continue;	// skip comment lines	
-		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
-		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
-		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
+		if (line == "[PROPERTIES]") { section = SCENE_SECTION_PROPERTIES; continue; };
 
 		//
 		// data section
 		//
 		switch (section)
 		{ 
-			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
-			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_PROPERTIES: _ParseSection_PROPERTIES(line); break;
 		}
 	}
 
 	f.close();
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath.c_str());
+}
+
+void CPlayScene::LoadMap(string path) {
+	CGame* const game = CGame::GetInstance();
+	CTextures* const textures = CTextures::GetInstance();
+	tmx::Map tMap;
+	if (tMap.load(path)) {
+		const auto& tilesets = tMap.getTilesets();
+		
+		for (const auto& tileset : tilesets) {
+			textures->Add(STRING_TO_WSTRING(tileset.getImagePath()));
+		}
+
+		tmx::Colour color = tMap.getBackgroundColour();
+		backgroundColor = D3DXCOLOR(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f);
+
+		const auto& layers = tMap.getLayers();
+		
+		LoadLayers(textures, tMap, layers, tilesets);
+	}
+
+}
+
+void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, const vector<tmx::Tileset>& tilesets)
+{
+	for (const auto& layer : layers) {
+		if (layer->getType() == tmx::Layer::Type::Object)
+		{
+			const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
+			const auto& layerObjects = objectLayer.getObjects();
+			for (const auto& layerObject : layerObjects)
+			{
+				const auto& aabb = layerObject.getAABB();
+				if (layerObject.getClass() == "CMario")
+				{
+					CMario* player = new CMario(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f);
+					objects.push_back(player);
+				}
+				//else if (object.getClass() == "CTankSpawner") {
+				//	float timeOffset = 0.0f;
+				//	for (const auto& proper : object.getProperties()) {
+				//		if (proper.getName() == "timeOffset")
+				//			timeOffset = proper.getFloatValue();
+				//	}
+
+				//	CTankSpawner* tank = new CTankSpawner(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f, timeOffset);
+				//	game->objects.push_back(tank);
+				//}
+				//do stuff with object properties
+			}
+		}
+		else if (layer->getType() == tmx::Layer::Type::Tile)
+		{
+			const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+			const auto& layerSize = tileLayer.getSize();
+			const auto& mapTileSize = tMap.getTileSize();
+			const auto& mapSize = tMap.getTileCount();
+			const auto& tiles = tileLayer.getTiles();
+
+			for (const auto& tileset : tilesets) {
+				const auto& tilesetTiles = tileset.getTiles();
+				for (int i = 0; i < mapSize.x; i++)
+				{
+					for (int j = 0; j < mapSize.y; j++) {
+						int idx = j * mapSize.x + i;
+						if (idx < tiles.size() && tiles[idx].ID >= tileset.getFirstGID() && tiles[idx].ID <= tileset.getLastGID()) {
+
+							auto imagePosition = tilesetTiles[tiles[idx].ID - tileset.getFirstGID()].imagePosition;
+							auto tileSize = tilesetTiles[tiles[idx].ID - tileset.getFirstGID()].imageSize;
+							Vector2 offset(tileSize.x / 2.0f, tileSize.y / 2.0f);
+							if (layer->getName() != "Wall") {
+								objects.push_back(
+									new CTile(
+										mapTileSize.x * i + offset.x, 
+										mapTileSize.y * j + offset.y, 
+										textures->Get(STRING_TO_WSTRING(tileset.getImagePath())),
+										imagePosition.x / mapTileSize.x, 
+										imagePosition.y / mapTileSize.y, 
+										tileSize.x, 
+										tileSize.y)
+								);
+							}
+							else {
+								objects.push_back(
+									new CCollidableTile(
+										mapTileSize.x * i + offset.x, 
+										mapTileSize.y * j + offset.y, 
+										textures->Get(STRING_TO_WSTRING(tileset.getImagePath())),
+										imagePosition.x / mapTileSize.x, 
+										imagePosition.y / mapTileSize.y, 
+										tileSize.x, 
+										tileSize.y)
+								);
+							}
+						}
+					}
+				}
+			}
+		}
+		else if (layer->getType() == tmx::Layer::Type::Group) {
+			const auto& layerGroup = layer->getLayerAs<tmx::LayerGroup>();
+			LoadLayers(textures, tMap, layerGroup.getLayers(), tilesets);
+		}
+	}
+}
+
+void CPlayScene::_ParseSection_PROPERTIES(string line) 
+{
+	std::vector<string> lines = split(line);
+	if (lines.size() != 2) {
+		DebugOut(L"[ERROR]: Unhandled parsing for PROPERTIES");
+		return;
+	}
+
+	if (lines[0] == "map_path") {
+		LoadMap(lines[1]);
+	} 
 }
 
 void CPlayScene::Update(DWORD dt)

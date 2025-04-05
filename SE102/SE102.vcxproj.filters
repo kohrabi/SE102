@@ -54,12 +54,27 @@
     <ClCompile Include="Engine\Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Loaders\SpritesLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Mario.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Content\bbox.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Content\mariotiles.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Content\marioTiles32.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Content\mario.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -106,9 +121,6 @@
     <ClInclude Include="Engine\Math\AABB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\CTile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Collision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -121,5 +133,25 @@
     <ClInclude Include="Engine\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameObjects\CollidableTile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Tile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Mario.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Loaders\SpritesLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Loaders\Loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Content\Scenes\1-1.txt" />
+    <Text Include="Content\Scenes\scenes_list.txt" />
+    <Text Include="1.1.txt" />
   </ItemGroup>
 </Project>

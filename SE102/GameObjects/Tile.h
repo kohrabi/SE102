@@ -15,17 +15,10 @@ public:
 		: CGameObject(x, y, 0.0f), texture(texture), tileSize(tileSizeX, tileSizeY)  {
 		textureRegion = GetTextureRegion(xTile, yTile, tileSizeX, tileSizeY);
 	}
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override {}
+	int IsCollidable() override { return false; };
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom) { left = 0; top = 0; right = 0; bottom = 0; }
 	void Render() override {
 		CGame* const game = CGame::GetInstance();
-		//game->Draw(position.x, position.y, 0.0f, texture, &textureRegion);
-		RenderBoundingBox();
-	}
-
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
-		left = position.x - round(tileSize.x / 2);
-		top = position.y - round(tileSize.y / 2);
-		right = position. x + round(tileSize.x / 2);
-		bottom = position.y + round(tileSize.y / 2);
+		game->Draw(position.x, position.y, 0.0f, texture, &textureRegion);
 	}
 };

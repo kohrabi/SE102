@@ -2,7 +2,18 @@
 #include "Game.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "Graphics/Textures.h"
+
 #include <string>
+#include <unordered_map>
+
+#include <tmxlite/Map.hpp>
+#include <tmxlite/Layer.hpp>
+#include <tmxlite/TileLayer.hpp>
+#include <tmxlite/ObjectGroup.hpp>
+#include <tmxlite/LayerGroup.hpp>
+
+using namespace std;
 //#include "Koopas.h"
 
 
@@ -14,14 +25,7 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 
-	void _ParseSection_SPRITES(string line);
-	void _ParseSection_ANIMATIONS(string line);
-
-	void _ParseSection_ASSETS(string line);
-	void _ParseSection_OBJECTS(string line);
-
-	void LoadAssets(LPCWSTR assetFile);
-	
+	void _ParseSection_PROPERTIES(string line);
 public: 
 	CPlayScene(int id, wstring filePath);
 
@@ -32,6 +36,8 @@ public:
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 
+	void LoadMap(string path);
+	void LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, const vector<tmx::Tileset>& tilesets);
 	void Clear();
 	void PurgeDeletedObjects();
 
