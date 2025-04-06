@@ -141,7 +141,9 @@
     <ClCompile Include="Engine\debug.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
+    <ClCompile Include="GameObjects\Coin.cpp" />
     <ClCompile Include="GameObjects\Mario.cpp" />
+    <ClCompile Include="GameObjects\QuestionBlock.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Graphics\Sprite.cpp" />
     <ClCompile Include="Engine\Graphics\Sprites.cpp" />
@@ -156,6 +158,7 @@
     <Image Include="Content\mario.png" />
     <Image Include="Content\mariotiles.png" />
     <Image Include="Content\marioTiles32.png" />
+    <Image Include="Content\objectSprites.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Collision.h" />
@@ -173,6 +176,7 @@
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Helper.h" />
+    <ClInclude Include="GameObjects\Coin.h" />
     <ClInclude Include="GameObjects\Mario.h" />
     <ClInclude Include="GameObjects\CollidableTile.h" />
     <ClInclude Include="Engine\Graphics\Sprite.h" />
@@ -180,6 +184,8 @@
     <ClInclude Include="Engine\Graphics\Texture.h" />
     <ClInclude Include="Engine\Graphics\Textures.h" />
     <ClInclude Include="Engine\Math\Vector2.h" />
+    <ClInclude Include="GameObjects\OneWay.h" />
+    <ClInclude Include="GameObjects\QuestionBlock.h" />
     <ClInclude Include="GameObjects\Tile.h" />
   </ItemGroup>
   <ItemGroup>

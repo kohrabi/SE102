@@ -1,7 +1,6 @@
 #pragma once
 #include "Game.h"
 #include "Scene.h"
-#include "GameObject.h"
 #include "Graphics/Textures.h"
 
 #include <string>
@@ -22,12 +21,7 @@ class CPlayScene: public CScene
 protected: 
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;					
-
-	vector<LPGAMEOBJECT> objects;
-
 	void _ParseSection_PROPERTIES(string line);
-
-	
 public: 
 	CPlayScene(int id, wstring filePath);
 
@@ -42,6 +36,7 @@ public:
 	void LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, const vector<tmx::Tileset>& tilesets);
 	void Clear();
 	void PurgeDeletedObjects();
+	
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 };

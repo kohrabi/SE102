@@ -12,7 +12,9 @@
 #include "GameObjects/Tile.h"
 #include "GameObjects/CollidableTile.h"
 #include "GameObjects/Mario.h"
+#include "GameObjects/QuestionBlock.h"
 #include "Engine/Helper.h"
+#include "GameObjects/OneWay.h"
 
 using namespace std;
 
@@ -33,7 +35,6 @@ void CPlayScene::Load()
 	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath.c_str());
 
 	ifstream f;
-	ofstream file("test.txt");
 	f.open(sceneFilePath.c_str());
 
 	// current resource section flag
@@ -86,6 +87,7 @@ void CPlayScene::Update(DWORD dt)
 	CGame* const game = CGame::GetInstance();
 	position.x -= game->GetBackBufferWidth() / 2;
 	position.y -= game->GetBackBufferHeight() / 2;
+	position.y = 500.f;
 
 	position.x = clampf(position.x, (float)levelBounds.left, (float)levelBounds.right - game->GetBackBufferWidth());
 	position.y = clampf(position.y, (float)levelBounds.top, (float)levelBounds.bottom - game->GetBackBufferHeight());
@@ -190,23 +192,36 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 			for (const auto& layerObject : layerObjects)
 			{
 				const auto& aabb = layerObject.getAABB();
+				Vector2 position(aabb.left + aabb.width / 2.0f, aabb.top + aabb.height / 2.0f);
 				if (layerObject.getClass() == "CMario")
 				{
-					CMario* player = new CMario(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f);
+					ASSERT(player == NULL, "There are two player in one scene");
+					CMario* player = new CMario(position.x, position.y);
 					objects.push_back(player);
 					this->player = player;
 				}
-				//else if (object.getClass() == "CTankSpawner") {
-				//	float timeOffset = 0.0f;
-				//	for (const auto& proper : object.getProperties()) {
-				//		if (proper.getName() == "timeOffset")
-				//			timeOffset = proper.getFloatValue();
-				//	}
-
-				//	CTankSpawner* tank = new CTankSpawner(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f, timeOffset);
-				//	game->objects.push_back(tank);
-				//}
-				//do stuff with object properties
+				else if (layerObject.getClass() == "CQuestionBlock") 
+				{
+					int type = -1;
+					int spawnCount = -1;
+					for (const auto& property : layerObject.getProperties()) 
+					{
+						if (property.getName() == "type") {
+							type = property.getIntValue();
+						}
+						else if (property.getName() == "spawnCount") {
+							spawnCount = property.getIntValue();
+						}
+					}
+					ASSERT(type != -1, "Question Block type is missing");
+					CQuestionBlock* questionBlock = new CQuestionBlock(position.x, position.y, type, spawnCount);
+					objects.push_back(questionBlock);
+				}
+				else if (layerObject.getClass() == "COneWay") 
+				{
+					COneWay* questionBlock = new COneWay(position.x, position.y, aabb.width, aabb.height);
+					objects.push_back(questionBlock);
+				}
 			}
 		}
 		else if (layer->getType() == tmx::Layer::Type::Tile)

@@ -12,11 +12,14 @@
             "expandedGroupLayers": [
                 6
             ],
-            "scale": 4,
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 5.5,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 100.625,
-                "y": 265.875
+                "x": 248,
+                "y": 216.0909090909091
             }
         },
         "cloud.tsx": {
@@ -48,6 +51,7 @@
         "mario.tsx"
     ],
     "project": "game.tiled-project",
+    "property.type": "int",
     "recentFiles": [
         "marioTiles32.tsx",
         "mario.tsx",

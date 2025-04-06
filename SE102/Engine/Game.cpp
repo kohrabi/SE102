@@ -175,6 +175,11 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, bo
 
 	float cx, cy;
 	GetCamPos(cx, cy);
+	cx = roundf(cx);
+	cy = roundf(cy);
+	
+	x = roundf(x);
+	y = roundf(y);
 
 	D3DX10_SPRITE sprite;
 

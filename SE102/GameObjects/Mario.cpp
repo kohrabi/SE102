@@ -14,13 +14,14 @@ using namespace std;
 
 bool CMario::IsContentLoaded = false;
 
-void CMario::LoadContent() {
+void CMario::LoadContent() 
+{
     if (IsContentLoaded)
         return;
     CMario::IsContentLoaded = true;
 
     SpritesLoader loader;
-    loader.Load(L"Content/Sprites/mario.txt");
+    loader.Load(MARIO_SPRITES_PATH);
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -38,7 +39,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
     }
 
     if (runBeforeWalkTimer > 0)
-        runBeforeWalkTimer -= dts;
+        runBeforeWalkTimer -= dt;
 
     if (game->IsKeyDown(KEY_MOVE_LEFT)) {
         accel.x = -(run ? RUNNING_ACCELERATION : WALKING_ACCELERATION);
@@ -58,7 +59,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
     if (accel.x == 0.0f) {
         velocity.x = move_towards(velocity.x, 0, RELEASE_DECELERATION);
     }
-    else if (sign(accel.x) != sign(velocity.x)) {
+    else if (sign(accel.x) != sign(velocity.x) && velocity.x != 0) {
         skidding = true;
         velocity.x = move_towards(velocity.x, 0, SKIDDING_DECELERATION);
     }
@@ -74,7 +75,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
     else 
         accel.y = GRAVITY;
     
-    if (game->IsKeyJustPressed(KEY_JUMP)) {
+    if (game->IsKeyJustPressed(KEY_JUMP) && isOnGround) {
         accel.y = -INIT_JUMP_VEL;
     }
 
@@ -83,7 +84,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
     velocity.y = min(velocity.y, MAX_FALL_SPEED);
 
-    CCollision::GetInstance()->Process(this, 1, coObjects);
+    CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CMario::Render() {
@@ -97,6 +98,7 @@ void CMario::Render() {
 
     bool flipX = nx > 0 ? true : false;
     animation->Render(position.x, position.y, flipX);
+    // RenderBoundingBox();
 }
 
 int CMario::GetAnimationIDSmall()
@@ -116,8 +118,8 @@ void CMario::SetState(int state) {
 }
 
 void CMario::OnNoCollision(DWORD dt) {
-    position.x += velocity.x;
-    position.y += velocity.y;
+    position.x += velocity.x * dt;
+    position.y += velocity.y * dt;
     isOnGround = false;
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="20" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#aff9f0" nextlayerid="8" nextobjectid="102">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="20" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#aff9f0" nextlayerid="8" nextobjectid="116">
  <tileset firstgid="1" source="mariotiles.tsx"/>
  <tileset firstgid="871" source="marioTiles32.tsx"/>
  <tileset firstgid="892" source="cloud.tsx"/>
@@ -127,14 +127,44 @@
 </data>
  </layer>
  <objectgroup id="3" name="Objects">
-  <object id="23" name="QuestionBlock" type="CQuestionBlock" gid="335" x="176" y="256" width="16" height="16"/>
-  <object id="24" template="QuestionBlock.tx" x="192" y="256"/>
-  <object id="25" template="QuestionBlock.tx" x="224" y="208"/>
-  <object id="26" template="QuestionBlock.tx" x="240" y="208"/>
+  <object id="102" template="QuestionBlock.tx" x="176" y="256">
+   <properties>
+    <property name="spawnCount" type="int" value="0"/>
+    <property name="type" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="24" template="QuestionBlock.tx" x="192" y="256">
+   <properties>
+    <property name="spawnCount" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="25" template="QuestionBlock.tx" x="224" y="208">
+   <properties>
+    <property name="spawnCount" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="26" template="QuestionBlock.tx" x="240" y="208">
+   <properties>
+    <property name="spawnCount" type="int" value="0"/>
+    <property name="type" type="int" value="2"/>
+   </properties>
+  </object>
   <object id="28" template="Pipe.tx" type="CPipe" x="352" y="304"/>
-  <object id="29" template="QuestionBlock.tx" x="656" y="288"/>
-  <object id="30" template="QuestionBlock.tx" x="704" y="256"/>
-  <object id="31" template="QuestionBlock.tx" x="1488" y="272"/>
+  <object id="29" template="QuestionBlock.tx" x="656" y="288">
+   <properties>
+    <property name="spawnCount" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="30" template="QuestionBlock.tx" x="704" y="256">
+   <properties>
+    <property name="spawnCount" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="31" template="QuestionBlock.tx" x="1488" y="272">
+   <properties>
+    <property name="spawnCount" type="int" value="0"/>
+   </properties>
+  </object>
   <object id="32" template="Pipe.tx" x="1808" y="304" width="32" height="32"/>
   <object id="33" template="Pipe.tx" x="1872" y="304"/>
   <object id="35" name="Brick" type="CBrick" gid="278" x="1984" y="304" width="16" height="16"/>
@@ -157,5 +187,11 @@
   <object id="99" template="Brick.tx" x="2128" y="288"/>
   <object id="100" template="Brick.tx" x="2144" y="304"/>
   <object id="101" name="Mario" type="CMario" gid="2147484543" x="64" y="240" width="16" height="16"/>
+  <object id="113" template="OneWay.tx" x="240" y="256"/>
+  <object id="109" template="OneWay.tx" x="272" y="208"/>
+  <object id="110" template="OneWay.tx" x="400" y="256" width="80" height="16"/>
+  <object id="112" template="OneWay.tx" x="464" y="208" width="64" height="16"/>
+  <object id="114" template="OneWay.tx" x="512" y="176" width="64" height="16"/>
+  <object id="115" template="OneWay.tx" x="512" y="272" width="96" height="16"/>
  </objectgroup>
 </map>

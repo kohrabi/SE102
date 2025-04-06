@@ -6,30 +6,31 @@
 #include "Engine/Game.h"
 
 #define SUBPIXEL 1.0F/16.0F
-#define MAX_DELTA_TIME 1.0f / MAX_FRAME_RATE
+#define MAX_DELTA_TIME 60.f / 1000.0f
 #define SUBSUBSUBPIXEL SUBPIXEL * SUBPIXEL * SUBPIXEL
+#define SUBSUBSUBPIXEL_DELTA_TIME SUBSUBSUBPIXEL * MAX_DELTA_TIME
 
 #pragma region X MOVEMENT
-#define MINIMUM_WALK_VELOCITY 0x00098 * SUBSUBSUBPIXEL
-#define WALKING_ACCELERATION 0x00098 * SUBSUBSUBPIXEL
-#define RUNNING_ACCELERATION 0x000E4 * SUBSUBSUBPIXEL
+#define MINIMUM_WALK_VELOCITY 0x00098 * SUBSUBSUBPIXEL_DELTA_TIME
+#define WALKING_ACCELERATION 0x00098 * SUBSUBSUBPIXEL_DELTA_TIME
+#define RUNNING_ACCELERATION 0x000E4 * SUBSUBSUBPIXEL_DELTA_TIME
 
-#define MAXIMUM_WALK_SPEED 0x01900 * SUBSUBSUBPIXEL
-#define MAXIMUM_RUNNING_SPEED 0x02900 * SUBSUBSUBPIXEL
+#define MAXIMUM_WALK_SPEED 0x01900 * SUBSUBSUBPIXEL_DELTA_TIME
+#define MAXIMUM_RUNNING_SPEED 0x02900 * SUBSUBSUBPIXEL_DELTA_TIME
 
-#define RELEASE_DECELERATION 0x000D0 * SUBSUBSUBPIXEL
-#define SKIDDING_DECELERATION 0x001A0 * SUBSUBSUBPIXEL
+#define RELEASE_DECELERATION 0x000D0 * SUBSUBSUBPIXEL_DELTA_TIME
+#define SKIDDING_DECELERATION 0x001A0 * SUBSUBSUBPIXEL_DELTA_TIME
 
-#define RUN_TIME_BEFORE_WALK 10.0f * 0.016f
+#define RUN_TIME_BEFORE_WALK 10.0f * MAX_DELTA_TIME
 
 #pragma endregion
 #pragma region Y MOVEMENT
 
-#define INIT_JUMP_VEL 0x04000 * SUBSUBSUBPIXEL
-#define HOLDING_A_GRAVITY 0x00200 * SUBSUBSUBPIXEL
-#define GRAVITY 0x00700 * SUBSUBSUBPIXEL
+#define INIT_JUMP_VEL 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME
+#define HOLDING_A_GRAVITY 0x00200 * SUBSUBSUBPIXEL_DELTA_TIME
+#define GRAVITY 0x00700 * SUBSUBSUBPIXEL_DELTA_TIME
 
-#define MAX_FALL_SPEED 0x04800 * SUBSUBSUBPIXEL
+#define MAX_FALL_SPEED 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME
 
 #pragma endregion
 
@@ -46,9 +47,9 @@ private:
 	bool skidding = false;
 
 	bool isOnGround = false;
-public:
     static bool IsContentLoaded;
     static void LoadContent();
+public:
 
     CMario(float x, float y) : CGameObject(x, y, 0.0f) 
 	{
@@ -61,7 +62,7 @@ public:
 	int IsCollidable() override { return !isDeleted; };
 	void OnNoCollision(DWORD dt) override;
 	void OnCollisionWith(LPCOLLISIONEVENT e) override;
-	int IsBlocking() override { return 1; }
+	int IsBlocking() override { return 0; }
 	int IsDirectionColliable(float nx, float ny) override { return 1; }
 
 	void SetState(int state) override;
@@ -71,6 +72,6 @@ public:
 		left = position.x - MarioSize.x;
 		top = position.y - MarioSize.y;
 		right = position. x + MarioSize.x;
-		bottom = position.y + MarioSize.y;
+		bottom = position.y + MarioSize.y - 1;
 	}
 };
