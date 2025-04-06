@@ -27,9 +27,18 @@ void CQuestionBlock::LoadContent()
 
 void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-    if (!isActive)
-        return;
-    CCollision::GetInstance()->Process(this, dt, coObjects);
+    if (animationTimer >= 0) 
+    {
+        animationTimer -= dt;
+        if (animationTimer >= QUESTION_BLOCK_ANIMATION_TIME / 2)
+            position.y -= QUESTION_BLOCK_ANIMATION_Y_VEL * dt;
+        else
+            position.y += QUESTION_BLOCK_ANIMATION_Y_VEL * dt;
+    }
+    position.y = min(position.y, ogYPos);
+    if (isActive) {
+        CCollision::GetInstance()->Process(this, dt, coObjects);
+    }
 }
 
 void CQuestionBlock::Render()
@@ -37,18 +46,18 @@ void CQuestionBlock::Render()
     CAnimations* const animations = CAnimations::GetInstance();
     CSprites* const sprites = CSprites::GetInstance();
 
-    LPANIMATION animation = animations->Get(isActive ? QUESTION_BLOCK_ID_ANIMATION_NORMAL : QUESTION_BLOCK_ID_ANIMATION_EMPTY);
+    LPANIMATION animation = animations->Get(spawnCount > 0 ? QUESTION_BLOCK_ID_ANIMATION_NORMAL : QUESTION_BLOCK_ID_ANIMATION_EMPTY);
     animation->Render(position.x, position.y);
     // RenderBoundingBox();
 }
 
-void CQuestionBlock::OnCollisionWith(LPCOLLISIONEVENT e)
+void CQuestionBlock::Hit()
 {
-    if (dynamic_cast<CMario*>(e->obj) && e->ny < 0) 
-    {
-        CMario* const mario = dynamic_cast<CMario*>(e->obj);
-        CGame* const game = CGame::GetInstance();
-        game->GetCurrentScene()->AddObject(new CCoin(position.x, position.y));
-        isActive = false;
-    }
+    if (spawnCount <= 0)
+        return;
+    CGame* const game = CGame::GetInstance();
+    game->GetCurrentScene()->AddObject(new CCoin(position.x, position.y));
+    isActive = false;
+    spawnCount--;
+    animationTimer = QUESTION_BLOCK_ANIMATION_TIME;
 }

@@ -23,10 +23,6 @@ public:
 	int IsBlocking() override { return 1; }
 	int IsDirectionColliable(float nx, float ny) override { return nx == 0 && ny < 0; }
 
-    void OnCollisionWith(LPCOLLISIONEVENT e) override {
-        cout << "hello\n";
-    }
-
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
 		left = position.x - round(size.x / 2.0f);
 		top = position.y - round(size.y / 2.0f);

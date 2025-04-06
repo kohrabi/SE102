@@ -9,6 +9,9 @@
 #include "Engine/Helper.h"
 #include <Engine/debug.h>
 
+#include "QuestionBlock.h"
+#include "Coin.h"
+
 #include <iostream>
 using namespace std;
 
@@ -70,19 +73,41 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
         velocity.x = clampf(velocity.x, -MAXIMUM_WALK_SPEED, MAXIMUM_WALK_SPEED);
 
     // Y MOVEMENT
+    float gravity = 0.0f;
     if (game->IsKeyDown(KEY_JUMP))
-        accel.y = HOLDING_A_GRAVITY;
-    else 
-        accel.y = GRAVITY;
+    {
+        if (velocity.x < SLOW_VEL)
+            gravity = JUMP_SLOW_HELD_GRAVITY;
+        else if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
+            gravity = JUMP_MID_HELD_GRAVITY;
+        else if (velocity.x >= FAST_VEL)
+            gravity = JUMP_FAST_HELD_GRAVITY;
+    }
+    else
+    {
+        if (velocity.x < SLOW_VEL)
+            gravity = JUMP_SLOW_GRAVITY;
+        else if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
+            gravity = JUMP_MID_GRAVITY;
+        else if (velocity.x >= FAST_VEL)
+            gravity = JUMP_FAST_GRAVITY;
+    } 
+    accel.y = gravity;
     
     if (game->IsKeyJustPressed(KEY_JUMP) && isOnGround) {
-        accel.y = -INIT_JUMP_VEL;
+        float initVel = JUMP_SLOW_INIT_VEL;
+        if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
+            initVel = JUMP_MID_INIT_VEL;
+        if (velocity.x >= FAST_VEL)
+            initVel = JUMP_FAST_INIT_VEL;
+        accel.y = -initVel;
     }
 
     velocity.x += accel.x;
     velocity.y += accel.y;
 
     velocity.y = min(velocity.y, MAX_FALL_SPEED);
+    cout << velocity.y << '\n';
 
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -133,4 +158,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 	{
 		velocity.x = 0;
 	}
+    
+    if (dynamic_cast<CQuestionBlock*>(e->obj) && e->ny > 0) 
+    {
+        CQuestionBlock* const questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
+        questionBlock->Hit();
+    }
 }

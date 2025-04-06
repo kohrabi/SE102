@@ -3,7 +3,7 @@
  <tileset firstgid="1" source="mariotiles.tsx"/>
  <object name="QuestionBlock" type="CQuestionBlock" gid="335" width="16" height="16">
   <properties>
-   <property name="spawnCount" type="int" value="0"/>
+   <property name="spawnCount" type="int" value="1"/>
    <property name="type" type="int" value="1"/>
   </properties>
  </object>

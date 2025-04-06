@@ -32,23 +32,23 @@ class CGame
 	IDXGISwapChain* pSwapChain = NULL;
 	ID3D10RenderTargetView* pRenderTargetView = NULL;
 	ID3D10BlendState* pBlendStateAlpha = NULL;			// To store alpha blending state
-	ID3D10SamplerState* pPointSamplerState;
+	ID3D10SamplerState* pPointSamplerState = NULL;
 
-	HINSTANCE hInstance;
+	HINSTANCE hInstance{};
 
 	unordered_map<int, LPSCENE> scenes = {};
 	int current_scene = {};
 	int next_scene = -1;
 
-	void _ParseSection_SETTINGS(string line);
-	void _ParseSection_SCENES(string line);
-
 	ID3DX10Sprite* spriteObject = NULL;				// Sprite handling object 
 	bool keyState[256] = {};
 	bool prevKeyState[256] = {};
 
+	void _ParseSection_SETTINGS(string line);
+	void _ParseSection_SCENES(string line);
+
 public:
-	bool leftMouseDown;
+	bool leftMouseDown = false;
 
 	CGame() {}
 	CGame(const CGame&) = delete;

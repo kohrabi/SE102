@@ -192,7 +192,8 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 			for (const auto& layerObject : layerObjects)
 			{
 				const auto& aabb = layerObject.getAABB();
-				Vector2 position(aabb.left + aabb.width / 2.0f, aabb.top + aabb.height / 2.0f);
+				Vector2 position = Vector2::Zero;
+				position = Vector2(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f);
 				if (layerObject.getClass() == "CMario")
 				{
 					ASSERT(player == NULL, "There are two player in one scene");
@@ -219,6 +220,7 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 				}
 				else if (layerObject.getClass() == "COneWay") 
 				{
+					position = Vector2(aabb.left + aabb.width / 2.0f, aabb.top + aabb.height / 2.0f);
 					COneWay* questionBlock = new COneWay(position.x, position.y, aabb.width, aabb.height);
 					objects.push_back(questionBlock);
 				}
