@@ -176,9 +176,6 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, bo
 	float cx, cy;
 	GetCamPos(cx, cy);
 
-	cx = (FLOAT)floor(cx);
-	cy = (FLOAT)floor(cy);
-
 	D3DX10_SPRITE sprite;
 
 	// Set the sprite�s shader resource view
@@ -218,7 +215,7 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, bo
 		
 		if (flipX) {
 			// Flip the UV from 0-1 to -1-0
-			sprite.TexCoord.x = rect->right / (float)tex->getWidth();
+			sprite.TexCoord.x = (rect->right + 1) / (float)tex->getWidth();
 			sprite.TexSize.x = -spriteWidth / (float)tex->getWidth();
 		}
 		else {
@@ -227,7 +224,7 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, bo
 		}
 
 		if (flipY) {
-			sprite.TexCoord.y = rect->bottom / (float)tex->getHeight();
+			sprite.TexCoord.y = (rect->bottom + 1) / (float)tex->getHeight();
 			sprite.TexSize.y = -spriteHeight / (float)tex->getHeight();
 		}
 		else {
@@ -235,6 +232,21 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, bo
 			sprite.TexSize.y = spriteHeight / (float)tex->getHeight();
 		}
 	}
+
+	// Skip if not in view
+	RECT cam, spriteRect;
+	cam.left = (LONG)cx;
+	cam.right = (LONG)(cx + backBufferWidth);
+	cam.top = (LONG)cy;
+	cam.bottom = (LONG)(cy + backBufferHeight);
+
+	spriteRect.left = (LONG)(x - spriteWidth / 2);
+	spriteRect.right = (LONG)(x + spriteWidth / 2);
+	spriteRect.top = (LONG)(y - spriteHeight / 2);
+	spriteRect.bottom = (LONG)(y + spriteHeight / 2);
+
+	if (!CCollision::CheckAABBOverlaps(cam, spriteRect))
+		return;
 
 	// Set the texture index. Single textures will use 0
 	sprite.TextureIndex = 0;

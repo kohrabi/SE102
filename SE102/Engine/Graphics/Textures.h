@@ -23,6 +23,9 @@ class CTextures
 
 public: 
 	CTextures();
+	CTextures(const CTextures&) = delete;
+	void operator=(const CTextures&) = delete;
+	
 	void Add(wstring filePath);
 	LPTEXTURE Get(const wstring& path);
 	LPTEXTURE Get(const string& path);

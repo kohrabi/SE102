@@ -46,6 +46,10 @@ class CCollision
 {
 	static CCollision* __instance;
 public:
+	CCollision() {}
+	CCollision(const CCollision&) = delete;
+	void operator=(const CCollision&) = delete;
+
 	static void SweptAABB(
 		float ml,			// move left 
 		float mt,			// move top
@@ -81,6 +85,8 @@ public:
 		int filterY);
 
 	void Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+
+	static bool CheckAABBOverlaps(RECT& r1, RECT& r2);
 
 	static CCollision* GetInstance();
 };

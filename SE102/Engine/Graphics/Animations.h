@@ -10,6 +10,11 @@ class CAnimations
 	unordered_map<int, LPANIMATION> animations;
 
 public:
+
+	CAnimations() {}
+	CAnimations(const CAnimations&) = delete;
+	void operator=(const CAnimations&) = delete;
+
 	void Add(int id, LPANIMATION ani);
 	LPANIMATION Get(int id);
 	void Clear();

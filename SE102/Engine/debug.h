@@ -22,7 +22,7 @@
 		va_end(argp);				\
 }
 
-#define ASSERT(condition, message) { if (!condition) DebugBreak(); }
+#define ASSERT(condition, message) { if (!(condition)) DebugBreak(); }
 //
 // Print formatted string (similar to printf) to debug console
 //

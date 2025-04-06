@@ -9,7 +9,7 @@
 #include "Graphics/Texture.h"
 #include "Engine/GameObject.h"
 
-#define MAX_FRAME_RATE 120
+#define MAX_FRAME_RATE 100
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
@@ -21,7 +21,7 @@
 class CGame
 {
 	static CGame* __instance;
-	HWND hWnd;									// Window handle
+	HWND hWnd = {};									// Window handle
 
 	int backBufferWidth = 0;					// Backbuffer width & height, will be set during Direct3D initialization
 	int backBufferHeight = 0;
@@ -36,19 +36,23 @@ class CGame
 
 	HINSTANCE hInstance;
 
-	unordered_map<int, LPSCENE> scenes;
-	int current_scene;
+	unordered_map<int, LPSCENE> scenes = {};
+	int current_scene = {};
 	int next_scene = -1;
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
 
 	ID3DX10Sprite* spriteObject = NULL;				// Sprite handling object 
-	bool keyState[256];
-	bool prevKeyState[256];
+	bool keyState[256] = {};
+	bool prevKeyState[256] = {};
 
 public:
 	bool leftMouseDown;
+
+	CGame() {}
+	CGame(const CGame&) = delete;
+	void operator=(const CGame&) = delete;
 
 	// Init DirectX, Sprite Handler
 	void Init(HWND hWnd, HINSTANCE hInstance);

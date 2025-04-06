@@ -17,6 +17,8 @@ protected:
 	int id;
 	wstring sceneFilePath;
 	D3DXCOLOR backgroundColor = BACKGROUND_COLOR;
+
+	RECT levelBounds{};
 public: 
 	CScene(int id, wstring filePath)
 	{

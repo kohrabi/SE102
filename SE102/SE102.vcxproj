@@ -134,6 +134,7 @@
     <ClCompile Include="Engine\Collision.cpp" />
     <ClCompile Include="Engine\Graphics\Animation.cpp" />
     <ClCompile Include="Engine\Graphics\Animations.cpp" />
+    <ClCompile Include="Engine\Helper.cpp" />
     <ClCompile Include="Engine\Loaders\SpritesLoader.cpp" />
     <ClCompile Include="Engine\PlayScene.cpp" />
     <ClCompile Include="Engine\Utils.cpp" />
@@ -171,7 +172,7 @@
     <ClInclude Include="Engine\debug.h" />
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GameObject.h" />
-    <ClInclude Include="Engine\helper.h" />
+    <ClInclude Include="Engine\Helper.h" />
     <ClInclude Include="GameObjects\Mario.h" />
     <ClInclude Include="GameObjects\CollidableTile.h" />
     <ClInclude Include="Engine\Graphics\Sprite.h" />

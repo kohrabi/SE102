@@ -95,68 +95,6 @@ void LoadResources()
 	int backBufferWidth = game->GetBackBufferWidth();
 	int backBufferHeight = game->GetBackBufferHeight();
 	game->SetCamPos(0, 100);
-
-	//if (tMap.load(TEST_TILE_TMX)) {
-	//	const auto& tilesets = tMap.getTilesets();
-
-	//	const auto& layers = tMap.getLayers();
-	//	for (const auto& layer : layers) {
-	//		if (layer->getType() == tmx::Layer::Type::Object)
-	//		{
-	//			const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
-	//			const auto& objects = objectLayer.getObjects();
-	//			for (const auto& object : objects)
-	//			{
-	//				const auto& aabb = object.getAABB();
-	//				if (object.getClass() == "CPlayer")
-	//				{
-	//					CPlayer* tank = new CPlayer(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f);
-	//					game->objects.push_back(tank);
-	//				}
-	//				else if (object.getClass() == "CTankSpawner") {
-	//					float timeOffset = 0.0f;
-	//					for (const auto& proper : object.getProperties()) {
-	//						if (proper.getName() == "timeOffset")
-	//							timeOffset = proper.getFloatValue();
-	//					}
-
-	//					CTankSpawner* tank = new CTankSpawner(aabb.left + aabb.width / 2.0f, aabb.top - aabb.height / 2.0f, 0.f, timeOffset);
-	//					game->objects.push_back(tank);
-	//				}
-	//				//do stuff with object properties
-	//			}
-	//		}
-	//		else if (layer->getType() == tmx::Layer::Type::Tile)
-	//		{
-	//			const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
-	//			const auto& layerSize = tileLayer.getSize();
-	//			const auto& mapTileSize = tMap.getTileSize();
-	//			const auto& mapSize = tMap.getTileCount();
-	//			const auto& tiles = tileLayer.getTiles();
-
-	//			for (const auto& tileset : tilesets) {
-	//				const auto& tilesetTiles = tileset.getTiles();
-	//				for (int i = 0; i < mapSize.x; i++)
-	//				{
-	//					for (int j = 0; j < mapSize.y; j++) {
-	//						int idx = j * mapSize.x + i;
-	//						if (idx < tiles.size() && tiles[idx].ID >= tileset.getFirstGID() && tiles[idx].ID <= tileset.getLastGID()) {
-
-	//							auto imagePosition = tilesetTiles[tiles[idx].ID - 1].imagePosition;
-	//							auto tileSize = tilesetTiles[tiles[idx].ID - 1].imageSize;
-	//							Vector2 offset(tileSize.x / 2.0f, tileSize.y / 2.0f);
-	//							game->objects.push_back(new CTile(mapTileSize.x * i + offset.x, mapTileSize.y * j + offset.y, 
-	//								textures->Get(STRING_TO_WSTRING(tileset.getImagePath())),
-	//								imagePosition.x / mapTileSize.x, imagePosition.y / mapTileSize.y, mapTileSize.x, mapTileSize.y));
-	//						}
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-
-	//}
-
 }
 
 void UnloadResources() {
@@ -172,21 +110,6 @@ void Update(DWORD dt)
 
 	game->GetCurrentScene()->Update(dt);
 
-	float cx, cy;
-	game->GetCamPos(cx, cy);
-	if (game->IsKeyDown(VK_UP)) {
-		cy -= 0.2f * dt;
-	}
-	if (game->IsKeyDown(VK_DOWN)) {
-		cy += 0.2f * dt;
-	}
-	if (game->IsKeyDown(VK_LEFT)) {
-		cx -= 0.2f * dt;
-	}
-	if (game->IsKeyDown(VK_RIGHT)) {
-		cx += 0.2f * dt;
-	}
-	game->SetCamPos(cx, cy);
 
 	DebugOutTitle(L"01 - Skeleton %f", (double)((1.0 / (dt / 1000.0)))); 
 }
@@ -300,12 +223,14 @@ int Run()
 		if (dt >= tickPerFrame)
 		{
 			frameStart = now;
-			Update((DWORD)dt);
+		
+			Update(dt);
 			Render();
+
+			CGame::GetInstance()->SwitchScene();
 		}
-		else {
-			Sleep((DWORD)(tickPerFrame - dt));
-		}
+		else
+			Sleep(tickPerFrame - dt);	
 	}
 
 	UnloadResources();

@@ -22,7 +22,7 @@ void CAnimation::Render(float x, float y, bool flipX, bool flipY)
 		else
 		{
 			DWORD t = frames[currentFrame]->GetTime();
-			if (now - lastFrameTime > t)
+			if (now - lastFrameTime > t * timeScale)
 			{
 				currentFrame++;
 				lastFrameTime = now;

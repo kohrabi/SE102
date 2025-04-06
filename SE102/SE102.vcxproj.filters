@@ -60,6 +60,9 @@
     <ClCompile Include="GameObjects\Mario.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -97,7 +100,7 @@
     <ClInclude Include="contents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\helper.h">
+    <ClInclude Include="Engine\Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Animation.h">

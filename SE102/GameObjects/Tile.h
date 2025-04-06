@@ -3,11 +3,13 @@
 #include "Engine/GameObject.h"
 #include "Engine/Graphics/Sprites.h"
 
+#include "Engine/Math/Vector2i.h"
+
 class CTile : public CGameObject {
 private:
 	RECT textureRegion;
 	LPTEXTURE texture;
-	Vector2 tileSize;
+	Vector2i tileSize;
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0

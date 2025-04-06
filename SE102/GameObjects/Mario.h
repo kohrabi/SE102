@@ -8,7 +8,8 @@
 #define SUBPIXEL 1.0F/16.0F
 #define MAX_DELTA_TIME 1.0f / MAX_FRAME_RATE
 #define SUBSUBSUBPIXEL SUBPIXEL * SUBPIXEL * SUBPIXEL
-// IN SUB.SUB.SUBPIXEL
+
+#pragma region X MOVEMENT
 #define MINIMUM_WALK_VELOCITY 0x00098 * SUBSUBSUBPIXEL
 #define WALKING_ACCELERATION 0x00098 * SUBSUBSUBPIXEL
 #define RUNNING_ACCELERATION 0x000E4 * SUBSUBSUBPIXEL
@@ -19,14 +20,32 @@
 #define RELEASE_DECELERATION 0x000D0 * SUBSUBSUBPIXEL
 #define SKIDDING_DECELERATION 0x001A0 * SUBSUBSUBPIXEL
 
+#define RUN_TIME_BEFORE_WALK 10.0f * 0.016f
+
+#pragma endregion
+#pragma region Y MOVEMENT
+
+#define INIT_JUMP_VEL 0x04000 * SUBSUBSUBPIXEL
+#define HOLDING_A_GRAVITY 0x00200 * SUBSUBSUBPIXEL
+#define GRAVITY 0x00700 * SUBSUBSUBPIXEL
+
+#define MAX_FALL_SPEED 0x04800 * SUBSUBSUBPIXEL
+
+#pragma endregion
+
 #define KEY_MOVE_LEFT 'A'
 #define KEY_MOVE_RIGHT 'D'
 #define KEY_RUN 'J'
+#define KEY_JUMP 'K'
 
 class CMario : public CGameObject {
 private:
 	int GetAnimationIDSmall();
 	Vector2 accel;
+	float runBeforeWalkTimer = 0.0f;
+	bool skidding = false;
+
+	bool isOnGround = false;
 public:
     static bool IsContentLoaded;
     static void LoadContent();

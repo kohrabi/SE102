@@ -26,6 +26,8 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 
 	void _ParseSection_PROPERTIES(string line);
+
+	
 public: 
 	CPlayScene(int id, wstring filePath);
 

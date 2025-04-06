@@ -19,7 +19,7 @@ Content/mario.png: 0
 #FLY
 11151: 80 0 95 15 0
 
-#BRACE
+#SKIDDING
 11161: 96 0 111 15 0
 
 #DIE
@@ -38,7 +38,7 @@ Content/mario.png: 0
 #JUMP
 700: 11131 100
 
-#BRACE  
+#SKIDDING  
 800: 11161 100
 
 #DIE
