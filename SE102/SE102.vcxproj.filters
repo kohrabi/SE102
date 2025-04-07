@@ -69,6 +69,12 @@
     <ClCompile Include="GameObjects\Coin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects\Mushroom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Goomba.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -87,6 +93,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Content\objectSprites.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Content\enemies.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -167,6 +176,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\OneWay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Mushroom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Goomba.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

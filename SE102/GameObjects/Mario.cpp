@@ -11,6 +11,7 @@
 
 #include "QuestionBlock.h"
 #include "Coin.h"
+#include "Goomba.h"
 
 #include <iostream>
 using namespace std;
@@ -74,32 +75,32 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
     // Y MOVEMENT
     float gravity = 0.0f;
-    if (game->IsKeyDown(KEY_JUMP))
+    if (game->IsKeyDown(KEY_JUMP) && sign(velocity.y) < 0 && abs(velocity.y) < 0x00E00 * SUBSUBSUBPIXEL)
     {
-        if (velocity.x < SLOW_VEL)
+        // if (velocity.x < SLOW_VEL)
             gravity = JUMP_SLOW_HELD_GRAVITY;
-        else if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
-            gravity = JUMP_MID_HELD_GRAVITY;
-        else if (velocity.x >= FAST_VEL)
-            gravity = JUMP_FAST_HELD_GRAVITY;
+        // else if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
+        //     gravity = JUMP_MID_HELD_GRAVITY;
+        // else if (velocity.x >= FAST_VEL)
+        //     gravity = JUMP_FAST_HELD_GRAVITY;
     }
     else
     {
-        if (velocity.x < SLOW_VEL)
+        // if (velocity.x < SLOW_VEL)
             gravity = JUMP_SLOW_GRAVITY;
-        else if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
-            gravity = JUMP_MID_GRAVITY;
-        else if (velocity.x >= FAST_VEL)
-            gravity = JUMP_FAST_GRAVITY;
+        // else if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
+        //     gravity = JUMP_MID_GRAVITY;
+        // else if (velocity.x >= FAST_VEL)
+        //     gravity = JUMP_FAST_GRAVITY;
     } 
     accel.y = gravity;
     
     if (game->IsKeyJustPressed(KEY_JUMP) && isOnGround) {
         float initVel = JUMP_SLOW_INIT_VEL;
-        if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
-            initVel = JUMP_MID_INIT_VEL;
-        if (velocity.x >= FAST_VEL)
-            initVel = JUMP_FAST_INIT_VEL;
+        // if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
+        //     initVel = JUMP_MID_INIT_VEL;
+        // if (velocity.x >= FAST_VEL)
+        //     initVel = JUMP_FAST_INIT_VEL;
         accel.y = -initVel;
     }
 
@@ -107,7 +108,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
     velocity.y += accel.y;
 
     velocity.y = min(velocity.y, MAX_FALL_SPEED);
-    cout << velocity.y << '\n';
+
+    //cout << velocity.y << '\n';
 
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -163,5 +165,23 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     {
         CQuestionBlock* const questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
         questionBlock->Hit();
+    }
+    else if (dynamic_cast<CCoin*>(e->obj) && e->obj->GetState() == COIN_STATE_NORMAL)
+    {
+        e->obj->Delete();
+        cout<<"AddCoin\n";
+    }
+    else if (dynamic_cast<CGoomba*>(e->obj))
+    {
+        CGoomba* const goomba = dynamic_cast<CGoomba*>(e->obj);
+        if (e->ny >= 0)
+        {
+            cout << "ouch!!!\n";
+        }
+        else
+        {
+            goomba->SetKill();
+            velocity.y = -JUMP_SLOW_INIT_VEL;
+        }
     }
 }

@@ -9,6 +9,14 @@
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
 
+#define SUBPIXEL 1.0F/16.0F
+#define MAX_DELTA_TIME 60.f / 1000.0f
+#define SUBSUBSUBPIXEL SUBPIXEL * SUBPIXEL * SUBPIXEL
+#define SUBSUBSUBPIXEL_DELTA_TIME SUBSUBSUBPIXEL * MAX_DELTA_TIME
+
+#define OBJECT_FALL 0x00300 * SUBSUBSUBPIXEL_DELTA_TIME
+#define OBJECT_MAX_FALL 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME
+
 RECT GetTextureRegion(int x, int y, int xSize, int ySize);
 
 class CGameObject;
@@ -33,6 +41,7 @@ public:
 	Vector2 GetPosition() const { return position; }
 	Vector2 GetVelocity() { return velocity; }
 	float GetRotation() const { return rotation; }
+	int GetState() const { return state; }
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
 
 	void SetRotation(float newVal) { rotation = newVal; }

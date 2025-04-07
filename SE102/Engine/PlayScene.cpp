@@ -15,6 +15,8 @@
 #include "GameObjects/QuestionBlock.h"
 #include "Engine/Helper.h"
 #include "GameObjects/OneWay.h"
+#include "GameObjects/Coin.h"
+#include "GameObjects/Goomba.h"
 
 using namespace std;
 
@@ -223,6 +225,16 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 					position = Vector2(aabb.left + aabb.width / 2.0f, aabb.top + aabb.height / 2.0f);
 					COneWay* questionBlock = new COneWay(position.x, position.y, aabb.width, aabb.height);
 					objects.push_back(questionBlock);
+				}
+				else if (layerObject.getClass() == "CCoin")
+				{
+					CCoin* coin = new CCoin(position.x, position.y);
+					objects.push_back(coin);
+				}
+				else if (layerObject.getClass() == "CGoomba")
+				{
+					CGoomba* obj = new CGoomba(position.x, position.y);
+					objects.push_back(obj);
 				}
 			}
 		}

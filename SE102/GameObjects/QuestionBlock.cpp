@@ -10,6 +10,7 @@
 #include "contents.h"
 
 #include "GameObjects/Coin.h"
+#include "GameObjects/Mushroom.h"
 
 #include <iostream>
 using namespace std;
@@ -56,7 +57,23 @@ void CQuestionBlock::Hit()
     if (spawnCount <= 0)
         return;
     CGame* const game = CGame::GetInstance();
-    game->GetCurrentScene()->AddObject(new CCoin(position.x, position.y));
+    switch (spawnType)
+    {
+    case QUESTION_BLOCK_SPAWN_COIN:
+    {
+        CCoin* coin = new CCoin(position.x, position.y);
+        coin->SetState(COIN_STATE_INTRO);
+        game->GetCurrentScene()->AddObject(coin); 
+    }
+    break;
+    case QUESTION_BLOCK_SPAWN_MUSHROOM:
+    {
+        game->GetCurrentScene()->AddObject(new CMushroom(position.x, position.y)); 
+    }
+    break;
+    default:
+    break;
+    }
     isActive = false;
     spawnCount--;
     animationTimer = QUESTION_BLOCK_ANIMATION_TIME;
