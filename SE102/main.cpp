@@ -36,8 +36,8 @@
 
 #define WINDOW_CLASS_NAME L"Game Window"
 #define MAIN_WINDOW_TITLE L"MARIO"
-#define SCREEN_WIDTH 240
-#define SCREEN_HEIGHT 180
+#define SCREEN_WIDTH 256
+#define SCREEN_HEIGHT 192
 
 
 using namespace std;

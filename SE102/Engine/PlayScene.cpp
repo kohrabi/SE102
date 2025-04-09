@@ -18,6 +18,7 @@
 #include "GameObjects/Coin.h"
 #include "GameObjects/Goomba.h"
 #include "GameObjects/FirePiranha.h"
+#include "GameObjects/GreenKoopa.h"
 
 using namespace std;
 
@@ -240,6 +241,11 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 				else if (layerObject.getClass() == "CFirePiranha")
 				{
 					CFirePiranha* obj = new CFirePiranha(position.x, position.y);
+					objects.push_back(obj);
+				}
+				else if (layerObject.getClass() == "CGreenKoopa")
+				{
+					CGreenKoopa* obj = new CGreenKoopa(position.x, position.y);
 					objects.push_back(obj);
 				}
 			}

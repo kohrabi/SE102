@@ -78,6 +78,9 @@
     <ClCompile Include="GameObjects\FirePiranha.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects\GreenKoopa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -206,6 +209,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="contents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentIds\GreenKoopa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentIds\Fireball.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentIds\RedKoopa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\GreenKoopa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

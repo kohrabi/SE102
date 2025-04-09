@@ -144,6 +144,7 @@
     <ClCompile Include="GameObjects\Coin.cpp" />
     <ClCompile Include="GameObjects\FirePiranha.cpp" />
     <ClCompile Include="GameObjects\Goomba.cpp" />
+    <ClCompile Include="GameObjects\GreenKoopa.cpp" />
     <ClCompile Include="GameObjects\Mario.cpp" />
     <ClCompile Include="GameObjects\Mushroom.cpp" />
     <ClCompile Include="GameObjects\QuestionBlock.cpp" />
@@ -166,11 +167,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ContentIds\Coin.h" />
+    <ClInclude Include="ContentIds\Fireball.h" />
     <ClInclude Include="ContentIds\FirePiranha.h" />
     <ClInclude Include="ContentIds\Goomba.h" />
+    <ClInclude Include="ContentIds\GreenKoopa.h" />
     <ClInclude Include="ContentIds\Mario.h" />
     <ClInclude Include="ContentIds\Mushroom.h" />
     <ClInclude Include="ContentIds\QuestionBlock.h" />
+    <ClInclude Include="ContentIds\RedKoopa.h" />
     <ClInclude Include="contents.h" />
     <ClInclude Include="Engine\Collision.h" />
     <ClInclude Include="Engine\Graphics\Animation.h" />
@@ -189,6 +193,7 @@
     <ClInclude Include="GameObjects\Coin.h" />
     <ClInclude Include="GameObjects\FirePiranha.h" />
     <ClInclude Include="GameObjects\Goomba.h" />
+    <ClInclude Include="GameObjects\GreenKoopa.h" />
     <ClInclude Include="GameObjects\Mario.h" />
     <ClInclude Include="GameObjects\CollidableTile.h" />
     <ClInclude Include="Engine\Graphics\Sprite.h" />

@@ -12,6 +12,7 @@
 #include "QuestionBlock.h"
 #include "Coin.h"
 #include "Goomba.h"
+#include "GreenKoopa.h"
 
 #include <iostream>
 using namespace std;
@@ -125,7 +126,7 @@ void CMario::Render() {
 
     bool flipX = nx > 0 ? true : false;
     animation->Render(position.x, position.y, flipX);
-    // RenderBoundingBox();
+    RenderBoundingBox();
 }
 
 int CMario::GetAnimationIDSmall()
@@ -181,6 +182,22 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         else
         {
             goomba->SetKill();
+            velocity.y = -JUMP_SLOW_INIT_VEL;
+        }
+    }
+    else if (dynamic_cast<CGreenKoopa*>(e->obj))
+    {
+        CGreenKoopa* const koopa = dynamic_cast<CGreenKoopa*>(e->obj);
+        if (e->ny >= 0)
+        {
+            cout << "ouch!!!\n";
+        }
+        else
+        {
+            //if (abs(position.x - koopa->GetPosition().x) <= 4)
+            //    koopa->PlayerHit(0);
+            //else    
+                koopa->PlayerHit(sign(position.x - koopa->GetPosition().x));
             velocity.y = -JUMP_SLOW_INIT_VEL;
         }
     }

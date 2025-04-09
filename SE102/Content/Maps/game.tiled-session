@@ -15,11 +15,11 @@
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 11,
+            "scale": 4,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 366.0909090909091,
-                "y": 246.13636363636363
+                "x": 291,
+                "y": 276.375
             }
         },
         "cloud.tsx": {
@@ -43,7 +43,7 @@
             "scaleInEditor": 3
         },
         "mariotiles.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 1.5
         },
         "mariotiles32.tsx": {
             "scaleInDock": 1.5,
@@ -53,14 +53,13 @@
     "last.imagePath": "D:/Code/VS/SE102/SE102/Content",
     "last.objectTemplatePath": "D:/Code/VS/SE102/SE102/Content/Maps",
     "openFiles": [
-        "1-1.tmx",
-        "enemies32.tsx"
+        "1-1.tmx"
     ],
     "project": "game.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "enemies32.tsx",
         "1-1.tmx",
+        "enemies32.tsx",
         "enemies.tsx",
         "marioTiles32.tsx",
         "mario.tsx",
