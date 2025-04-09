@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="20" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#aff9f0" nextlayerid="8" nextobjectid="131">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="20" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#aff9f0" nextlayerid="8" nextobjectid="134">
  <tileset firstgid="1" source="mariotiles.tsx"/>
  <tileset firstgid="871" source="marioTiles32.tsx"/>
  <tileset firstgid="892" source="cloud.tsx"/>
  <tileset firstgid="895" source="mario.tsx"/>
  <tileset firstgid="1311" source="enemies.tsx"/>
+ <tileset firstgid="1461" source="enemies32.tsx"/>
  <group id="6" name="Background">
   <layer id="7" name="Sky" width="150" height="20">
    <data encoding="csv">
@@ -198,6 +199,7 @@
   <object id="127" template="Coin.tx" x="1168" y="128"/>
   <object id="128" template="Coin.tx" x="1200" y="96"/>
   <object id="129" template="Coin.tx" x="144" y="272"/>
-  <object id="130" template="Goomba.tx" type="CGoomba" x="208" y="304"/>
+  <object id="130" template="Goomba.tx" type="CGoomba" x="224" y="304"/>
+  <object id="133" template="FirePiranha.tx" type="CFirePiranha" x="360" y="256"/>
  </objectgroup>
 </map>

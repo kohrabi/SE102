@@ -1,8 +1,8 @@
 [SETTINGS]
-start: 1
-width: 320
-height: 240
+start 1
+width 320
+height 240
 
 [SCENES]
-0: intro.txt
-1: Content/Scenes/1-1.txt
+0 intro.txt
+1 Content/Scenes/1-1.txt

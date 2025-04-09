@@ -19,8 +19,7 @@ using namespace std;
 class CPlayScene: public CScene
 {
 protected: 
-	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
+	// A play scene has to have player, right? 			
 	void _ParseSection_PROPERTIES(string line);
 public: 
 	CPlayScene(int id, wstring filePath);

@@ -15,11 +15,11 @@
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 4,
+            "scale": 11,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 275.5,
-                "y": 292.875
+                "x": 366.0909090909091,
+                "y": 246.13636363636363
             }
         },
         "cloud.tsx": {
@@ -27,8 +27,12 @@
             "scaleInEditor": 1
         },
         "enemies.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 3,
             "scaleInEditor": 1
+        },
+        "enemies32.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 4
         },
         "mario.tsx": {
             "scaleInDock": 1,
@@ -49,16 +53,15 @@
     "last.imagePath": "D:/Code/VS/SE102/SE102/Content",
     "last.objectTemplatePath": "D:/Code/VS/SE102/SE102/Content/Maps",
     "openFiles": [
-        "marioTiles32.tsx",
         "1-1.tmx",
-        "cloud.tsx",
-        "mario.tsx"
+        "enemies32.tsx"
     ],
     "project": "game.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "enemies.tsx",
+        "enemies32.tsx",
         "1-1.tmx",
+        "enemies.tsx",
         "marioTiles32.tsx",
         "mario.tsx",
         "cloud.tsx",
@@ -67,7 +70,7 @@
     "tileset.lastUsedFormat": "tsx",
     "tileset.margin": 0,
     "tileset.tileSize": {
-        "height": 16,
+        "height": 32,
         "width": 16
     }
 }

@@ -1,0 +1,22 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\VS\SE102\SE102\
+# EDITOR startID 0
+
+[TEXTURES]
+Content\enemies.png 0
+
+[SPRITES]
+0 128 64 143 95 0
+# EDITOR frameName Look Down Open
+1 144 64 159 95 0
+# EDITOR frameName Look Down Close
+2 160 64 175 95 0
+# EDITOR frameName Look Up Open
+3 176 64 191 95 0
+# EDITOR frameName Look Up Open
+4 32 0 47 15 0
+# EDITOR frameName Frame 0
+
+[ANIMATIONS]
+5 4 10 
+# EDITOR animationName New Ani

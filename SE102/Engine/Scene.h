@@ -23,6 +23,7 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 
 	RECT levelBounds{};
+	LPGAMEOBJECT player;		
 public: 
 	CScene(int id, wstring filePath)
 	{
@@ -35,6 +36,7 @@ public:
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0; 
 
+	LPGAMEOBJECT const GetPlayer() const { return player; } 
 	void AddObject(LPGAMEOBJECT object) { objects.push_back(object); }
 
 	D3DXCOLOR GetBackgroundColor() { return backgroundColor; }

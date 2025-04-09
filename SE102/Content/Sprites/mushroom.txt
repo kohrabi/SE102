@@ -1,6 +1,6 @@
-[ALIAS]
-Content/mariotiles.png: 0
+[TEXTURES]
+Content/mariotiles.png 0
 
 [SPRITES]
 # NORMAL
-40010: 160 112 175 127 0
+40010 160 112 175 127 0

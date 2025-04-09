@@ -26,7 +26,7 @@
 #include "Engine/Graphics/Textures.h"
 #include "Engine/Graphics/Sprites.h"
 #include "Engine/Graphics/Animations.h"
-
+#include "Engine/Loaders/SpritesLoader.h"
 
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Layer.hpp>

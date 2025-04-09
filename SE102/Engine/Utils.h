@@ -13,7 +13,7 @@
 
 using namespace std;
 
-vector<string> split(string line, string delimeter = ": ");
+vector<string> split(string line, string delimeter = " ");
 wstring ToWSTR(string st);
 
 //LPCWSTR ToLPCWSTR(string st);

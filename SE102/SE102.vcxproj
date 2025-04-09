@@ -142,6 +142,7 @@
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="GameObjects\Coin.cpp" />
+    <ClCompile Include="GameObjects\FirePiranha.cpp" />
     <ClCompile Include="GameObjects\Goomba.cpp" />
     <ClCompile Include="GameObjects\Mario.cpp" />
     <ClCompile Include="GameObjects\Mushroom.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Helper.h" />
     <ClInclude Include="GameObjects\Coin.h" />
+    <ClInclude Include="GameObjects\FirePiranha.h" />
     <ClInclude Include="GameObjects\Goomba.h" />
     <ClInclude Include="GameObjects\Mario.h" />
     <ClInclude Include="GameObjects\CollidableTile.h" />
@@ -206,6 +208,12 @@
     <Text Include="Content\Scenes\scenes_list.txt">
       <DeploymentContent>true</DeploymentContent>
     </Text>
+    <Text Include="Content\Sprites\coin.txt" />
+    <Text Include="Content\Sprites\fire_piranha.txt" />
+    <Text Include="Content\Sprites\goomba.txt" />
+    <Text Include="Content\Sprites\mario.txt" />
+    <Text Include="Content\Sprites\mushroom.txt" />
+    <Text Include="Content\Sprites\questionBlock.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
