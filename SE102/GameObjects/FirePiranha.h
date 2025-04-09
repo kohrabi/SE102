@@ -3,7 +3,6 @@
 
 #include "Engine/GameObject.h"
 
-#include "contents.h"
 
 #include "Engine/Graphics/Animations.h"
 

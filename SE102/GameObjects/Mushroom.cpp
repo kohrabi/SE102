@@ -2,7 +2,7 @@
 
 #include "Engine/Loaders/SpritesLoader.h"
 
-#include "contents.h"
+#include "ContentIds/Mushroom.h"
 
 #include <iostream>
 #include <algorithm>
@@ -62,5 +62,5 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 void CMushroom::Render() {
     CSprites* const sprites = CSprites::GetInstance();
 
-    sprites->Get(MUSHROOM_ID_SPRITE_NORMAL)->Draw(position.x, position.y);
+    sprites->Get(MUSHROOM_ID_SPRITE_IDLE)->Draw(position.x, position.y);
 }

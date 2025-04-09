@@ -4,22 +4,20 @@
 
 [TEXTURES]
 Content\enemies.png 0
+Content\est.png 1
 
 [SPRITES]
-1 128 64 143 95 0
+0 128 64 143 95 0
 # EDITOR frameName Look Down Open
-2 144 64 159 95 0
+1 144 64 159 95 0
 # EDITOR frameName Look Down Close
-3 160 64 175 95 0
+2 160 64 175 95 0
 # EDITOR frameName Look Up Open
-4 176 64 191 95 0
+3 176 64 191 95 0
 # EDITOR frameName Look Up Close
-
-# NEW ANI
-5 32 0 47 15 0
-
+4 32 0 47 15 0
+# EDITOR frameName Frame 0
 
 [ANIMATIONS]
-6 5 10 
+5 4 10 
 # EDITOR animationName New Ani
-

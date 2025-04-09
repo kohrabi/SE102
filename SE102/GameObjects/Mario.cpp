@@ -4,7 +4,7 @@
 #include "Engine/Game.h"
 #include "Engine/Graphics/Animations.h"
 
-#include "contents.h"
+#include "ContentIds/Mario.h"
 
 #include "Engine/Helper.h"
 #include <Engine/debug.h>
@@ -135,7 +135,7 @@ int CMario::GetAnimationIDSmall()
     if (skidding)
         return MARIO_ID_ANIMATION_SKIDDING;
     if (abs(velocity.x) > 0)
-        return MARIO_ID_ANIMATION_WALKING;
+        return MARIO_ID_ANIMATION_WALK;
     else
         return MARIO_ID_ANIMATION_IDLE;
 }

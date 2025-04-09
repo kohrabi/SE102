@@ -1,6 +1,14 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\VS\SE102\SE102\
+# EDITOR startID 40000
+# EDITOR objectName Mushroom
+
 [TEXTURES]
-Content/mariotiles.png 0
+Content\mariotiles.png 0
 
 [SPRITES]
-# NORMAL
-40010 160 112 175 127 0
+40001 160 112 175 127 0
+# EDITOR frameName Idle
+
+
+[ANIMATIONS]

@@ -2,8 +2,7 @@
 
 #include "Engine/Loaders/SpritesLoader.h"
 
-#include "contents.h"
-
+#include "ContentIds/Goomba.h"
 #include <iostream>
 #include <algorithm>
 
@@ -58,7 +57,7 @@ void CGoomba::Render() {
     CAnimations* const animations = CAnimations::GetInstance();
 
     if (kill)
-        animations->Get(GOOMBA_ID_ANIMATION_DEATH)->Render(position.x, position.y);
+        animations->Get(GOOMBA_ID_ANIMATION_DEAD)->Render(position.x, position.y);
     else
-        animations->Get(GOOMBA_ID_ANIMATION_NORMAL)->Render(position.x, position.y);
+        animations->Get(GOOMBA_ID_ANIMATION_WALK)->Render(position.x, position.y);
 }

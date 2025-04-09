@@ -2,7 +2,7 @@
 
 #include "Engine/Loaders/SpritesLoader.h"
 
-#include "contents.h"
+#include "ContentIds/FirePiranha.h"
 
 #include "Engine/Helper.h"
 

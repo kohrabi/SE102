@@ -1,9 +1,20 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\VS\SE102\SE102
+# EDITOR startID 60000
+# EDITOR objectName Fire Piranha
+
 [TEXTURES]
-Content/enemies.png 0
+Content\enemies.png 0
 
 [SPRITES]
-# NORMAL
-60010 128 64 143 95 0
-60011 144 64 159 95 0
-60012 160 64 175 95 0
-60013 176 64 191 95 0
+60001 128 64 143 95 0
+# EDITOR frameName Look Down Open
+60002 144 64 159 95 0
+# EDITOR frameName Look Down Close
+60003 160 64 175 95 0
+# EDITOR frameName Look Up Open
+60004 176 64 191 95 0
+# EDITOR frameName Look Up Close
+
+
+[ANIMATIONS]

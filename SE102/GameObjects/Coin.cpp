@@ -2,7 +2,7 @@
 
 #include "Engine/Loaders/SpritesLoader.h"
 
-#include "contents.h"
+#include "ContentIds/Coin.h"
 
 #include <iostream>
 #include <algorithm>
@@ -54,8 +54,8 @@ void CCoin::Render() {
     CSprites* const sprites = CSprites::GetInstance();
 
     if (state == COIN_STATE_INTRO)
-        animations->Get(COIN_ID_ANIMATION_NORMAL)->Render(position.x, position.y);
+        animations->Get(COIN_ID_ANIMATION_ROTATE)->Render(position.x, position.y);
     else
-        sprites->Get(COIN_ID_SPRITE_NORMAL_FRAME1)->Draw(position.x, position.y);
+        sprites->Get(COIN_ID_SPRITE_NORMAL)->Draw(position.x, position.y);
 
 }

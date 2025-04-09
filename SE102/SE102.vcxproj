@@ -165,11 +165,17 @@
     <Image Include="Content\objectSprites.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ContentIds\Coin.h" />
+    <ClInclude Include="ContentIds\FirePiranha.h" />
+    <ClInclude Include="ContentIds\Goomba.h" />
+    <ClInclude Include="ContentIds\Mario.h" />
+    <ClInclude Include="ContentIds\Mushroom.h" />
+    <ClInclude Include="ContentIds\QuestionBlock.h" />
+    <ClInclude Include="contents.h" />
     <ClInclude Include="Engine\Collision.h" />
     <ClInclude Include="Engine\Graphics\Animation.h" />
     <ClInclude Include="Engine\Graphics\AnimationFrame.h" />
     <ClInclude Include="Engine\Graphics\Animations.h" />
-    <ClInclude Include="contents.h" />
     <ClInclude Include="Engine\Loaders\Loader.h" />
     <ClInclude Include="Engine\Loaders\SpritesLoader.h" />
     <ClInclude Include="Engine\Math\AABB.h" />

@@ -7,10 +7,12 @@
 
 #include "Engine/Loaders/SpritesLoader.h"
 
-#include "contents.h"
+#include "QuestionBlock.h"
 
 #include "GameObjects/Coin.h"
 #include "GameObjects/Mushroom.h"
+
+#include "ContentIds/QuestionBlock.h"
 
 #include <iostream>
 using namespace std;
@@ -47,7 +49,7 @@ void CQuestionBlock::Render()
     CAnimations* const animations = CAnimations::GetInstance();
     CSprites* const sprites = CSprites::GetInstance();
 
-    LPANIMATION animation = animations->Get(spawnCount > 0 ? QUESTION_BLOCK_ID_ANIMATION_NORMAL : QUESTION_BLOCK_ID_ANIMATION_EMPTY);
+    LPANIMATION animation = animations->Get(spawnCount > 0 ? QUESTION_BLOCK_ID_ANIMATION_IDLE : QUESTION_BLOCK_ID_ANIMATION_EMPTY);
     animation->Render(position.x, position.y);
     // RenderBoundingBox();
 }
