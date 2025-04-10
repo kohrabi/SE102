@@ -95,8 +95,8 @@ void CPlayScene::Update(DWORD dt)
 	position.y -= game->GetBackBufferHeight() / 2;
 	position.y = 500.f;
 
-	position.x = clampf(position.x, (float)levelBounds.left, (float)levelBounds.right - game->GetBackBufferWidth());
-	position.y = clampf(position.y, (float)levelBounds.top, (float)levelBounds.bottom - game->GetBackBufferHeight());
+	position.x = clampf(position.x, levelBounds.left, levelBounds.right - game->GetBackBufferWidth());
+	position.y = clampf(position.y, levelBounds.top, levelBounds.bottom - game->GetBackBufferHeight());
 
 	CGame::GetInstance()->SetCamPos(position.x, position.y /*cy*/);
 
@@ -182,7 +182,7 @@ void CPlayScene::LoadMap(string path) {
 		if (collisionMapFilePath != "")
 		{
 			loader.Load(collisionMapFilePath);
-			for (RECT region : loader.collisionRegion)
+			for (AABB region : loader.collisionRegion)
 			{
 				LPTILELAYER tileLayer = new CTileLayer(region);
 				wallObjects.push_back(tileLayer);
@@ -204,10 +204,10 @@ void CPlayScene::LoadMap(string path) {
 
 		const auto& bounds = tMap.getBounds();
 
-		levelBounds.left = (LONG)bounds.left;
-		levelBounds.right = (LONG)(bounds.left + bounds.width);
-		levelBounds.top = (LONG)bounds.top;
-		levelBounds.bottom = (LONG)(bounds.top + bounds.height);
+		levelBounds.left = bounds.left;
+		levelBounds.right = (bounds.left + bounds.width);
+		levelBounds.top = bounds.top;
+		levelBounds.bottom = (bounds.top + bounds.height);
 	}
 }
 

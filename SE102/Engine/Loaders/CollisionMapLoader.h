@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include <d3d10.h>
+#include "Engine/Math/AABB.h"
 
 using namespace std;
 
@@ -12,7 +12,7 @@ private:
 	void _ParseSection_RECTANGLES(string line);
 	void _ParseSection_MAP(string line, int& currentMapLine);
 public:
-	vector<RECT> collisionRegion;
+	vector<AABB> collisionRegion;
 	int** map;
 	int width = 0;
 	int height = 0;

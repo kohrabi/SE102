@@ -6,6 +6,12 @@
 #include "debug.h"
 #include "GameObject.h"
 
+#include "Engine/Math/AABB.h"
+
+#include <algorithm>
+
+using namespace std;
+
 int CCollisionEvent::WasCollided() {
 	return t >= 0.0f && t <= 1.0f && obj->IsDirectionColliable(nx, ny) == 1;
 }
@@ -176,7 +182,7 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 			delete e;
 	}
 
-	//std::sort(coEvents.begin(), coEvents.end(), CCollisionEvent::compare);
+	//sort(coEvents.begin(), coEvents.end(), CCollisionEvent::compare);
 }
 
 void CCollision::Filter(LPGAMEOBJECT objSrc,
@@ -361,7 +367,8 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
-bool CCollision::CheckAABBOverlaps(RECT &r1, RECT &r2)
+bool CCollision::CheckAABBOverlaps(AABB &r1, AABB&r2)
 {
 	return !(r1.left > r2.right || r1.right < r2.left || r1.bottom < r2.top || r1.top > r2.bottom);
 }
+

@@ -6,7 +6,6 @@
 #include <iostream>
 #include <algorithm>
 #include <Engine/Helper.h>
-#include "CollisionCast.h"
 
 using namespace std;
 
@@ -62,6 +61,13 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
     if (!IsColliderInCamera())
         return;
 
+    cast.SetBoundingBox(position + Vector2((7) * nx, 16), Vector2(4, 6));
+    cast.CheckOverlap(coObjects);
+    if (cast.collisionCount <= 0)
+    {
+        nx *= -1;
+    }
+
     if (!inShell)
     {
         velocity.x = RED_KOOPA_X_SPEED * nx;
@@ -74,12 +80,6 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
     }
     CCollision::GetInstance()->Process(this, dt, coObjects);
 
-    CCollisionCast collisionCheck(position + Vector2((16 + 1) * nx, 20), Vector2(15, 16));
-    collisionCheck.CheckOverlap(coObjects);
-    if (collisionCheck.collisionCount <= 0)
-    {
-        nx *= -1;
-    }
 
 }
 
@@ -100,5 +100,6 @@ void CRedKoopa::Render() {
         animation->Render(position.x, position.y + 8, nx > 0 ? true : false);
 
     }
+    cast.Render();
     RenderBoundingBox();
 }

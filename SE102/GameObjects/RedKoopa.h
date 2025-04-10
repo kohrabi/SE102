@@ -5,6 +5,7 @@
 
 
 #include "Engine/Graphics/Animations.h"
+#include "CollisionCast.h"
 
 #define RED_KOOPA_INTRO_Y_VELOCITY 0.03
 
@@ -20,13 +21,15 @@ private:
     static bool IsContentLoaded;
 
     bool inShell = false;
+    CCollisionCast cast;
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0
-	CRedKoopa(float x, float y) : CGameObject(x, y, 0.0f) 
+	CRedKoopa(float x, float y) : CGameObject(x, y, 0.0f)
     { 
         LoadContent();
         nx = -1;
+        cast.SetParent(this);
     }
 	int IsCollidable() override { return !isDeleted; };
     int IsBlocking() override { return false; }

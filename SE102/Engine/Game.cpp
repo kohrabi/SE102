@@ -6,6 +6,8 @@
 #include "Graphics/Animations.h"
 #include "Graphics/Textures.h"
 
+#include "Math/AABB.h"
+
 #include <fstream>
 
 CGame* CGame::__instance = NULL;
@@ -239,16 +241,16 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, bo
 	}
 
 	// Skip if not in view
-	RECT cam, spriteRect;
-	cam.left = (LONG)cx;
-	cam.right = (LONG)(cx + backBufferWidth);
-	cam.top = (LONG)cy;
-	cam.bottom = (LONG)(cy + backBufferHeight);
+	AABB cam, spriteRect;
+	cam.left = cx;
+	cam.right = (cx + backBufferWidth);
+	cam.top = cy;
+	cam.bottom = (cy + backBufferHeight);
 
-	spriteRect.left = (LONG)(x - spriteWidth / 2);
-	spriteRect.right = (LONG)(x + spriteWidth / 2);
-	spriteRect.top = (LONG)(y - spriteHeight / 2);
-	spriteRect.bottom = (LONG)(y + spriteHeight / 2);
+	spriteRect.left = (x - spriteWidth / 2.0f);
+	spriteRect.right = (x + spriteWidth / 2.0f);
+	spriteRect.top = (y - spriteHeight / 2.0f);
+	spriteRect.bottom = (y + spriteHeight / 2.0f);
 
 	if (!CCollision::CheckAABBOverlaps(cam, spriteRect))
 		return;
