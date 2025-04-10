@@ -29,12 +29,12 @@ struct Tile
 class CTileLayer : public CGameObject {
 private:
 	vector<Tile> tiles;
-	RECT collision;
+	AABB collision;
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0
 	CTileLayer() {}
-	CTileLayer(RECT collisionRect) : CGameObject(0, 0, 0.0f) {
+	CTileLayer(AABB collisionRect) : CGameObject(0, 0, 0.0f) {
 		collision = collisionRect;
 		tiles = vector<Tile>();
 	}

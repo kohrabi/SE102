@@ -7,6 +7,7 @@
 #include <math.h>
 #include "contents.h"
 #include "Graphics/Textures.h"
+#include "Math/AABB.h"
 
 #include "Engine/Game.h"
 
@@ -55,18 +56,13 @@ bool CGameObject::IsColliderInCamera()
 	{
 		float cx, cy;
 		game->GetCamPos(cx, cy);
-		RECT cam, collider;
-		cam.left = (LONG)cx;
-		cam.right = (LONG)(cx + game->GetBackBufferWidth());
-		cam.top = (LONG)cy;
-		cam.bottom = (LONG)(cy + game->GetBackBufferHeight());
+		AABB cam, collider;
+		cam.left = cx;
+		cam.right = (cx + game->GetBackBufferWidth());
+		cam.top = cy;
+		cam.bottom = (cy + game->GetBackBufferHeight());
 
-		float l, t, r, b;
-		GetBoundingBox(l, t, r, b);
-		collider.left = (LONG)l;
-		collider.top = (LONG)t;
-		collider.right = (LONG)r;
-		collider.bottom = (LONG)b;
+		GetBoundingBox(collider.left, collider.top, collider.right, collider.bottom);
 
 		return CCollision::CheckAABBOverlaps(cam, collider);
 	}

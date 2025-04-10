@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <vector>
 #include <algorithm>
+#include "Engine/Math/AABB.h"
 
 using namespace std;
 
@@ -86,7 +87,7 @@ public:
 
 	void Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 
-	static bool CheckAABBOverlaps(RECT& r1, RECT& r2);
+	static bool CheckAABBOverlaps(AABB& r1, AABB& r2);
 
 	static CCollision* GetInstance();
 };

@@ -137,6 +137,7 @@
     <ClCompile Include="Engine\Helper.cpp" />
     <ClCompile Include="Engine\Loaders\CollisionMapLoader.cpp" />
     <ClCompile Include="Engine\Loaders\SpritesLoader.cpp" />
+    <ClCompile Include="Engine\Math\Vector2i.cpp" />
     <ClCompile Include="Engine\PlayScene.cpp" />
     <ClCompile Include="Engine\Utils.cpp" />
     <ClCompile Include="Engine\debug.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Engine\Loaders\Loader.h" />
     <ClInclude Include="Engine\Loaders\SpritesLoader.h" />
     <ClInclude Include="Engine\Math\AABB.h" />
+    <ClInclude Include="Engine\Math\Vector2i.h" />
     <ClInclude Include="Engine\PlayScene.h" />
     <ClInclude Include="Engine\Scene.h" />
     <ClInclude Include="Engine\Utils.h" />

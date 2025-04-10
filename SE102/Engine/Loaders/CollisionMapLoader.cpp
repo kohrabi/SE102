@@ -41,7 +41,7 @@ void CollisionMapLoader::_ParseSection_RECTANGLES(string line) {
 	vector<string> tokens = split(line);
 	if (tokens.size() != 5)
 		DebugBreak();
-	RECT r;
+	AABB r;
 	r.left = atoi(tokens[1].c_str()) * tileWidth;
 	r.top = (atoi(tokens[2].c_str())) * tileHeight;
 	r.right = (atoi(tokens[3].c_str()) + 1) * tileWidth;
