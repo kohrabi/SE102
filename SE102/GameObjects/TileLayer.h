@@ -43,14 +43,14 @@ public:
 		tiles.push_back(tile);
 	}
 
-	int IsCollidable() override { return CGameObject::IsCollidable(); };
-	int IsDirectionColliable(float nx, float ny) override { return CGameObject::IsDirectionColliable(nx, ny); }
+	int IsCollidable() override { return true; };
+	int IsDirectionColliable(float nx, float ny) override { return true; }
 	
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) { 
-		left = collision.left; 
-		top = collision.top; 
-		right = collision.right; 
-		bottom = collision.bottom; 
+		left = (float)collision.left; 
+		top = (float)collision.top;
+		right = (float)collision.right;
+		bottom = (float)collision.bottom;
 	}
 
 	void Render() override {

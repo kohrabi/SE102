@@ -63,10 +63,11 @@ public:
 	void RenderBoundingBox();
 
 
+	bool IsColliderInCamera();
 	//
 	// Collision ON or OFF ? This can change depending on object's state. For example: die
 	//
-	virtual int IsCollidable();
+	virtual int IsCollidable() { return !isDeleted; };
 
 	// When no collision has been detected (triggered by CCollision::Process)
 	virtual void OnNoCollision(DWORD dt) {};
@@ -78,6 +79,6 @@ public:
 	virtual int IsBlocking() { return 1; }
 
 	// Is this object collide with other object at certain direction ( like ColorBox )
-	virtual int IsDirectionColliable(float nx, float ny);
+	virtual int IsDirectionColliable(float nx, float ny) { return 1; }
 };
 typedef CGameObject* LPGAMEOBJECT;

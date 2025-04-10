@@ -76,33 +76,32 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
     // Y MOVEMENT
     float gravity = 0.0f;
-    if (game->IsKeyDown(KEY_JUMP) && sign(velocity.y) < 0 && abs(velocity.y) < 0x00E00 * SUBSUBSUBPIXEL)
+    if (game->IsKeyDown(KEY_JUMP) && velocity.y < JUMP_MAX_NEGATIVE)
     {
-        // if (velocity.x < SLOW_VEL)
-            gravity = JUMP_SLOW_HELD_GRAVITY;
-        // else if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
-        //     gravity = JUMP_MID_HELD_GRAVITY;
-        // else if (velocity.x >= FAST_VEL)
-        //     gravity = JUMP_FAST_HELD_GRAVITY;
+        gravity = JUMP_SLOW_HELD_GRAVITY;
     }
     else
     {
-        // if (velocity.x < SLOW_VEL)
-            gravity = JUMP_SLOW_GRAVITY;
-        // else if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
-        //     gravity = JUMP_MID_GRAVITY;
-        // else if (velocity.x >= FAST_VEL)
-        //     gravity = JUMP_FAST_GRAVITY;
+        gravity = JUMP_SLOW_GRAVITY;
     } 
     accel.y = gravity;
     
     if (game->IsKeyJustPressed(KEY_JUMP) && isOnGround) {
-        float initVel = JUMP_SLOW_INIT_VEL;
+        float initVel = -JUMP_SLOW_INIT_VEL;
+        int temp = trunc(abs(velocity.x) * MAX_DELTA_TIME);
+        if (temp == 0)
+            initVel -= 0x00000 * SUBSUBSUBPIXEL_DELTA_TIME;
+        else if (temp == 1)
+            initVel -= 0x00200 * SUBSUBSUBPIXEL_DELTA_TIME;
+        else if (temp == 2)
+            initVel -= 0x00400 * SUBSUBSUBPIXEL_DELTA_TIME;
+        else if (temp == 3)
+            initVel -= 0x00800 * SUBSUBSUBPIXEL_DELTA_TIME;
         // if (velocity.x >= MID_VEL_START && velocity.x <= MID_VEL_END)
         //     initVel = JUMP_MID_INIT_VEL;
         // if (velocity.x >= FAST_VEL)
         //     initVel = JUMP_FAST_INIT_VEL;
-        accel.y = -initVel;
+        accel.y = initVel;
     }
 
     velocity.x += accel.x;

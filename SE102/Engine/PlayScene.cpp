@@ -194,7 +194,7 @@ void CPlayScene::LoadMap(string path) {
 		}
 
 		tmx::Colour color = tMap.getBackgroundColour();
-		backgroundColor = D3DXCOLOR(color.r / 255.0, color.g / 255.0, color.b / 255.0, color.a / 255.0);
+		backgroundColor = D3DXCOLOR(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f);
 
 		const auto& layers = tMap.getLayers();
 
@@ -295,6 +295,11 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 							auto tileSize = tilesetTiles[tiles[idx].ID - tileset.getFirstGID()].imageSize;
 							Vector2 offset(tileSize.x / 2.0f, tileSize.y / 2.0f);
 							Vector2 position(mapTileSize.x * i + offset.x, mapTileSize.y * j + offset.y);
+							// ERROR: TODO: THIS MIGHT BE WRONG
+							if (tileSize.x != tileSize.y)
+							{
+								position.y -= offset.y;
+							}
 							if (layer->getName() != "Wall") {
 								objects.push_back(
 									new CTile(

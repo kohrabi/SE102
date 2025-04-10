@@ -8,7 +8,7 @@
 
 #define COIN_MAX_Y -18
 #define COIN_DESTROY_TIME 200
-#define COIN_Y_VELOCITY 0.17
+#define COIN_Y_VELOCITY 0.17f
 
 #define COIN_STATE_INTRO 1
 #define COIN_STATE_NORMAL 2
@@ -18,7 +18,7 @@ private:
     static void LoadContent();
     static bool IsContentLoaded;
 
-    long startTime;
+    ULONGLONG startTime;
     float maxYPos;
 public:
 	// Tile number xTile counting from 0

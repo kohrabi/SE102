@@ -48,9 +48,8 @@ void CGameObject::RenderBoundingBox()
 	CGame::GetInstance()->Draw(l + rect.right / 2, t + rect.bottom / 2, 0.0f, bbox, rect.left, rect.top, rect.right, rect.bottom, false, false, 0.25f);
 }
 
-int CGameObject::IsCollidable()
+bool CGameObject::IsColliderInCamera()
 {
-	bool returnCondition = !isDeleted;
 	CGame* const game = CGame::GetInstance();
 	if (game != NULL)
 	{
@@ -64,44 +63,12 @@ int CGameObject::IsCollidable()
 
 		float l, t, r, b;
 		GetBoundingBox(l, t, r, b);
-		collider.left = l;
-		collider.top = t;
-		collider.right = r;
-		collider.bottom = b;
+		collider.left = (LONG)l;
+		collider.top = (LONG)t;
+		collider.right = (LONG)r;
+		collider.bottom = (LONG)b;
 
-		if (!CCollision::CheckAABBOverlaps(cam, collider))
-			return false;
-		else
-			return returnCondition;
+		return CCollision::CheckAABBOverlaps(cam, collider);
 	}
-	return returnCondition;
-}
-
-int CGameObject::IsDirectionColliable(float nx, float ny)
-{
-	bool returnCondition = 1;
-	CGame* const game = CGame::GetInstance();
-	if (game != NULL)
-	{
-		float cx, cy;
-		game->GetCamPos(cx, cy);
-		RECT cam, collider;
-		cam.left = (LONG)cx;
-		cam.right = (LONG)(cx + game->GetBackBufferWidth());
-		cam.top = (LONG)cy;
-		cam.bottom = (LONG)(cy + game->GetBackBufferHeight());
-
-		float l, t, r, b;
-		GetBoundingBox(l, t, r, b);
-		collider.left = l;
-		collider.top = t;
-		collider.right = r;
-		collider.bottom = b;
-
-		if (!CCollision::CheckAABBOverlaps(cam, collider))
-			return false;
-		else
-			return returnCondition;
-	}
-	return returnCondition;
+	return false;
 }

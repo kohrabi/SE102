@@ -58,6 +58,8 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+    if (!IsColliderInCamera())
+        return;
     if (!inShell)
     {
         velocity.x = GREEN_KOOPA_X_SPEED * nx;

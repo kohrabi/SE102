@@ -241,7 +241,7 @@ int WINAPI WinMain(
 	freopen_s(&fp, "CONOUT$", "w", stdout);
 	freopen_s(&fp, "CONOUT$", "w", stderr);
 
-	srand(time(nullptr));
+	srand(time(NULL));
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 

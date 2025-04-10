@@ -6,7 +6,7 @@
 
 #include "Engine/Graphics/Animations.h"
 
-#define MUSHROOM_INTRO_Y_VELOCITY 0.03
+#define MUSHROOM_INTRO_Y_VELOCITY 0.03f
 
 #define MUSHROOM_X_SPEED 0x01000 * SUBSUBSUBPIXEL_DELTA_TIME
 

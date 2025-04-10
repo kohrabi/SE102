@@ -28,9 +28,11 @@ public:
         LoadContent(); 
         nx = -1;
     }
-	int IsCollidable() override { return !isDeleted && !kill; };
+	int IsCollidable() override { 
+        return !isDeleted && !kill; };
     int IsBlocking() override { return false; }
-    int IsDirectionColliable(float nx, float ny) override { return !kill; }
+    int IsDirectionColliable(float nx, float ny) override { 
+        return !kill; }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) { 
         left = position.x - 8; 
         top = position.y - 8; 

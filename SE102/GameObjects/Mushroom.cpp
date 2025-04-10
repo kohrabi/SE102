@@ -30,7 +30,7 @@ void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 {
     if (e->nx != 0 && e->obj->IsBlocking())
     {
-        nx = e->nx;
+        nx = (int)e->nx;
     }
     if (e->ny != 0 && e->obj->IsBlocking())
     {

@@ -40,6 +40,8 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+    if (!IsColliderInCamera())
+        return;
     if (kill)
     {
         killTimer -= dt;

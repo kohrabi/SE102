@@ -28,7 +28,7 @@ void CCoin::SetState(int state)
     {
     case COIN_STATE_INTRO:
         {
-            startTime = GetTickCount64() + COIN_DESTROY_TIME;
+            startTime = (ULONGLONG)GetTickCount64() + COIN_DESTROY_TIME;
             maxYPos = position.y + COIN_MAX_Y;
         }
         break;
@@ -42,7 +42,7 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
     position.y -= COIN_Y_VELOCITY * dt;
 
     position.y = max(position.y, maxYPos);
-    DWORD now = GetTickCount64();
+    ULONGLONG now = GetTickCount64();
     if (now > startTime) {
         Delete();
         cout << "delete\n";
