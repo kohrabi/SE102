@@ -5,3 +5,8 @@ https://github.com/velipso/smb3-physics
 https://mitxela.com/projects/console/mario
 https://github.com/captainsouthbird/smb3/blob/master/smb3.asm
 https://datacrystal.tcrf.net/wiki/Super_Mario_Bros._3/Notes
+# Stuff Used
+tmxlite
+Tiled
+Tile CollisionMap Generator
+SimpleSpritesEditor(gotta plug my own software)
