@@ -25,10 +25,11 @@ private:
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0
-	CRedKoopa(float x, float y) : CGameObject(x, y, 0.0f) 
+	CRedKoopa(float x, float y) : CGameObject(x, y, 0.0f)
     { 
         LoadContent();
         nx = -1;
+        cast.SetParent(this);
     }
 	int IsCollidable() override { return !isDeleted; };
     int IsBlocking() override { return false; }

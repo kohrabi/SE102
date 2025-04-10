@@ -9,7 +9,7 @@ void CCollisionCast::CheckOverlap(vector<LPGAMEOBJECT>* coObjects)
 	for (int i = 0; i < coObjects->size(); i++)
 	{
 		LPGAMEOBJECT obj = coObjects->at(i);
-		if (!obj->IsCollidable())
+		if (!obj->IsCollidable() || obj == parent || obj->GetVelocity().length() > 0)
 			continue;
 		AABB objRect;
 		obj->GetBoundingBox(objRect.left, objRect.top, objRect.right, objRect.bottom);

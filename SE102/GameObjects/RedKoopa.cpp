@@ -61,7 +61,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
     if (!IsColliderInCamera())
         return;
 
-    cast.SetBoundingBox(Vector2(round(position.x), round(position.y)) + Vector2((16 + 5) * nx, 16), Vector2(16, 2));
+    cast.SetBoundingBox(position + Vector2((7) * nx, 16), Vector2(4, 6));
     cast.CheckOverlap(coObjects);
     if (cast.collisionCount <= 0)
     {
@@ -100,5 +100,6 @@ void CRedKoopa::Render() {
         animation->Render(position.x, position.y + 8, nx > 0 ? true : false);
 
     }
+    cast.Render();
     RenderBoundingBox();
 }

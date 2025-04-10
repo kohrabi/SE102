@@ -5,26 +5,28 @@
 class CCollisionCast : public CGameObject
 {
 private:
-	float l, t, r, b;
+	float l = 0, t = 0, r = 0, b = 0;
+	LPGAMEOBJECT parent = NULL;
 public:
 	int collisionCount = 0;
 	CCollisionCast() {}
 	CCollisionCast(Vector2 position, Vector2 size)
+		: parent(parent)
 	{
-		l = position.x - size.x / 2;
-		t = position.y - size.y / 2;
-		r = position.x + size.x / 2;
-		b = position.y + size.y / 2;
+		l = position.x - size.x / 2.0f;
+		t = position.y - size.y / 2.0f;
+		r = position.x + size.x / 2.0f;
+		b = position.y + size.y / 2.0f;
 	}
 	CCollisionCast(float l, float t, float r, float b)
-		: l(l), t(t), r(r), b(b) { }
+		: l(l), t(t), r(r), b(b), parent(parent) { }
 
 	void SetBoundingBox(Vector2 position, Vector2 size)
 	{
-		l = position.x - size.x / 2;
-		t = position.y - size.y / 2;
-		r = position.x + size.x / 2;
-		b = position.y + size.y / 2;
+		l = position.x - size.x / 2.0f;
+		t = position.y - size.y / 2.0f;
+		r = position.x + size.x / 2.0f;
+		b = position.y + size.y / 2.0f;
 	}
 
 	void SetBoundingBox(float l, float t, float r, float b)
@@ -33,6 +35,10 @@ public:
 		this->t = t;
 		this->r = r;
 		this->b = b;
+	}
+	void SetParent(LPGAMEOBJECT parent)
+	{
+		this->parent = parent;
 	}
 
 	void Render() override { RenderBoundingBox(); }
