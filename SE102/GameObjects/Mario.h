@@ -51,6 +51,7 @@ public:
     CMario(float x, float y) : CGameObject(x, y, 0.0f) 
 	{
 		LoadContent();
+		nx = 1;
 	}
 
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;

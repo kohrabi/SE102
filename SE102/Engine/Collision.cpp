@@ -7,8 +7,7 @@
 #include "GameObject.h"
 
 int CCollisionEvent::WasCollided() {
-	return
-		t >= 0.0f && t <= 1.0f && obj->IsDirectionColliable(nx, ny) == 1;
+	return t >= 0.0f && t <= 1.0f && obj->IsDirectionColliable(nx, ny) == 1;
 }
 
 #define BLOCK_PUSH_FACTOR 0.01f
