@@ -171,7 +171,7 @@ void CPlayScene::LoadMap(string path) {
 		}
 
 		tmx::Colour color = tMap.getBackgroundColour();
-		backgroundColor = D3DXCOLOR(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f);
+		backgroundColor = D3DXCOLOR(color.r / 255.0, color.g / 255.0, color.b / 255.0, color.a / 255.0);
 
 		const auto& layers = tMap.getLayers();
 		

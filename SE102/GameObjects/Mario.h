@@ -78,7 +78,7 @@ public:
 	void SetState(int state) override;
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
-        const Vector2 MarioSize = Vector2(16.f, 16.f) / 2.0f;
+        const Vector2 MarioSize = Vector2(10.f, 16.f) / 2.0f;
 		left = position.x - MarioSize.x;
 		top = position.y - MarioSize.y;
 		right = position. x + MarioSize.x;

@@ -423,6 +423,5 @@ FodyWeavers.xsd
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
