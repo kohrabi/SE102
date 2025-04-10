@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "Scene.h"
 #include "Graphics/Textures.h"
+#include "Engine/Loaders/CollisionMapLoader.h"
+#include "GameObjects/TileLayer.h"
 
 #include <string>
 #include <unordered_map>
@@ -32,7 +34,8 @@ public:
 	LPGAMEOBJECT GetPlayer() { return player; }
 
 	void LoadMap(string path);
-	void LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, const vector<tmx::Tileset>& tilesets);
+	void LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, 
+		const vector<tmx::Tileset>& tilesets, const CollisionMapLoader& collisionLoader, const vector<LPTILELAYER>& collisionObjects);
 	void Clear();
 	void PurgeDeletedObjects();
 	

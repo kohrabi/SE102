@@ -20,6 +20,7 @@
 RECT GetTextureRegion(int x, int y, int xSize, int ySize);
 
 class CGameObject;
+class CGame;
 
 class CGameObject
 {
@@ -65,7 +66,7 @@ public:
 	//
 	// Collision ON or OFF ? This can change depending on object's state. For example: die
 	//
-	virtual int IsCollidable() { return !isDeleted; };
+	virtual int IsCollidable();
 
 	// When no collision has been detected (triggered by CCollision::Process)
 	virtual void OnNoCollision(DWORD dt) {};
@@ -77,6 +78,6 @@ public:
 	virtual int IsBlocking() { return 1; }
 
 	// Is this object collide with other object at certain direction ( like ColorBox )
-	virtual int IsDirectionColliable(float nx, float ny) { return 1; }
+	virtual int IsDirectionColliable(float nx, float ny);
 };
 typedef CGameObject* LPGAMEOBJECT;

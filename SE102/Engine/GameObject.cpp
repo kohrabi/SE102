@@ -8,6 +8,8 @@
 #include "contents.h"
 #include "Graphics/Textures.h"
 
+#include "Engine/Game.h"
+
 /*
 	Initialize game object 
 */
@@ -44,4 +46,62 @@ void CGameObject::RenderBoundingBox()
 	rect.bottom = (int)b - (int)t;
 
 	CGame::GetInstance()->Draw(l + rect.right / 2, t + rect.bottom / 2, 0.0f, bbox, rect.left, rect.top, rect.right, rect.bottom, false, false, 0.25f);
+}
+
+int CGameObject::IsCollidable()
+{
+	bool returnCondition = !isDeleted;
+	CGame* const game = CGame::GetInstance();
+	if (game != NULL)
+	{
+		float cx, cy;
+		game->GetCamPos(cx, cy);
+		RECT cam, collider;
+		cam.left = (LONG)cx;
+		cam.right = (LONG)(cx + game->GetBackBufferWidth());
+		cam.top = (LONG)cy;
+		cam.bottom = (LONG)(cy + game->GetBackBufferHeight());
+
+		float l, t, r, b;
+		GetBoundingBox(l, t, r, b);
+		collider.left = l;
+		collider.top = t;
+		collider.right = r;
+		collider.bottom = b;
+
+		if (!CCollision::CheckAABBOverlaps(cam, collider))
+			return false;
+		else
+			return returnCondition;
+	}
+	return returnCondition;
+}
+
+int CGameObject::IsDirectionColliable(float nx, float ny)
+{
+	bool returnCondition = 1;
+	CGame* const game = CGame::GetInstance();
+	if (game != NULL)
+	{
+		float cx, cy;
+		game->GetCamPos(cx, cy);
+		RECT cam, collider;
+		cam.left = (LONG)cx;
+		cam.right = (LONG)(cx + game->GetBackBufferWidth());
+		cam.top = (LONG)cy;
+		cam.bottom = (LONG)(cy + game->GetBackBufferHeight());
+
+		float l, t, r, b;
+		GetBoundingBox(l, t, r, b);
+		collider.left = l;
+		collider.top = t;
+		collider.right = r;
+		collider.bottom = b;
+
+		if (!CCollision::CheckAABBOverlaps(cam, collider))
+			return false;
+		else
+			return returnCondition;
+	}
+	return returnCondition;
 }

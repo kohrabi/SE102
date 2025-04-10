@@ -56,17 +56,6 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_KEYUP:
 		CGame::GetInstance()->SetKeyState((int)wParam, false);
 		break;
-	//case WM_SIZE:
-	//	{
-	//		RECT r;
-	//		GetClientRect(hWnd, &r);
-	//		UINT wR = r.right + 1;
-	//		UINT hR = r.bottom + 1;
-	//		UINT width = LOWORD(lParam);
-	//		UINT height = HIWORD(lParam);
-	//		CGame::GetInstance()->WindowResized(width, height);
-	//	}
-	//	return 0;
 	case WM_LBUTTONDOWN:
 		CGame::GetInstance()->leftMouseDown = true;
 		break;
@@ -112,6 +101,7 @@ void Update(DWORD dt)
 
 
 	DebugOutTitle(L"01 - Skeleton %f", (double)((1.0 / (dt / 1000.0)))); 
+	cout << (double)((1.0 / (dt / 1000.0))) << '\n';
 }
 
 /*

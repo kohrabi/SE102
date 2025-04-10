@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="20" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#aff9f0" nextlayerid="8" nextobjectid="135">
+ <properties>
+  <property name="collisionMap" type="file" value="1-1.txt"/>
+ </properties>
  <tileset firstgid="1" source="mariotiles.tsx"/>
  <tileset firstgid="871" source="marioTiles32.tsx"/>
  <tileset firstgid="892" source="cloud.tsx"/>
@@ -186,7 +189,7 @@
   <object id="97" template="Brick.tx" x="2128" y="304"/>
   <object id="99" template="Brick.tx" x="2128" y="288"/>
   <object id="100" template="Brick.tx" x="2144" y="304"/>
-  <object id="101" name="Mario" type="CMario" gid="2147484543" x="64" y="240" width="16" height="16"/>
+  <object id="101" name="Mario" type="CMario" gid="2147484543" x="0" y="304" width="16" height="16"/>
   <object id="113" template="OneWay.tx" x="240" y="256"/>
   <object id="109" template="OneWay.tx" x="272" y="224"/>
   <object id="110" template="OneWay.tx" x="400" y="256" width="80" height="16"/>

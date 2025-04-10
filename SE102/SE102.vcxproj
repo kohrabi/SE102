@@ -135,6 +135,7 @@
     <ClCompile Include="Engine\Graphics\Animation.cpp" />
     <ClCompile Include="Engine\Graphics\Animations.cpp" />
     <ClCompile Include="Engine\Helper.cpp" />
+    <ClCompile Include="Engine\Loaders\CollisionMapLoader.cpp" />
     <ClCompile Include="Engine\Loaders\SpritesLoader.cpp" />
     <ClCompile Include="Engine\PlayScene.cpp" />
     <ClCompile Include="Engine\Utils.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Engine\Graphics\Animation.h" />
     <ClInclude Include="Engine\Graphics\AnimationFrame.h" />
     <ClInclude Include="Engine\Graphics\Animations.h" />
+    <ClInclude Include="Engine\Loaders\CollisionMapLoader.h" />
     <ClInclude Include="Engine\Loaders\Loader.h" />
     <ClInclude Include="Engine\Loaders\SpritesLoader.h" />
     <ClInclude Include="Engine\Math\AABB.h" />
@@ -205,6 +207,7 @@
     <ClInclude Include="GameObjects\OneWay.h" />
     <ClInclude Include="GameObjects\QuestionBlock.h" />
     <ClInclude Include="GameObjects\Tile.h" />
+    <ClInclude Include="GameObjects\TileLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libs\tmxlite\tmxlite\tmxlite.vcxproj">

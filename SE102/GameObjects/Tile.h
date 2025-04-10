@@ -5,6 +5,7 @@
 
 #include "Engine/Math/Vector2i.h"
 
+
 class CTile : public CGameObject {
 private:
 	RECT textureRegion;

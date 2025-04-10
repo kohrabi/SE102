@@ -20,6 +20,7 @@
 #include "GameObjects/FirePiranha.h"
 #include "GameObjects/GreenKoopa.h"
 
+
 using namespace std;
 
 CPlayScene::CPlayScene(int id, wstring filePath):
@@ -166,6 +167,28 @@ void CPlayScene::LoadMap(string path) {
 	if (tMap.load(path)) {
 		const auto& tilesets = tMap.getTilesets();
 		
+		string collisionMapFilePath = "";
+		for (const auto& property : tMap.getProperties())
+		{
+			if (property.getName() == "collisionMap")
+			{
+				collisionMapFilePath = tMap.getWorkingDirectory() + "/" + property.getFileValue();
+			}
+		}
+
+		vector<LPTILELAYER> wallObjects = vector<LPTILELAYER>();
+		CollisionMapLoader loader(tMap.getTileCount().x, tMap.getTileCount().y, tMap.getTileSize().x, tMap.getTileSize().y);
+		if (collisionMapFilePath != "")
+		{
+			loader.Load(collisionMapFilePath);
+			for (RECT region : loader.collisionRegion)
+			{
+				LPTILELAYER tileLayer = new CTileLayer(region);
+				wallObjects.push_back(tileLayer);
+				objects.push_back(tileLayer);
+			}
+		}
+		
 		for (const auto& tileset : tilesets) {
 			textures->Add(STRING_TO_WSTRING(tileset.getImagePath()));
 		}
@@ -174,8 +197,9 @@ void CPlayScene::LoadMap(string path) {
 		backgroundColor = D3DXCOLOR(color.r / 255.0, color.g / 255.0, color.b / 255.0, color.a / 255.0);
 
 		const auto& layers = tMap.getLayers();
+
 		
-		LoadLayers(textures, tMap, layers, tilesets);
+		LoadLayers(textures, tMap, layers, tilesets, loader, wallObjects);
 
 		const auto& bounds = tMap.getBounds();
 
@@ -186,7 +210,8 @@ void CPlayScene::LoadMap(string path) {
 	}
 }
 
-void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, const vector<tmx::Tileset>& tilesets)
+void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, 
+		const vector<tmx::Tileset>& tilesets, const CollisionMapLoader& collisionLoader, const vector<LPTILELAYER>& collisionObjects)
 {
 	for (const auto& layer : layers) {
 		if (layer->getType() == tmx::Layer::Type::Object)
@@ -269,29 +294,40 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 							auto imagePosition = tilesetTiles[tiles[idx].ID - tileset.getFirstGID()].imagePosition;
 							auto tileSize = tilesetTiles[tiles[idx].ID - tileset.getFirstGID()].imageSize;
 							Vector2 offset(tileSize.x / 2.0f, tileSize.y / 2.0f);
+							Vector2 position(mapTileSize.x * i + offset.x, mapTileSize.y * j + offset.y);
 							if (layer->getName() != "Wall") {
 								objects.push_back(
 									new CTile(
-										mapTileSize.x * i + offset.x, 
-										mapTileSize.y * j + offset.y, 
+										position.x,
+										position.y,
 										textures->Get(STRING_TO_WSTRING(tileset.getImagePath())),
-										imagePosition.x / mapTileSize.x, 
-										imagePosition.y / mapTileSize.y, 
-										tileSize.x, 
+										imagePosition.x / mapTileSize.x,
+										imagePosition.y / mapTileSize.y,
+										tileSize.x,
 										tileSize.y)
 								);
 							}
 							else {
-								objects.push_back(
-									new CCollidableTile(
-										mapTileSize.x * i + offset.x, 
-										mapTileSize.y * j + offset.y, 
-										textures->Get(STRING_TO_WSTRING(tileset.getImagePath())),
-										imagePosition.x / mapTileSize.x, 
-										imagePosition.y / mapTileSize.y, 
-										tileSize.x, 
-										tileSize.y)
-								);
+								if (collisionObjects.size() > 0 && collisionLoader.map[j][i] - 1 > 0)
+								{
+									RECT textureRegion = GetTextureRegion(imagePosition.x / mapTileSize.x, imagePosition.y / mapTileSize.y, tileSize.x, tileSize.y);
+
+									collisionObjects[collisionLoader.map[j][i] - 1]
+										->AddTile(Tile(tileset.getImagePath(), position, textureRegion));
+								}
+								else
+								{
+									objects.push_back(
+										new CCollidableTile(
+											mapTileSize.x * i + offset.x, 
+											mapTileSize.y * j + offset.y, 
+											textures->Get(STRING_TO_WSTRING(tileset.getImagePath())),
+											imagePosition.x / mapTileSize.x, 
+											imagePosition.y / mapTileSize.y, 
+											tileSize.x, 
+											tileSize.y)
+									);
+								}
 							}
 						}
 					}
@@ -300,7 +336,7 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 		}
 		else if (layer->getType() == tmx::Layer::Type::Group) {
 			const auto& layerGroup = layer->getLayerAs<tmx::LayerGroup>();
-			LoadLayers(textures, tMap, layerGroup.getLayers(), tilesets);
+			LoadLayers(textures, tMap, layerGroup.getLayers(), tilesets, collisionLoader, collisionObjects);
 		}
 	}
 }
