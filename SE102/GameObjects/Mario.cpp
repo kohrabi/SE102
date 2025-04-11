@@ -12,9 +12,9 @@
 
 #include "QuestionBlock.h"
 #include "Coin.h"
-#include "Goomba.h"
-#include "GreenKoopa.h"
-#include "Mushroom.h"
+#include "NPC/Goomba.h"
+#include "NPC/GreenKoopa.h"
+#include "NPC/Mushroom.h"
 
 #include <iostream>
 using namespace std;

@@ -4,8 +4,8 @@
 
 #include "Engine/Math/Vector2.h"
 #include "Engine/Game.h"
-#include "GameObjects/CollisionCast.h"
-#include "GreenKoopa.h"
+#include "Engine/CollisionCast.h"
+#include "NPC/GreenKoopa.h"
 
 #pragma region X MOVEMENT
 constexpr float MINIMUM_WALK_VELOCITY = 0x00098 * SUBSUBSUBPIXEL_DELTA_TIME;

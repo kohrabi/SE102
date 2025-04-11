@@ -9,18 +9,19 @@
 #include "Graphics/Animation.h"
 #include "Graphics/Animations.h"
 
-#include "GameObjects/Tile.h"
-#include "GameObjects/CollidableTile.h"
+#include "GameObjects/TileObjects/Tile.h"
+#include "GameObjects/TileObjects/CollidableTile.h"
 #include "GameObjects/Mario.h"
 #include "GameObjects/QuestionBlock.h"
 #include "Engine/Helper.h"
 #include "GameObjects/OneWay.h"
 #include "GameObjects/Coin.h"
-#include "GameObjects/Goomba.h"
-#include "GameObjects/FirePiranha.h"
-#include "GameObjects/GreenKoopa.h"
-#include "GameObjects/RedKoopa.h"
+#include "GameObjects/NPC/Goomba.h"
+#include "GameObjects/NPC/FirePiranha.h"
+#include "GameObjects/NPC/GreenKoopa.h"
+#include "GameObjects/NPC/RedKoopa.h"
 
+#include "GameObjects/TileObjects/CollidableTileLayer.h"
 
 using namespace std;
 
@@ -177,14 +178,14 @@ void CPlayScene::LoadMap(string path) {
 			}
 		}
 
-		vector<LPTILELAYER> wallObjects = vector<LPTILELAYER>();
+		vector<LPCOLLIDABLETILELAYER> wallObjects = vector<LPCOLLIDABLETILELAYER>();
 		CollisionMapLoader loader(tMap.getTileCount().x, tMap.getTileCount().y, tMap.getTileSize().x, tMap.getTileSize().y);
 		if (collisionMapFilePath != "")
 		{
 			loader.Load(collisionMapFilePath);
 			for (AABB region : loader.collisionRegion)
 			{
-				LPTILELAYER tileLayer = new CCollidableTileLayer(region);
+				LPCOLLIDABLETILELAYER tileLayer = new CCollidableTileLayer(region);
 				wallObjects.push_back(tileLayer);
 				objects.push_back(tileLayer);
 			}
@@ -212,7 +213,7 @@ void CPlayScene::LoadMap(string path) {
 }
 
 void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, 
-		const vector<tmx::Tileset>& tilesets, const CollisionMapLoader& collisionLoader, const vector<LPTILELAYER>& collisionObjects)
+		const vector<tmx::Tileset>& tilesets, const CollisionMapLoader& collisionLoader, const vector<LPCOLLIDABLETILELAYER>& collisionObjects)
 {
 	for (const auto& layer : layers) {
 		if (layer->getType() == tmx::Layer::Type::Object)
@@ -289,6 +290,8 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 			const auto& mapTileSize = tMap.getTileSize();
 			const auto& mapSize = tMap.getTileCount();
 			const auto& tiles = tileLayer.getTiles();
+			CTileLayer* objTileLayer = new CTileLayer();
+			objects.push_back(objTileLayer);
 
 			for (const auto& tileset : tilesets) {
 				const auto& tilesetTiles = tileset.getTiles();
@@ -307,27 +310,18 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 							{
 								position.y -= offset.y;
 							}
+							RECT textureRegion = GetTextureRegion(imagePosition.x / mapTileSize.x, imagePosition.y / mapTileSize.y, tileSize.x, tileSize.y);
+
 							if (layer->getName() != "Wall") {
-								objects.push_back(
-									new CTile(
-										position.x,
-										position.y,
-										textures->Get(STRING_TO_WSTRING(tileset.getImagePath())),
-										imagePosition.x / mapTileSize.x,
-										imagePosition.y / mapTileSize.y,
-										tileSize.x,
-										tileSize.y)
-								);
+								objTileLayer->AddTile(Tile(tileset.getImagePath(), position, textureRegion));
 							}
 							else {
 								if (collisionObjects.size() > 0 && collisionLoader.map[j][i] - 1 > 0)
 								{
-									RECT textureRegion = GetTextureRegion(imagePosition.x / mapTileSize.x, imagePosition.y / mapTileSize.y, tileSize.x, tileSize.y);
-
 									collisionObjects[collisionLoader.map[j][i] - 1]
 										->AddTile(Tile(tileset.getImagePath(), position, textureRegion));
 								}
-								else
+								else // Exception for when the collision map decided to not work for some reason
 								{
 									objects.push_back(
 										new CCollidableTile(

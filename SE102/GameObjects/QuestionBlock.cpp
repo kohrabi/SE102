@@ -9,8 +9,8 @@
 
 #include "QuestionBlock.h"
 
-#include "GameObjects/Coin.h"
-#include "GameObjects/Mushroom.h"
+#include "Coin.h"
+#include "NPC/Mushroom.h"
 
 #include "ContentIds/QuestionBlock.h"
 

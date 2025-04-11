@@ -46,6 +46,7 @@ void CGreenKoopa::AttachHold(LPGAMEOBJECT player, float holdYOffset)
 void CGreenKoopa::DetachHold()
 {
     this->player = NULL;
+    position.y += holdYOffset / 2.0f;
     holdYOffset = 0;
 
 }

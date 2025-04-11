@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "Graphics/Textures.h"
 #include "Engine/Loaders/CollisionMapLoader.h"
-#include "GameObjects/TileLayer.h"
+#include "GameObjects/TileObjects/CollidableTileLayer.h"
 
 #include <string>
 #include <unordered_map>
@@ -35,7 +35,7 @@ public:
 
 	void LoadMap(string path);
 	void LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, 
-		const vector<tmx::Tileset>& tilesets, const CollisionMapLoader& collisionLoader, const vector<LPTILELAYER>& collisionObjects);
+		const vector<tmx::Tileset>& tilesets, const CollisionMapLoader& collisionLoader, const vector<LPCOLLIDABLETILELAYER>& collisionObjects);
 	void Clear();
 	void PurgeDeletedObjects();
 	
