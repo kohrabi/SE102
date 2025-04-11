@@ -250,6 +250,9 @@
     <ClInclude Include="Engine\Math\Vector2i.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ContentIds\MarioBig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Content\Scenes\1-1.txt" />

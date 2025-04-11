@@ -37,14 +37,17 @@ void CGreenKoopa::PlayerHit(int nx)
     }
 }
 
-void CGreenKoopa::AttachHold(LPGAMEOBJECT player)
+void CGreenKoopa::AttachHold(LPGAMEOBJECT player, float holdYOffset)
 {
     this->player = player;
+    this->holdYOffset = holdYOffset;
 }
 
 void CGreenKoopa::DetachHold()
 {
     this->player = NULL;
+    holdYOffset = 0;
+
 }
 
 void CGreenKoopa::OnNoCollision(DWORD dt)
@@ -70,20 +73,20 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
     if (!IsColliderInCamera())
         return;
+
+    velocity.y += OBJECT_FALL;
+    velocity.y = min(velocity.y, OBJECT_MAX_FALL);
+
     if (!inShell)
     {
-        velocity.x = GREEN_KOOPA_X_SPEED * nx;
-        velocity.y += OBJECT_FALL;
-        velocity.y = min(velocity.y, OBJECT_MAX_FALL);
-        
+        velocity.x = GREEN_KOOPA_X_SPEED * nx;   
     }
     else
     {
-
         if (player != NULL)
         {
             nx = player->GetNx();
-            position = player->GetPosition() + Vector2(16 * nx, - 8);
+            position = player->GetPosition() + Vector2(16 * nx, holdYOffset);
             velocity.x = 0;
             velocity.y = 0;
         }

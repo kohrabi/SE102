@@ -17,7 +17,6 @@ public:
 		: CGameObject(x, y, 0.0f), texture(texture), tileSize(tileSizeX, tileSizeY)  {
 		textureRegion = GetTextureRegion(xTile, yTile, tileSizeX, tileSizeY);
 	}
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override {}
 	void Render() override {
 		CGame* const game = CGame::GetInstance();
 		game->Draw(position.x, position.y, 0.0f, texture, &textureRegion);

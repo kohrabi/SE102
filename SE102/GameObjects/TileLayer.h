@@ -26,15 +26,15 @@ struct Tile
 	}
 };
 
-class CTileLayer : public CGameObject {
+class CCollidableTileLayer : public CGameObject {
 private:
 	vector<Tile> tiles;
 	AABB collision;
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0
-	CTileLayer() {}
-	CTileLayer(AABB collisionRect) : CGameObject(0, 0, 0.0f) {
+	CCollidableTileLayer() {}
+	CCollidableTileLayer(AABB collisionRect) : CGameObject(0, 0, 0.0f) {
 		collision = collisionRect;
 		tiles = vector<Tile>();
 	}
@@ -64,4 +64,4 @@ public:
 	}
 };
 
-typedef CTileLayer* LPTILELAYER;
+typedef CCollidableTileLayer* LPTILELAYER;

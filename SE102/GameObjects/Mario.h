@@ -23,15 +23,19 @@ constexpr float RUN_TIME_BEFORE_WALK = 10.0f * MAX_DELTA_TIME;
 #pragma endregion
 #pragma region Y MOVEMENT
 
-constexpr float JUMP_SLOW_INIT_VEL = 0x03800 * SUBSUBSUBPIXEL_DELTA_TIME;
-constexpr float JUMP_SLOW_HELD_GRAVITY = 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME;
-constexpr float JUMP_SLOW_GRAVITY = 0x00500 * SUBSUBSUBPIXEL_DELTA_TIME;
+constexpr float JUMP_INIT_VEL = 0x03800 * SUBSUBSUBPIXEL_DELTA_TIME;
+constexpr float JUMP_HELD_GRAVITY = 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME;
+constexpr float JUMP_GRAVITY = 0x00500 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 constexpr float JUMP_MAX_NEGATIVE = -2 * MAX_DELTA_TIME;
 
 constexpr float MAX_FALL_SPEED = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 #pragma endregion
+
+#define MARIO_POWERUP_SMALL 0
+#define MARIO_POWERUP_BIG 1
+#define MARIO_POWERUP_RACOON 2
 
 #define KEY_MOVE_LEFT 'A'
 #define KEY_MOVE_RIGHT 'D'
@@ -41,6 +45,8 @@ constexpr float MAX_FALL_SPEED = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 class CMario : public CGameObject {
 private:
 	int GetAnimationIDSmall();
+	int GetAnimationIDBig();
+	int GetAnimationID();
 	Vector2 accel;
 	float runBeforeWalkTimer = 0.0f;
 	bool skidding = false;
@@ -50,6 +56,7 @@ private:
 	CCollisionCast cast;
 	CGreenKoopa* holdShell;
 	bool isHolding = false;
+	int powerUp = 0;
 
     static bool IsContentLoaded;
     static void LoadContent();
@@ -69,10 +76,23 @@ public:
 	void SetState(int state) override;
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
-        const Vector2 MarioSize = Vector2(10.f, 16.f) / 2.0f;
-		left = position.x - MarioSize.x;
-		top = position.y - MarioSize.y;
-		right = position. x + MarioSize.x;
-		bottom = position.y + MarioSize.y - 1;
+		if (powerUp == MARIO_POWERUP_SMALL)
+		{
+			const Vector2 marioSize = Vector2(10.f, 16.f) / 2.0f;
+			left = position.x - marioSize.x;
+			top = position.y - marioSize.y;
+			right = position. x + marioSize.x;
+			bottom = position.y + marioSize.y - 1;
+		}
+		else
+		{
+			const float yOffset = 4.0f;
+			const Vector2 marioSize = Vector2(12.f, 24.f) / 2.0f;
+			left = position.x - marioSize.x;
+			top = position.y - marioSize.y + yOffset;
+			right = position.x + marioSize.x;
+			bottom = position.y + marioSize.y + yOffset;
+
+		}
 	}
 };

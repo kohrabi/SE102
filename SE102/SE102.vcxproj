@@ -176,6 +176,7 @@
     <ClInclude Include="ContentIds\Goomba.h" />
     <ClInclude Include="ContentIds\GreenKoopa.h" />
     <ClInclude Include="ContentIds\Mario.h" />
+    <ClInclude Include="ContentIds\MarioBig.h" />
     <ClInclude Include="ContentIds\Mushroom.h" />
     <ClInclude Include="ContentIds\QuestionBlock.h" />
     <ClInclude Include="ContentIds\RedKoopa.h" />

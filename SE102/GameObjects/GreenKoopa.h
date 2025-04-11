@@ -21,6 +21,7 @@ private:
 
     LPGAMEOBJECT player = NULL;
     bool inShell = false;
+    float holdYOffset = 0.0f;
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0
@@ -41,7 +42,7 @@ public:
 
     bool IsInShell() const { return inShell; }
     void PlayerHit(int nx);
-    void AttachHold(LPGAMEOBJECT player);
+    void AttachHold(LPGAMEOBJECT player, float holdYOffset);
     void DetachHold();
 
     void OnNoCollision(DWORD dt) override;

@@ -184,7 +184,7 @@ void CPlayScene::LoadMap(string path) {
 			loader.Load(collisionMapFilePath);
 			for (AABB region : loader.collisionRegion)
 			{
-				LPTILELAYER tileLayer = new CTileLayer(region);
+				LPTILELAYER tileLayer = new CCollidableTileLayer(region);
 				wallObjects.push_back(tileLayer);
 				objects.push_back(tileLayer);
 			}

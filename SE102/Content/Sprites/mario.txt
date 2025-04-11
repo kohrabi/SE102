@@ -31,7 +31,7 @@ Content\mario.png 0
 10009 272 0 287 15 0
 # EDITOR frameName Dead
 
-# HOLD STAND
+# HOLD IDLE
 10010 128 0 143 15 0
 
 # HOLD WALK
@@ -59,7 +59,7 @@ Content\mario.png 0
 # EDITOR animationName Dead
 
 10019 10010 100 
-# EDITOR animationName Hold Stand
+# EDITOR animationName Hold Idle
 
 10020 10011 100 10012 100 
 # EDITOR animationName Hold Walk

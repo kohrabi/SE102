@@ -66,6 +66,7 @@ void SpritesLoader::_ParseSection_ANIMATIONS(const string& line)
 
 void SpritesLoader::Load(LPCWSTR path)
 {
+	textures.clear();
 	DebugOut(L"[INFO] Start loading assets from : %s \n", path);
 	ifstream f;
 	f.open(path);
