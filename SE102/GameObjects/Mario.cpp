@@ -57,16 +57,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
         cast.CheckOverlap(coObjects);
         if (cast.collision.size() > 0)
         {
+            isHolding = true;
             if (holdShell == NULL)
             {
                 holdShell = dynamic_cast<CGreenKoopa*>(cast.collision[0]);
-
-                if (powerUp == MARIO_POWERUP_SMALL)
-                    holdShell->AttachHold(this, -8);
+                if (holdShell->IsInShell())
+                {
+                    if (powerUp == MARIO_POWERUP_SMALL)
+                        holdShell->AttachHold(this, -8);
+                    else
+                        holdShell->AttachHold(this, 0);
+                }
                 else
-                    holdShell->AttachHold(this, 0);
+                    isHolding = false;
             }
-            isHolding = true;
         }
     }
 

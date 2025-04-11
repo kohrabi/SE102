@@ -87,7 +87,7 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
         if (player != NULL)
         {
             nx = player->GetNx();
-            position = player->GetPosition() + Vector2(16 * nx, holdYOffset);
+            position = player->GetPosition() + Vector2(12 * nx, holdYOffset);
             velocity.x = 0;
             velocity.y = 0;
         }

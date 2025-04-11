@@ -37,7 +37,7 @@
 #define WINDOW_CLASS_NAME L"Game Window"
 #define MAIN_WINDOW_TITLE L"MARIO"
 #define SCREEN_WIDTH 256
-#define SCREEN_HEIGHT 208 + 20
+#define SCREEN_HEIGHT 208 + 30
 
 
 using namespace std;
@@ -247,7 +247,7 @@ int WINAPI WinMain(
 	CGame * game = CGame::GetInstance();
 	game->Init(hWnd, hInstance);
 
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_WIDTH * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 8, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 
 	LoadResources();

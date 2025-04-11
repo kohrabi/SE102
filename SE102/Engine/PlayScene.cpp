@@ -64,6 +64,9 @@ void CPlayScene::Load()
 		}
 	}
 
+	CTextures* const textures = CTextures::GetInstance();
+	textures->Add(L"Content/menu.png");
+
 	f.close();
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath.c_str());
@@ -77,7 +80,9 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
-		coObjects.push_back(objects[i]);
+		LPGAMEOBJECT obj = objects[i];
+		if (obj->IsCollidable() && obj->IsColliderInCamera())
+			coObjects.push_back(objects[i]);
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -106,8 +111,19 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	CTextures* const textures = CTextures::GetInstance();
+	CGame* const game = CGame::GetInstance();
+	float cx, cy;
+	game->GetCamPos(cx, cy);
+
+	cy += 72.0f / 2.0f;
+	game->SetCamPos(cx, cy);
+
+
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+
+	game->Draw(cx + 256.0f / 2.0f - 8.f, cy + game->GetBackBufferHeight() - (60.0f - 48.0f), 0.0f, textures->Get(L"Content/menu.png"));
 }
 
 /*
