@@ -34,6 +34,7 @@ public:
         ogPosition = position;
         SetState(FIRE_PIRANHA_DOWN);
         position.y = y + 32.0f;
+        layer = SortingLayer::NPC;
     }
     void SetState(int state) override;
 	int IsCollidable() override { return !isDeleted; };

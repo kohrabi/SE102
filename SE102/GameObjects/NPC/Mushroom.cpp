@@ -62,5 +62,5 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 void CMushroom::Render() {
     CSprites* const sprites = CSprites::GetInstance();
 
-    sprites->Get(MUSHROOM_ID_SPRITE_IDLE)->Draw(position.x, position.y);
+    sprites->Get(MUSHROOM_ID_SPRITE_IDLE)->Draw(position.x, position.y, GetLayer(layer, orderInLayer));
 }

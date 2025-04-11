@@ -11,7 +11,7 @@ private:
 	AABB collision{ 0 };
 public:
 	CCollidableTileLayer() : CTileLayer() {}
-	CCollidableTileLayer(AABB collisionRect) : CTileLayer() { collision = collisionRect; }
+	CCollidableTileLayer(AABB collisionRect) : CTileLayer() { collision = collisionRect; layer = SortingLayer::WALL; }
 
 	int IsCollidable() override { return true; };
 	int IsDirectionColliable(float nx, float ny) override { return true; }

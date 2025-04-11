@@ -104,7 +104,7 @@ void CGreenKoopa::Render() {
 
     if (!inShell)
     {
-        animations->Get(GREEN_KOOPA_ID_ANIMATION_WALK)->Render(position.x, position.y - 0);
+        animations->Get(GREEN_KOOPA_ID_ANIMATION_WALK)->Render(position.x, position.y - 0, GetLayer(layer, orderInLayer));
     }
     else
     {
@@ -113,7 +113,7 @@ void CGreenKoopa::Render() {
             animation->Play();
         else
             animation->Stop();
-        animation->Render(position.x, position.y + 8, nx > 0, true);
+        animation->Render(position.x, position.y + 8, GetLayer(layer, orderInLayer), nx > 0, true);
 
     }
     RenderBoundingBox();

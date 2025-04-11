@@ -31,6 +31,16 @@ RECT GetTextureRegion(int xTile, int yTile, int xSize, int ySize)
 	return r;
 }
 
+float GetLayer(SortingLayer layer, int orderInLayer)
+{
+	return (float)layer / (float)SORTING_LAYER_SIZE + 0.001f * orderInLayer;
+}
+
+bool CGameObject::CompareSortingLayer(const LPGAMEOBJECT a, const LPGAMEOBJECT b)
+{
+	return GetLayer(a->GetSortingLayer(), a->GetOrderInLayer()) < GetLayer(b->GetSortingLayer(), b->GetOrderInLayer());
+}
+
 void CGameObject::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(position.x, position.y, 0);
@@ -46,7 +56,7 @@ void CGameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	CGame::GetInstance()->Draw(l + rect.right / 2, t + rect.bottom / 2, 0.0f, bbox, rect.left, rect.top, rect.right, rect.bottom, false, false, 0.25f);
+	CGame::GetInstance()->Draw(l + rect.right / 2, t + rect.bottom / 2, 0.0f, 1.0f, bbox, rect.left, rect.top, rect.right, rect.bottom, false, false, 0.25f);
 }
 
 bool CGameObject::IsColliderInCamera()

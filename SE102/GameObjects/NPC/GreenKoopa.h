@@ -8,7 +8,7 @@
 
 #define GREEN_KOOPA_INTRO_Y_VELOCITY 0.03
 
-#define GREEN_KOOPA_X_SPEED 0x00A00 * SUBSUBSUBPIXEL_DELTA_TIME
+#define GREEN_KOOPA_X_SPEED 0x00F00 * SUBSUBSUBPIXEL_DELTA_TIME
 #define GREEN_KOOPA_SHELL_X_SPEED 0x02800 * SUBSUBSUBPIXEL_DELTA_TIME
 #define GREEN_KOOPA_KILL_TIME 500
 
@@ -19,6 +19,7 @@ private:
     static void LoadContent();
     static bool IsContentLoaded;
 
+protected:
     LPGAMEOBJECT player = NULL;
     bool inShell = false;
     float holdYOffset = 0.0f;
@@ -29,6 +30,7 @@ public:
     { 
         LoadContent();
         nx = -1;
+        layer = SortingLayer::NPC;
     }
 	int IsCollidable() override { return !isDeleted; };
     int IsBlocking() override { return false; }

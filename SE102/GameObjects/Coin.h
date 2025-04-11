@@ -27,6 +27,7 @@ public:
     { 
         LoadContent(); 
         SetState(COIN_STATE_NORMAL);
+        layer = SortingLayer::BLOCK;
     }
 
     void SetState(int state) override;

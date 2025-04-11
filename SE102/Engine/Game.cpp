@@ -168,7 +168,7 @@ void CGame::SetPointSamplerState()
 	Draw the whole texture or part of texture onto screen
 	NOTE: This function is OBSOLTED in this example. Use Sprite::Render instead 
 */
-void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, bool flipX, bool flipY, float alpha, int sprite_width, int sprite_height)
+void CGame::Draw(float x, float y, float rotation, float z, LPTEXTURE tex, RECT* rect, bool flipX, bool flipY, float alpha, int sprite_width, int sprite_height)
 {
 	if (tex == NULL) return; 
 
@@ -270,7 +270,7 @@ void CGame::Draw(float x, float y, float rotation, LPTEXTURE tex, RECT* rect, bo
 	D3DXMATRIX matTranslation;
 
 	// Create the translation matrix
-	// ------------------------------------------ CURRENT FLOORING THE POSITION FOR PIXEL ART
+	// ------------------------------------------ CURRENT ROUND THE POSITION FOR PIXEL ART
 	D3DXMatrixTranslation(&matTranslation, roundf(x - cx), roundf(backBufferHeight - y + cy), 0.1f);
 
 	D3DXMATRIX matRotation;

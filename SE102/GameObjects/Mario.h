@@ -42,6 +42,35 @@ constexpr float MAX_FALL_SPEED = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 #define KEY_RUN 'J'
 #define KEY_JUMP 'K'
 
+// Y ofset
+// Held object Large: -$02
+// Suit: $0D
+// Small: $0F
+// ObjectKickXVelMoving:	.byte -$30, $30
+/*
+	; Some objects have "feet" when they are waking up,
+	; this offsets their Y depending on whether v-flipped
+ObjWakeUp_FeetYOff:	.byte 10, -10
+; In units of $10 ticks by timer 3...
+
+ObjKickXvel:	.byte $18, -$18
+
+
+	; Different X and X Hi offsets applied to object being held by Player
+	; Changes whether not doing anything special, in pipe, etc.
+ObjectHoldXOff:		.byte $0B, -$0B, $04, -$04, $04, $0B, -$13, $04, -$08, $04, $00
+ObjectHoldXHiOff:	.byte $00,  $FF, $00,  $FF, $00, $00,  $FF, $00,  $FF, $00, $00
+
+	; Object-to-object hit resultant X velocity
+ObjectToObject_HitXVel:	.byte -$08, $08
+
+Player grow 20
+Player_Grow = $2f (shrinking!)
+
+bounce #-$38
+Larger bounce #-$70
+*/
+
 class CMario : public CGameObject {
 private:
 	int GetAnimationIDSmall();

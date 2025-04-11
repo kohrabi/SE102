@@ -12,7 +12,9 @@ private:
 	Vector2i tileSize;
 public:
 	CCollidableTile(float x, float y, LPTEXTURE texture, int xTile, int yTile, int tileSizeX, int tileSizeY) 
-		: CTile(x, y, texture, xTile, yTile, tileSizeX, tileSizeY)  {}
+		: CTile(x, y, texture, xTile, yTile, tileSizeX, tileSizeY) {
+		layer = SortingLayer::WALL;
+	}
 
 	void Render() override {
 		CTile::Render();

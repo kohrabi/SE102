@@ -110,6 +110,7 @@ void Render()
 {
 	CGame* const g = CGame::GetInstance();
 
+
 	ID3D10Device* pD3DDevice = g->GetDirect3DDevice();
 	IDXGISwapChain* pSwapChain = g->GetSwapChain();
 	ID3D10RenderTargetView* pRenderTargetView = g->GetRenderTargetView();

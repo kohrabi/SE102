@@ -31,7 +31,7 @@ public:
 		return texture->getHeight();
 	}
 
-	void Draw(float x, float y, bool flipX = false, bool flipY = false);
+	void Draw(float x, float y, float z, bool flipX = false, bool flipY = false);
 };
 
 typedef CSprite* LPSPRITE;

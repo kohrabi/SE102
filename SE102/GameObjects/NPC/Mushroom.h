@@ -31,13 +31,14 @@ public:
         maxYPos = y - 16;
         nx = 1;
         inIntro = true;
+        layer = SortingLayer::NPC;
     }
 	int IsCollidable() override { return !isDeleted && !inIntro; };
     int IsBlocking() override { return false; }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) { 
-        left = position.x - 8; 
+        left = position.x - 4; 
         top = position.y - 8; 
-        right = position.x + 8; 
+        right = position.x + 4; 
         bottom = position.y + 8; 
     }
 

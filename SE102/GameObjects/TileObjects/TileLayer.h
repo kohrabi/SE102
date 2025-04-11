@@ -20,6 +20,7 @@ public:
 	// Tile number yTile counting from 0
 	CTileLayer() : CGameObject(0, 0, 0.0f) {
 		tiles = vector<Tile>();
+		layer = SortingLayer::BACKGROUND;
 	}
 
 	void AddTile(Tile tile) { tiles.push_back(tile); }
@@ -34,7 +35,7 @@ public:
 		CTextures* const textures = CTextures::GetInstance();
 		for (auto& tile : tiles)
 		{
-			game->Draw(tile.position.x, tile.position.y, 0.0f, textures->Get(tile.texturePath), &tile.textureRegion);
+			game->Draw(tile.position.x, tile.position.y, 0.0f, GetLayer(layer, orderInLayer), textures->Get(tile.texturePath), &tile.textureRegion);
 		}
 	}
 };

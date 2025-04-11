@@ -27,6 +27,7 @@ public:
     { 
         LoadContent(); 
         nx = -1;
+        layer = SortingLayer::NPC;
     }
 	int IsCollidable() override { 
         return !isDeleted && !kill; };

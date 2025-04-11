@@ -3,6 +3,8 @@
 #include "Engine/GameObject.h"
 #include "Engine/debug.h"
 
+#include "Engine/CollisionCast.h"
+
 #define QUESTION_BLOCK_SPAWN_COIN 1
 #define QUESTION_BLOCK_SPAWN_MUSHROOM 2
 #define QUESTION_BLOCK_SPAWN_ONE_UP 3
@@ -16,24 +18,20 @@ private:
 	bool isActive = true;
 	float animationTimer = 0.0f;
 	float ogYPos = 0.0f;
+	bool isHit = false;
+	CCollisionCast cast;
 	
 	static bool IsContentLoaded;
 	static void LoadContent();
 public:
 
-    CQuestionBlock(float x, float y, int type, int count) 
-		: CGameObject(x, y, 0.0f), spawnType(type), spawnCount(count)
-	{
-		ASSERT(spawnType > 0 && spawnType <= 3, "Invalid spawn type");
-		ASSERT(spawnCount >= 0, "Invalid spawn count");
-		ogYPos = y;
-		LoadContent();
-	}
+	CQuestionBlock(float x, float y, int type, int count);
 
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
     
 	void Hit();
+
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
 		const float size = 16.0f / 2.0f;

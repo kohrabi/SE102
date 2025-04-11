@@ -88,6 +88,6 @@ void CFirePiranha::Render() {
             flipX = true;
         if (sign(playerPosition.y) < 0)
             animationID = FIRE_PIRANHA_ID_SPRITE_LOOK_UP_CLOSE;
-        sprites->Get(animationID)->Draw(position.x, position.y, flipX);
+        sprites->Get(animationID)->Draw(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
     }
 }

@@ -59,7 +59,7 @@ void CGoomba::Render() {
     CAnimations* const animations = CAnimations::GetInstance();
 
     if (kill)
-        animations->Get(GOOMBA_ID_ANIMATION_DEAD)->Render(position.x, position.y);
+        animations->Get(GOOMBA_ID_ANIMATION_DEAD)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
     else
-        animations->Get(GOOMBA_ID_ANIMATION_WALK)->Render(position.x, position.y);
+        animations->Get(GOOMBA_ID_ANIMATION_WALK)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
 }

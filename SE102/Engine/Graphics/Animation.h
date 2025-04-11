@@ -32,7 +32,7 @@ public:
 	void Stop() { stop = true; }
 	void Play() { stop = false; }
 	void Reset() { currentFrame = 0; }
-	void Render(float x, float y, bool flipX = false, bool flipY = false);
+	void Render(float x, float y, float z, bool flipX = false, bool flipY = false);
 };
 
 typedef CAnimation* LPANIMATION;

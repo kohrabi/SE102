@@ -20,49 +20,14 @@ void CRedKoopa::LoadContent()
     loader.Load(RED_KOOPA_SPRITES_PATH);
 }
 
-CRedKoopa::CRedKoopa(float x, float y) : CGameObject(x, y, 0.0f)
+CRedKoopa::CRedKoopa(float x, float y) : CGreenKoopa(x, y)
 {
     LoadContent();
     nx = -1;
     cast.SetConditionFunction([this](LPGAMEOBJECT obj) {
         return !(obj == this || obj->GetVelocity().length() > 0);
     });
-}
-
-void CRedKoopa::PlayerHit(int nx)
-{
-    if (!inShell)
-    {
-        velocity.x = 0;
-        inShell = true;
-        this->nx = 0;
-    }
-    else
-    {
-        if (this->nx == -nx)
-            this->nx = 0;
-        else
-            this->nx = -nx;
-    }
-}
-
-void CRedKoopa::OnNoCollision(DWORD dt)
-{
-    position.x += velocity.x * dt;
-    position.y += velocity.y * dt;
-}
-
-void CRedKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
-{
-    if (e->nx != 0 && e->obj->IsBlocking())
-    {
-        nx *= -1;
-    }
-    if (e->ny != 0 && e->obj->IsBlocking())
-    {
-        velocity.y = 0.0f;
-    }
-    
+    layer = SortingLayer::NPC;
 }
 
 void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -70,26 +35,16 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
     if (!IsColliderInCamera())
         return;
 
-    cast.SetBoundingBox(position + Vector2((7) * nx, 16), Vector2(4, 6));
-    cast.CheckOverlap(coObjects);
-    if (cast.collision.size() <= 0)
-    {
-        nx *= -1;
-    }
-
     if (!inShell)
     {
-        velocity.x = RED_KOOPA_X_SPEED * nx;
-        velocity.y += OBJECT_FALL;
-        velocity.y = min(velocity.y, OBJECT_MAX_FALL);
+        cast.SetBoundingBox(position + Vector2((7) * nx, 16), Vector2(4, 6));
+        cast.CheckOverlap(coObjects);
+        if (cast.collision.size() <= 0)
+        {
+            nx *= -1;
+        }
     }
-    else
-    {
-        velocity.x = RED_KOOPA_SHELL_X_SPEED * nx;
-    }
-    CCollision::GetInstance()->Process(this, dt, coObjects);
-
-
+    CGreenKoopa::Update(dt, coObjects);
 }
 
 void CRedKoopa::Render() {
@@ -97,7 +52,7 @@ void CRedKoopa::Render() {
 
     if (!inShell)
     {
-        animations->Get(RED_KOOPA_ID_ANIMATION_WALK)->Render(position.x, position.y - 0, nx > 0 ? true : false);
+        animations->Get(RED_KOOPA_ID_ANIMATION_WALK)->Render(position.x, position.y - 0, GetLayer(layer, orderInLayer), nx > 0);
     }
     else
     {
@@ -106,9 +61,8 @@ void CRedKoopa::Render() {
             animation->Play();
         else
             animation->Stop();
-        animation->Render(position.x, position.y + 8, nx > 0 ? true : false);
+        animation->Render(position.x, position.y + 8, GetLayer(layer, orderInLayer), nx > 0, true);
 
     }
     cast.Render();
-    RenderBoundingBox();
 }

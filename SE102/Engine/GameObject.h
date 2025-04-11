@@ -17,20 +17,37 @@
 #define OBJECT_FALL 0x00300 * SUBSUBSUBPIXEL_DELTA_TIME
 #define OBJECT_MAX_FALL 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME
 
+// Bounce Dead -$30
+
 RECT GetTextureRegion(int x, int y, int xSize, int ySize);
 
 class CGameObject;
 class CGame;
+
+#define SORTING_LAYER_SIZE 4
+enum SortingLayer
+{
+	START = 1,
+	BACKGROUND,
+	NPC,
+	MARIO,
+	BLOCK,
+	WALL,
+};
+
+float GetLayer(SortingLayer layer, int orderInLayer);
 
 class CGameObject
 {
 protected:
 	Vector2 position = Vector2::Zero;
 	Vector2 velocity;
+	int orderInLayer = 0;
 
 	float rotation = 0.0f;
 
 	bool isDeleted = false;
+	SortingLayer layer;
 
 	int nx;
 	int state;
@@ -45,7 +62,10 @@ public:
 	int GetNx() const { return nx; }
 	int GetState() const { return state; }
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
-
+	SortingLayer GetSortingLayer() const { return layer; }
+	int GetOrderInLayer() const { return orderInLayer; }
+	
+	void SetOrderInLayer(int order) { orderInLayer = order; }
 	void SetRotation(float newVal) { rotation = newVal; }
 	virtual void SetState(int state) { this->state = state; }
 	void SetNx(int newVal) { nx = newVal; }
@@ -82,5 +102,7 @@ public:
 
 	// Is this object collide with other object at certain direction ( like ColorBox )
 	virtual int IsDirectionColliable(float nx, float ny) { return 1; }
+
+	static bool CompareSortingLayer(const LPGAMEOBJECT a, const LPGAMEOBJECT b);
 };
 typedef CGameObject* LPGAMEOBJECT;

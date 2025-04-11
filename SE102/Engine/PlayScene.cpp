@@ -119,11 +119,21 @@ void CPlayScene::Render()
 	cy += 72.0f / 2.0f;
 	game->SetCamPos(cx, cy);
 
+	if (!is_sorted(objects.begin(), objects.end(), CGameObject::CompareSortingLayer))
+	{
+		vector<LPGAMEOBJECT> sortedObjects{ objects.begin(), objects.end() };
+		sort(sortedObjects.begin(), sortedObjects.end(), CGameObject::CompareSortingLayer);
+		for (int i = 0; i < sortedObjects.size(); i++)
+			sortedObjects[i]->Render();
+	}
+	else
+	{
+		for (int i = 0; i < objects.size(); i++)
+			objects[i]->Render();
+	}
 
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
 
-	game->Draw(cx + 256.0f / 2.0f - 8.f, cy + game->GetBackBufferHeight() - (60.0f - 48.0f), 0.0f, textures->Get(L"Content/menu.png"));
+	game->Draw(cx + 256.0f / 2.0f - 8.f, cy + game->GetBackBufferHeight() - (60.0f - 48.0f), 0.0f, 1.0f, textures->Get(L"Content/menu.png"));
 }
 
 /*
@@ -217,7 +227,8 @@ void CPlayScene::LoadMap(string path) {
 		const auto& layers = tMap.getLayers();
 
 		
-		LoadLayers(textures, tMap, layers, tilesets, loader, wallObjects);
+		int order = 0;
+		LoadLayers(textures, tMap, layers, tilesets, loader, wallObjects, order);
 
 		const auto& bounds = tMap.getBounds();
 
@@ -229,7 +240,7 @@ void CPlayScene::LoadMap(string path) {
 }
 
 void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, 
-		const vector<tmx::Tileset>& tilesets, const CollisionMapLoader& collisionLoader, const vector<LPCOLLIDABLETILELAYER>& collisionObjects)
+		const vector<tmx::Tileset>& tilesets, const CollisionMapLoader& collisionLoader, const vector<LPCOLLIDABLETILELAYER>& collisionObjects, int& i)
 {
 	for (const auto& layer : layers) {
 		if (layer->getType() == tmx::Layer::Type::Object)
@@ -307,6 +318,7 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 			const auto& mapSize = tMap.getTileCount();
 			const auto& tiles = tileLayer.getTiles();
 			CTileLayer* objTileLayer = new CTileLayer();
+			objTileLayer->SetOrderInLayer(i);
 			objects.push_back(objTileLayer);
 
 			for (const auto& tileset : tilesets) {
@@ -358,8 +370,9 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 		}
 		else if (layer->getType() == tmx::Layer::Type::Group) {
 			const auto& layerGroup = layer->getLayerAs<tmx::LayerGroup>();
-			LoadLayers(textures, tMap, layerGroup.getLayers(), tilesets, collisionLoader, collisionObjects);
+			LoadLayers(textures, tMap, layerGroup.getLayers(), tilesets, collisionLoader, collisionObjects, i);
 		}
+		i++;
 	}
 }
 

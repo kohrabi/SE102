@@ -39,6 +39,7 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
     cast.SetConditionFunction([this](LPGAMEOBJECT obj) {
         return dynamic_cast<CGreenKoopa*>(obj) != nullptr;
     });
+    layer = SortingLayer::MARIO;
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -168,7 +169,7 @@ void CMario::Render() {
         animation->SetTimeScale(0.5f);
 
     bool flipX = nx > 0 ? true : false;
-    animation->Render(position.x, position.y, flipX);
+    animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
     RenderBoundingBox();
     cast.RenderBoundingBox();
 }

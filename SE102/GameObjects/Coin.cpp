@@ -54,8 +54,8 @@ void CCoin::Render() {
     CSprites* const sprites = CSprites::GetInstance();
 
     if (state == COIN_STATE_INTRO)
-        animations->Get(COIN_ID_ANIMATION_ROTATE)->Render(position.x, position.y);
+        animations->Get(COIN_ID_ANIMATION_ROTATE)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
     else
-        sprites->Get(COIN_ID_SPRITE_NORMAL)->Draw(position.x, position.y);
+        sprites->Get(COIN_ID_SPRITE_NORMAL)->Draw(position.x, position.y, GetLayer(layer, orderInLayer));
 
 }
