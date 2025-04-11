@@ -42,11 +42,13 @@ public:
 	Vector2 GetPosition() const { return position; }
 	Vector2 GetVelocity() { return velocity; }
 	float GetRotation() const { return rotation; }
+	int GetNx() const { return nx; }
 	int GetState() const { return state; }
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
 
 	void SetRotation(float newVal) { rotation = newVal; }
 	virtual void SetState(int state) { this->state = state; }
+	void SetNx(int newVal) { nx = newVal; }
 
 	void Delete() {
 		if (isDeleted)

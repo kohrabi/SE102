@@ -19,6 +19,7 @@ private:
     static void LoadContent();
     static bool IsContentLoaded;
 
+    LPGAMEOBJECT player = NULL;
     bool inShell = false;
 public:
 	// Tile number xTile counting from 0
@@ -38,7 +39,10 @@ public:
         bottom = position.y + 16; 
     }
 
+    bool IsInShell() const { return inShell; }
     void PlayerHit(int nx);
+    void AttachHold(LPGAMEOBJECT player);
+    void DetachHold();
 
     void OnNoCollision(DWORD dt) override;
     void OnCollisionWith(LPCOLLISIONEVENT e) override;

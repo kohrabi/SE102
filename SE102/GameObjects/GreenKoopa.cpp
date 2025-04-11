@@ -37,6 +37,16 @@ void CGreenKoopa::PlayerHit(int nx)
     }
 }
 
+void CGreenKoopa::AttachHold(LPGAMEOBJECT player)
+{
+    this->player = player;
+}
+
+void CGreenKoopa::DetachHold()
+{
+    this->player = NULL;
+}
+
 void CGreenKoopa::OnNoCollision(DWORD dt)
 {
     position.x += velocity.x * dt;
@@ -65,10 +75,22 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
         velocity.x = GREEN_KOOPA_X_SPEED * nx;
         velocity.y += OBJECT_FALL;
         velocity.y = min(velocity.y, OBJECT_MAX_FALL);
+        
     }
     else
     {
-        velocity.x = GREEN_KOOPA_SHELL_X_SPEED * nx;
+
+        if (player != NULL)
+        {
+            nx = player->GetNx();
+            position = player->GetPosition() + Vector2(16 * nx, - 8);
+            velocity.x = 0;
+            velocity.y = 0;
+        }
+        else
+        {
+            velocity.x = GREEN_KOOPA_SHELL_X_SPEED * nx;
+        }
     }
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -87,7 +109,7 @@ void CGreenKoopa::Render() {
             animation->Play();
         else
             animation->Stop();
-        animation->Render(position.x, position.y + 8);
+        animation->Render(position.x, position.y + 8, nx > 0, true);
 
     }
     RenderBoundingBox();

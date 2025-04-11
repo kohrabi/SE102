@@ -101,7 +101,6 @@ void Update(DWORD dt)
 
 
 	DebugOutTitle(L"01 - Skeleton %f", (double)((1.0 / (dt / 1000.0)))); 
-	cout << (double)((1.0 / (dt / 1000.0))) << '\n';
 }
 
 /*

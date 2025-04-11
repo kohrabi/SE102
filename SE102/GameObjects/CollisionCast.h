@@ -2,16 +2,17 @@
 
 #include "Engine/GameObject.h"
 
-class CCollisionCast : public CGameObject
+#include <functional>
+
+class CCollisionCast
 {
 private:
 	float l = 0, t = 0, r = 0, b = 0;
-	LPGAMEOBJECT parent = NULL;
+	function<bool(LPGAMEOBJECT)> checkCondition;
 public:
-	int collisionCount = 0;
+	vector<LPGAMEOBJECT> collision = vector<LPGAMEOBJECT>();
 	CCollisionCast() {}
 	CCollisionCast(Vector2 position, Vector2 size)
-		: parent(parent)
 	{
 		l = position.x - size.x / 2.0f;
 		t = position.y - size.y / 2.0f;
@@ -19,7 +20,7 @@ public:
 		b = position.y + size.y / 2.0f;
 	}
 	CCollisionCast(float l, float t, float r, float b)
-		: l(l), t(t), r(r), b(b), parent(parent) { }
+		: l(l), t(t), r(r), b(b) { }
 
 	void SetBoundingBox(Vector2 position, Vector2 size)
 	{
@@ -36,12 +37,14 @@ public:
 		this->r = r;
 		this->b = b;
 	}
-	void SetParent(LPGAMEOBJECT parent)
+
+	void SetConditionFunction(function<bool(LPGAMEOBJECT)> checkCondition)
 	{
-		this->parent = parent;
+		this->checkCondition = checkCondition;
 	}
 
-	void Render() override { RenderBoundingBox(); }
+	void RenderBoundingBox();
+	void Render() { RenderBoundingBox(); }
 
 	void CheckOverlap(vector<LPGAMEOBJECT>* coObjects = NULL);
 

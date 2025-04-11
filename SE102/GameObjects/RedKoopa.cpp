@@ -20,6 +20,15 @@ void CRedKoopa::LoadContent()
     loader.Load(RED_KOOPA_SPRITES_PATH);
 }
 
+CRedKoopa::CRedKoopa(float x, float y) : CGameObject(x, y, 0.0f)
+{
+    LoadContent();
+    nx = -1;
+    cast.SetConditionFunction([this](LPGAMEOBJECT obj) {
+        return !(obj == this || obj->GetVelocity().length() > 0);
+    });
+}
+
 void CRedKoopa::PlayerHit(int nx)
 {
     if (!inShell)
@@ -63,7 +72,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
     cast.SetBoundingBox(position + Vector2((7) * nx, 16), Vector2(4, 6));
     cast.CheckOverlap(coObjects);
-    if (cast.collisionCount <= 0)
+    if (cast.collision.size() <= 0)
     {
         nx *= -1;
     }

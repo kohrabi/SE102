@@ -29,10 +29,42 @@ void CMario::LoadContent()
     loader.Load(MARIO_SPRITES_PATH);
 }
 
+CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
+{
+    LoadContent();
+    nx = 1;
+    cast.SetConditionFunction([this](LPGAMEOBJECT obj) {
+        return dynamic_cast<CGreenKoopa*>(obj) != nullptr;
+    });
+}
+
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
     CGame* const game = CGame::GetInstance();
     float dts = dt / 1000.f;
     
+
+    isHolding = false;
+    if (game->IsKeyDown(KEY_RUN))
+    {
+        cast.SetBoundingBox(position + Vector2((10) * nx, 0), Vector2(4, 6));
+        cast.CheckOverlap(coObjects);
+        if (cast.collision.size() > 0)
+        {
+            if (holdShell == NULL)
+            {
+                holdShell = dynamic_cast<CGreenKoopa*>(cast.collision[0]);
+                holdShell->AttachHold(this);
+            }
+            isHolding = true;
+        }
+    }
+
+    if (!isHolding && holdShell != NULL)
+    {
+        holdShell->DetachHold();
+        holdShell = NULL;
+    }
+
     // X Movement
     accel.x = 0;
 
@@ -109,6 +141,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
     velocity.y = min(velocity.y, MAX_FALL_SPEED);
 
+
     //cout << velocity.y << '\n';
 
     CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -126,10 +159,18 @@ void CMario::Render() {
     bool flipX = nx > 0 ? true : false;
     animation->Render(position.x, position.y, flipX);
     RenderBoundingBox();
+    cast.RenderBoundingBox();
 }
 
 int CMario::GetAnimationIDSmall()
 {
+    if (isHolding)
+    {
+        if (abs(velocity.x) > 0)
+            return MARIO_ID_ANIMATION_HOLD_WALK;
+        else
+            return MARIO_ID_ANIMATION_HOLD_STAND;
+    }
     if (!isOnGround)
         return MARIO_ID_ANIMATION_JUMP;
     if (skidding)
@@ -189,6 +230,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         CGreenKoopa* const koopa = dynamic_cast<CGreenKoopa*>(e->obj);
         if (e->ny >= 0)
         {
+            if (koopa->IsInShell() && koopa->GetVelocity().x == 0.0f)
+            {
+                koopa->SetNx(nx);
+            }
             cout << "ouch!!!\n";
         }
         else

@@ -4,6 +4,8 @@
 
 #include "Engine/Math/Vector2.h"
 #include "Engine/Game.h"
+#include "GameObjects/CollisionCast.h"
+#include "GreenKoopa.h"
 
 #pragma region X MOVEMENT
 constexpr float MINIMUM_WALK_VELOCITY = 0x00098 * SUBSUBSUBPIXEL_DELTA_TIME;
@@ -44,15 +46,16 @@ private:
 	bool skidding = false;
 
 	bool isOnGround = false;
+
+	CCollisionCast cast;
+	CGreenKoopa* holdShell;
+	bool isHolding = false;
+
     static bool IsContentLoaded;
     static void LoadContent();
 public:
 
-    CMario(float x, float y) : CGameObject(x, y, 0.0f) 
-	{
-		LoadContent();
-		nx = 1;
-	}
+	CMario(float x, float y);
 
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
