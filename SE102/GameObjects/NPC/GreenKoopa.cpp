@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include <Engine/Helper.h>
+#include "GameObjects/NPC/Goomba.h"
 
 using namespace std;
 
@@ -68,6 +69,11 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
         velocity.y = 0.0f;
     }
     
+    if (dynamic_cast<CGoomba*>(e->obj))
+    {
+        CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+        goomba->KillByShell();
+    }
 }
 
 void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)

@@ -31,6 +31,13 @@ constexpr float JUMP_MAX_NEGATIVE = -2 * MAX_DELTA_TIME;
 
 constexpr float MAX_FALL_SPEED = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 
+
+constexpr float ENEMY_BOUNCE = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
+#pragma endregion
+
+#pragma region Others
+
+
 #pragma endregion
 
 #define MARIO_POWERUP_SMALL 0
@@ -63,12 +70,22 @@ ObjectHoldXHiOff:	.byte $00,  $FF, $00,  $FF, $00, $00,  $FF, $00,  $FF, $00, $0
 
 	; Object-to-object hit resultant X velocity
 ObjectToObject_HitXVel:	.byte -$08, $08
+EnemyKill_XVels:	.byte -$08, $08
 
 Player grow 20
 Player_Grow = $2f (shrinking!)
 
 bounce #-$38
 Larger bounce #-$70
+
+	; Set Player's Y velocity to -$40 (bounce!)
+	LDA #-$40
+
+ENEMY
+	; Set Y vel to -$20 (bounce up)
+
+	; Set Y Vel to -$30 (bounce dead)
+	LDA #-$30
 */
 
 class CMario : public CGameObject {

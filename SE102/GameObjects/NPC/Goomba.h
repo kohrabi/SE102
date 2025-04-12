@@ -19,6 +19,7 @@ private:
     static bool IsContentLoaded;
 
     bool kill = false;
+    bool killShell = false;
     float killTimer = 0.0f;
 public:
 	// Tile number xTile counting from 0
@@ -30,10 +31,9 @@ public:
         layer = SortingLayer::NPC;
     }
 	int IsCollidable() override { 
-        return !isDeleted && !kill; };
+        return !isDeleted && (!kill && !killShell); };
     int IsBlocking() override { return false; }
-    int IsDirectionColliable(float nx, float ny) override { 
-        return !kill; }
+    int IsDirectionColliable(float nx, float ny) override { return !kill && !killShell; }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) { 
         left = position.x - 8; 
         top = position.y - 8; 
@@ -45,6 +45,13 @@ public:
     {
         kill = true;
         killTimer = GOOMBA_KILL_TIME;
+    }
+
+    void KillByShell()
+    {
+        killShell = true;
+        velocity.y = -OBJECT_DEAD_BOUNCE;
+        velocity.x = OBJECT_DEAD_X_VEL;
     }
 
     void OnNoCollision(DWORD dt) override;

@@ -49,9 +49,10 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
             Delete();
         return;
     }
-    velocity.x = GOOMBA_X_SPEED * nx;
     velocity.y += OBJECT_FALL;
     velocity.y = min(velocity.y, OBJECT_MAX_FALL);
+    if (!killShell)
+        velocity.x = GOOMBA_X_SPEED * nx;
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 

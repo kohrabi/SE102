@@ -86,7 +86,7 @@ void CQuestionBlock::Render()
     cast.RenderBoundingBox();
 }
 
-void CQuestionBlock::Hit()
+void CQuestionBlock::Hit(int dx)
 {
     if (spawnCount <= 0)
         return;
@@ -102,7 +102,9 @@ void CQuestionBlock::Hit()
     break;
     case QUESTION_BLOCK_SPAWN_MUSHROOM:
     {
-        game->GetCurrentScene()->AddObject(new CMushroom(position.x, position.y)); 
+        CMushroom* mushroom = new CMushroom(position.x, position.y);
+        mushroom->SetNx(dx);
+        game->GetCurrentScene()->AddObject(mushroom); 
     }
     break;
     default:

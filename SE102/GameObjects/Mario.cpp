@@ -246,7 +246,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     if (dynamic_cast<CQuestionBlock*>(e->obj) && e->ny > 0) 
     {
         CQuestionBlock* const questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
-        questionBlock->Hit();
+        questionBlock->Hit(sign(questionBlock->GetPosition().x - position.x));
     }
     else if (dynamic_cast<CCoin*>(e->obj) && e->obj->GetState() == COIN_STATE_NORMAL)
     {
@@ -263,13 +263,14 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         else
         {
             goomba->SetKill();
-            velocity.y = -JUMP_INIT_VEL;
+            velocity.y = -ENEMY_BOUNCE;
         }
     }
     else if (dynamic_cast<CMushroom*>(e->obj))
     {
         e->obj->Delete();
         powerUp = MARIO_POWERUP_BIG;
+        position.y -= 16;
     }
     else if (dynamic_cast<CGreenKoopa*>(e->obj))
     {
@@ -288,7 +289,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             //    koopa->PlayerHit(0);
             //else    
                 koopa->PlayerHit(sign(position.x - koopa->GetPosition().x));
-            velocity.y = -JUMP_INIT_VEL;
+            velocity.y = -ENEMY_BOUNCE;
         }
     }
 }
