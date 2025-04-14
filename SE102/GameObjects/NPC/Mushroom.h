@@ -46,9 +46,9 @@ public:
         bottom = position.y + 8; 
     }
 
-    void OnNoCollision(DWORD dt) override;
+    void OnNoCollision(float dt) override;
     void OnCollisionWith(LPCOLLISIONEVENT e) override;
 
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
+	void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
 };

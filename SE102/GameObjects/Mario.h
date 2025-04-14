@@ -110,11 +110,11 @@ public:
 
 	CMario(float x, float y);
 
-    void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
+    void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
 
 	int IsCollidable() override { return !isDeleted; };
-	void OnNoCollision(DWORD dt) override;
+	void OnNoCollision(float dt) override;
 	void OnCollisionWith(LPCOLLISIONEVENT e) override;
 	int IsBlocking() override { return 0; }
 	int IsDirectionColliable(float nx, float ny) override { return 1; }

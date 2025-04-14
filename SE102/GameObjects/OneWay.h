@@ -17,7 +17,7 @@ public:
 	COneWay(float x, float y, float width, float height) 
 		: CGameObject(x, y, 0.0f), size(width, height)  {
 	}
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override {}
+	void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override {}
 	void Render() override { RenderBoundingBox(); }
 
 	int IsBlocking() override { return 1; }

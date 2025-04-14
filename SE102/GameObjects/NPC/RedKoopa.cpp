@@ -20,6 +20,20 @@ void CRedKoopa::LoadContent()
     loader.Load(RED_KOOPA_SPRITES_PATH);
 }
 
+int CRedKoopa::GetAnimationId()
+{
+    if (state == KOOPA_STATE_RESPAWNING)
+        return RED_KOOPA_ID_ANIMATION_RESPAWN;
+    if (state == KOOPA_STATE_NORMAL)
+        return RED_KOOPA_ID_ANIMATION_WALK;
+    else
+    {
+        if (abs(velocity.x) > 0)
+            return RED_KOOPA_ID_ANIMATION_SHELL;
+        return RED_KOOPA_ID_ANIMATION_SHELL_IDLE;
+    }
+}
+
 CRedKoopa::CRedKoopa(float x, float y) : CGreenKoopa(x, y)
 {
     LoadContent();
@@ -30,12 +44,12 @@ CRedKoopa::CRedKoopa(float x, float y) : CGreenKoopa(x, y)
     layer = SortingLayer::NPC;
 }
 
-void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CRedKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
     if (!IsColliderInCamera())
         return;
 
-    if (!inShell)
+    if (state == KOOPA_STATE_NORMAL)
     {
         cast.SetBoundingBox(position + Vector2((7) * nx, 16), Vector2(4, 6));
         cast.CheckOverlap(coObjects);
@@ -48,21 +62,6 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 }
 
 void CRedKoopa::Render() {
-    CAnimations* const animations = CAnimations::GetInstance();
-
-    if (!inShell)
-    {
-        animations->Get(RED_KOOPA_ID_ANIMATION_WALK)->Render(position.x, position.y - 0, GetLayer(layer, orderInLayer), nx > 0);
-    }
-    else
-    {
-        auto animation = animations->Get(RED_KOOPA_ID_ANIMATION_SHELL);
-        if (abs(velocity.x) > 0)
-            animation->Play();
-        else
-            animation->Stop();
-        animation->Render(position.x, position.y + 8, GetLayer(layer, orderInLayer), nx > 0, true);
-
-    }
+    CGreenKoopa::Render();
     cast.Render();
 }

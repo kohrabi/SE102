@@ -19,7 +19,7 @@ void CGoomba::LoadContent()
     loader.Load(GOOMBA_SPRITES_PATH);
 }
 
-void CGoomba::OnNoCollision(DWORD dt)
+void CGoomba::OnNoCollision(float dt)
 {
     position.x += velocity.x * dt;
     position.y += velocity.y * dt;
@@ -38,29 +38,46 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
     
 }
 
-void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CGoomba::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
     if (!IsColliderInCamera())
         return;
-    if (kill)
+    switch (state)
     {
-        killTimer -= dt;
-        if (killTimer < 0)
-            Delete();
-        return;
+    case GOOMBA_STATE_NORMAL:
+        {
+            velocity.y += OBJECT_FALL;
+            velocity.y = min(velocity.y, OBJECT_MAX_FALL);
+            velocity.x = GOOMBA_X_SPEED * nx;
+            CCollision::GetInstance()->Process(this, dt, coObjects);
+        }
+        break;
+    case GOOMBA_STATE_DEAD:
+        {
+            killTimer -= dt;
+            if (killTimer < 0)
+                Delete();
+        }
+        break;
+    case GOOMBA_STATE_DEAD_BOUNCE:
+        {
+            velocity.y += OBJECT_FALL;
+            velocity.y = min(velocity.y, OBJECT_MAX_FALL);
+            velocity.x = GOOMBA_X_SPEED * nx;
+
+            // Handle physics here
+            position.x += velocity.x * dt;
+            position.y += velocity.y * dt;
+        }
+        break;
     }
-    velocity.y += OBJECT_FALL;
-    velocity.y = min(velocity.y, OBJECT_MAX_FALL);
-    if (!killShell)
-        velocity.x = GOOMBA_X_SPEED * nx;
-    CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CGoomba::Render() {
     CAnimations* const animations = CAnimations::GetInstance();
 
-    if (kill)
-        animations->Get(GOOMBA_ID_ANIMATION_DEAD)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
+    if (state == GOOMBA_STATE_DEAD)
+        animations->Get(GOOMBA_ID_ANIMATION_DEAD)->Render(position.x, position.y, GetLayer(layer, orderInLayer), false);
     else
-        animations->Get(GOOMBA_ID_ANIMATION_WALK)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
+        animations->Get(GOOMBA_ID_ANIMATION_WALK)->Render(position.x, position.y, GetLayer(layer, orderInLayer), false, state == GOOMBA_STATE_DEAD_BOUNCE);
 }

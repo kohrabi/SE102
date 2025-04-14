@@ -60,7 +60,7 @@ void CFirePiranha::SetState(int state)
     this->state = state;
 }
 
-void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CFirePiranha::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
     if (!IsColliderInCamera())
         return;

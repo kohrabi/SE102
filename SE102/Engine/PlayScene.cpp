@@ -72,7 +72,7 @@ void CPlayScene::Load()
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath.c_str());
 }
 
-void CPlayScene::Update(DWORD dt)
+void CPlayScene::Update(float dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
@@ -133,7 +133,7 @@ void CPlayScene::Render()
 	}
 
 
-	game->Draw(cx + 256.0f / 2.0f - 8.f, cy + game->GetBackBufferHeight() - (60.0f - 48.0f), 0.0f, 1.0f, textures->Get(L"Content/menu.png"));
+	game->DrawScreen(256.0f / 2.0f - 8.f, game->GetBackBufferHeight() - (60.0f - 48.0f), 0.0f, 1.0f, textures->Get(L"Content/menu.png"));
 }
 
 /*

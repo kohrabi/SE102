@@ -27,7 +27,7 @@ public:
 	CPlayScene(int id, wstring filePath);
 
 	virtual void Load();
-	virtual void Update(DWORD dt);
+	virtual void Update(float dt);
 	virtual void Render();
 	virtual void Unload();
 

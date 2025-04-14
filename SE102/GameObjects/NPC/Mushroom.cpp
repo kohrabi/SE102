@@ -20,7 +20,7 @@ void CMushroom::LoadContent()
     loader.Load(MUSHROOM_SPRITES_PATH);
 }
 
-void CMushroom::OnNoCollision(DWORD dt)
+void CMushroom::OnNoCollision(float dt)
 {
     position.x += velocity.x * dt;
     position.y += velocity.y * dt;
@@ -38,7 +38,7 @@ void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
     }
 }
 
-void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CMushroom::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
     if (state == MUSHROOM_STATE_INTRO)
     {

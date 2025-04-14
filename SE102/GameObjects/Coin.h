@@ -42,6 +42,6 @@ public:
         bottom = position.y + 8; 
     }
 
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
+	void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
 };

@@ -10,11 +10,14 @@ private:
 protected:
 
     CCollisionCast cast;
+
+	int GetAnimationId() override;
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0
     CRedKoopa(float x, float y);
 
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
+
+	void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
 };

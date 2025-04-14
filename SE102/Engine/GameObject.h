@@ -35,6 +35,7 @@ enum SortingLayer
 	MARIO,
 	BLOCK,
 	WALL,
+	CORPSE,
 };
 
 float GetLayer(SortingLayer layer, int orderInLayer);
@@ -82,7 +83,7 @@ public:
 	CGameObject(float x = 0.0f, float y = 0.0f, float rotation = 0.0f);
 
 	virtual void OnDelete() {}
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {}
+	virtual void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) {}
 	virtual void Render() = 0;
 	void RenderBoundingBox();
 
@@ -94,7 +95,7 @@ public:
 	virtual int IsCollidable() { return !isDeleted; };
 
 	// When no collision has been detected (triggered by CCollision::Process)
-	virtual void OnNoCollision(DWORD dt) {};
+	virtual void OnNoCollision(float dt) {};
 
 	// When collision with an object has been detected (triggered by CCollision::Process)
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e) {};

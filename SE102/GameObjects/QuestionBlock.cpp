@@ -48,7 +48,7 @@ CQuestionBlock::CQuestionBlock(float x, float y, int type, int count)
     layer = SortingLayer::BLOCK;
 }
 
-void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CQuestionBlock::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
     if (animationTimer >= 0) 
     {
@@ -70,7 +70,23 @@ void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
         if (cast.collision.size() > 0)
         {
             for (LPGAMEOBJECT obj : cast.collision)
-                obj->Delete();
+            {
+                if (dynamic_cast<CGoomba*>(obj))
+                {
+                    CGoomba* goomba = dynamic_cast<CGoomba*>(obj);
+                    goomba->DeadBounce();
+                }
+                else if (dynamic_cast<CGreenKoopa*>(obj))
+                {
+                    CGreenKoopa* greenKoopa = dynamic_cast<CGreenKoopa*>(obj);
+                    greenKoopa->DeadBounce(false);
+                }
+                else if (dynamic_cast<CRedKoopa*>(obj))
+                {
+                    CRedKoopa* redKoopa = dynamic_cast<CRedKoopa*>(obj);
+                    redKoopa->DeadBounce(false);
+                }
+            }
         }
         isHit = false;
     }

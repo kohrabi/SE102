@@ -68,11 +68,11 @@ public:
 
 	LPCOLLISIONEVENT SweptAABB(
 		LPGAMEOBJECT objSrc,
-		DWORD dt,
+		float dt,
 		LPGAMEOBJECT objDest);
 	void Scan(
 		LPGAMEOBJECT objSrc,
-		DWORD dt,
+		float dt,
 		vector<LPGAMEOBJECT>* objDests,
 		vector<LPCOLLISIONEVENT>& coEvents);
 
@@ -85,7 +85,7 @@ public:
 		int filterX,
 		int filterY);
 
-	void Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Process(LPGAMEOBJECT objSrc, float dt, vector<LPGAMEOBJECT>* coObjects);
 
 	static bool CheckAABBOverlaps(AABB& r1, AABB& r2);
 

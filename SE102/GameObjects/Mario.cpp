@@ -42,7 +42,7 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
     layer = SortingLayer::MARIO;
 }
 
-void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
     CGame* const game = CGame::GetInstance();
     float dts = dt / 1000.f;
     
@@ -51,9 +51,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
     if (game->IsKeyDown(KEY_RUN))
     {
         if (powerUp == MARIO_POWERUP_SMALL)
-            cast.SetBoundingBox(position + Vector2((10) * nx, 0), Vector2(4, 6));
+            cast.SetBoundingBox(position + Vector2((10.0f) * nx, 0.0f), Vector2(4.0f, 6.0f));
         else
-            cast.SetBoundingBox(position + Vector2((10) * nx, 8), Vector2(4, 6));
+            cast.SetBoundingBox(position + Vector2((10.0f) * nx, 8.0f), Vector2(4.0f, 6.0f));
 
         cast.CheckOverlap(coObjects);
         if (cast.collision.size() > 0)
@@ -65,9 +65,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
                 if (holdShell->IsInShell())
                 {
                     if (powerUp == MARIO_POWERUP_SMALL)
-                        holdShell->AttachHold(this, -8);
+                        holdShell->AttachHold(this, -8.0f);
                     else
-                        holdShell->AttachHold(this, 0);
+                        holdShell->AttachHold(this, 0.0f);
                 }
                 else
                     isHolding = false;
@@ -226,7 +226,7 @@ void CMario::SetState(int state) {
     this->state = state;
 }
 
-void CMario::OnNoCollision(DWORD dt) {
+void CMario::OnNoCollision(float dt) {
     position.x += velocity.x * dt;
     position.y += velocity.y * dt;
     isOnGround = false;
@@ -288,8 +288,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             //if (abs(position.x - koopa->GetPosition().x) <= 4)
             //    koopa->PlayerHit(0);
             //else    
-                koopa->PlayerHit(sign(position.x - koopa->GetPosition().x));
-            velocity.y = -ENEMY_BOUNCE;
+            if (!koopa->IsInShell())
+                velocity.y = -ENEMY_BOUNCE;
+            koopa->PlayerHit(sign(position.x - koopa->GetPosition().x));
         }
     }
 }

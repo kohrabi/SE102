@@ -12,14 +12,14 @@
 #define GOOMBA_KILL_TIME 500
 
 #define GOOMBA_STATE_NORMAL 1
+#define GOOMBA_STATE_DEAD 2
+#define GOOMBA_STATE_DEAD_BOUNCE 3
 
 class CGoomba : public CGameObject {
 private:
     static void LoadContent();
     static bool IsContentLoaded;
 
-    bool kill = false;
-    bool killShell = false;
     float killTimer = 0.0f;
 public:
 	// Tile number xTile counting from 0
@@ -29,11 +29,12 @@ public:
         LoadContent(); 
         nx = -1;
         layer = SortingLayer::NPC;
+        state = GOOMBA_STATE_NORMAL;
     }
 	int IsCollidable() override { 
-        return !isDeleted && (!kill && !killShell); };
+        return !isDeleted && state == GOOMBA_STATE_NORMAL; };
     int IsBlocking() override { return false; }
-    int IsDirectionColliable(float nx, float ny) override { return !kill && !killShell; }
+    int IsDirectionColliable(float nx, float ny) override { return state == GOOMBA_STATE_NORMAL; }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) { 
         left = position.x - 8; 
         top = position.y - 8; 
@@ -43,20 +44,21 @@ public:
 
     void SetKill()
     {
-        kill = true;
+        SetState(GOOMBA_STATE_DEAD);
         killTimer = GOOMBA_KILL_TIME;
     }
 
-    void KillByShell()
+    void DeadBounce()
     {
-        killShell = true;
+        SetState(GOOMBA_STATE_DEAD_BOUNCE);
+        layer = SortingLayer::CORPSE;
         velocity.y = -OBJECT_DEAD_BOUNCE;
         velocity.x = OBJECT_DEAD_X_VEL;
     }
 
-    void OnNoCollision(DWORD dt) override;
+    void OnNoCollision(float dt) override;
     void OnCollisionWith(LPCOLLISIONEVENT e) override;
 
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
+	void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
 };

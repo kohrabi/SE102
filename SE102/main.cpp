@@ -93,7 +93,7 @@ void UnloadResources() {
 	Update world status for this frame
 	dt: time period between beginning of last frame and beginning of this frame
 */
-void Update(DWORD dt)
+void Update(float dt)
 {
 	CGame* const game = CGame::GetInstance();
 
@@ -208,7 +208,7 @@ int Run()
 
 		// dt: the time between (beginning of last frame) and now
 		// this frame: the frame we are about to render
-		ULONGLONG dt = now - frameStart;
+		float dt = (now - frameStart) * CGame::GetInstance()->GetTimeScale();
 
 		if (dt >= tickPerFrame)
 		{

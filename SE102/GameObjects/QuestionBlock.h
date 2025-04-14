@@ -27,7 +27,7 @@ public:
 
 	CQuestionBlock(float x, float y, int type, int count);
 
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
+	void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
     
 	void Hit(int dx);

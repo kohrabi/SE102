@@ -35,7 +35,7 @@ void CCoin::SetState(int state)
     }
 }
 
-void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CCoin::Update(float dt, vector<LPGAMEOBJECT>* coObjects)
 {
     if (state != COIN_STATE_INTRO)
         return;
