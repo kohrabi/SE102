@@ -6,6 +6,8 @@
 
 #include "Engine/Helper.h"
 
+#include "GreenKoopa.h"
+
 #include <iostream>
 #include <algorithm>
 
@@ -60,6 +62,16 @@ void CFirePiranha::SetState(int state)
     this->state = state;
 }
 
+void CFirePiranha::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+    if (dynamic_cast<CGreenKoopa*>(e->obj))
+    {
+        CGreenKoopa* koopa = dynamic_cast<CGreenKoopa*>(e->obj);
+        if (koopa->IsInShell())
+            this->Delete();
+    }
+}
+
 void CFirePiranha::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
     if (!IsColliderInCamera())
@@ -72,6 +84,7 @@ void CFirePiranha::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
         else if (state == FIRE_PIRANHA_WAIT) SetState(FIRE_PIRANHA_MOVE);
     }
     position.y = clampf(position.y + velocity.y * dt, ogPosition.y, ogPosition.y + 32.f);
+    CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CFirePiranha::Render() {

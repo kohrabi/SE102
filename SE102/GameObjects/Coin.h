@@ -6,9 +6,9 @@
 
 #include "Engine/Graphics/Animations.h"
 
-#define COIN_MAX_Y -18
-#define COIN_DESTROY_TIME 200
-#define COIN_Y_VELOCITY 0.17f
+#define COIN_KILL_TIME 450
+constexpr float COIN_INIT_Y_VEL = 0x07A00 * SUBSUBSUBPIXEL_DELTA_TIME;
+constexpr float COIN_Y_DESTROY = 0x02000 * SUBSUBSUBPIXEL;
 
 #define COIN_STATE_INTRO 1
 #define COIN_STATE_NORMAL 2
@@ -18,7 +18,7 @@ private:
     static void LoadContent();
     static bool IsContentLoaded;
 
-    ULONGLONG startTime;
+    float killTimer = 0.0f;
     float maxYPos;
 public:
 	// Tile number xTile counting from 0

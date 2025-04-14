@@ -28,6 +28,8 @@ int CRedKoopa::GetAnimationId()
         return RED_KOOPA_ID_ANIMATION_WALK;
     else
     {
+        if (state == KOOPA_STATE_DEAD_BOUNCE)
+            return RED_KOOPA_ID_ANIMATION_SHELL_IDLE;
         if (abs(velocity.x) > 0)
             return RED_KOOPA_ID_ANIMATION_SHELL;
         return RED_KOOPA_ID_ANIMATION_SHELL_IDLE;

@@ -50,6 +50,9 @@ constexpr float POWER_UP_ANIMATION_TIME = 1500;
 #define KEY_RUN 'J'
 #define KEY_JUMP 'K'
 
+#define MARIO_STATE_NORMAL 1
+#define MARIO_STATE_POWER_UP 2
+
 // Y ofset
 // Held object Large: -$02
 // Suit: $0D
@@ -97,15 +100,17 @@ private:
 	Vector2 accel;
 	float runBeforeWalkTimer = 0.0f;
 	bool skidding = false;
-
 	bool isOnGround = false;
+
+	int powerUp = 0;
+	float powerUpStartTimer = 0.0f;
 
 	CCollisionCast cast;
 	CGreenKoopa* holdShell;
 	bool isHolding = false;
-	int powerUp = 0;
-	float powerUpStartTimer = 0.0f;
-	bool shouldPowerUp = false;
+
+	void marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
+	void marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
 
     static bool IsContentLoaded;
     static void LoadContent();

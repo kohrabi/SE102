@@ -27,11 +27,11 @@ void CCoin::SetState(int state)
     switch (state)
     {
     case COIN_STATE_INTRO:
-        {
-            startTime = (ULONGLONG)GetTickCount64() + COIN_DESTROY_TIME;
-            maxYPos = position.y + COIN_MAX_Y;
-        }
-        break;
+    {
+        velocity.y -= COIN_INIT_Y_VEL;
+        killTimer = COIN_KILL_TIME;
+    }
+    break;
     }
 }
 
@@ -39,23 +39,25 @@ void CCoin::Update(float dt, vector<LPGAMEOBJECT>* coObjects)
 {
     if (state != COIN_STATE_INTRO)
         return;
-    position.y -= COIN_Y_VELOCITY * dt;
 
-    position.y = max(position.y, maxYPos);
-    ULONGLONG now = GetTickCount64();
-    if (now > startTime) {
+    velocity.y = min(velocity.y + OBJECT_FALL * 2.0f, OBJECT_MAX_FALL * 2.0f);
+    position.y += velocity.y * dt;
+
+    if (velocity.y >= OBJECT_MAX_FALL * 1.0f)
         Delete();
-        cout << "delete\n";
-    }
+
+    //if (killTimer > 0) killTimer -= dt;
+    //else {
+    //    Delete();
+    //}
 }
 
 void CCoin::Render() {
     CAnimations* const animations = CAnimations::GetInstance();
-    CSprites* const sprites = CSprites::GetInstance();
 
     if (state == COIN_STATE_INTRO)
-        animations->Get(COIN_ID_ANIMATION_ROTATE)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
+        animations->Get(COIN_ID_ANIMATION_INTRO)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
     else
-        sprites->Get(COIN_ID_SPRITE_NORMAL)->Draw(position.x, position.y, GetLayer(layer, orderInLayer));
+        animations->Get(COIN_ID_ANIMATION_NORMAL)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
 
 }

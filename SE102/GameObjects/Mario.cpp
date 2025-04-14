@@ -21,7 +21,7 @@ using namespace std;
 
 bool CMario::IsContentLoaded = false;
 
-void CMario::LoadContent() 
+void CMario::LoadContent()
 {
     if (IsContentLoaded)
         return;
@@ -40,24 +40,13 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
         return dynamic_cast<CGreenKoopa*>(obj) != nullptr;
     });
     layer = SortingLayer::MARIO;
+    SetState(MARIO_STATE_NORMAL);
 }
 
-void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
-    CGame* const game = CGame::GetInstance();
-    float dts = dt / 1000.f;
+void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
+{
 
-    if (shouldPowerUp)
-    {
-        if (GetTickCount64() - powerUpStartTimer > POWER_UP_ANIMATION_TIME)
-        {
-            powerUp = MARIO_POWERUP_BIG;
-            shouldPowerUp = false;
-            position.y -= 9.0f;
-        }
-        else
-            return;
-    }
-    
+    CGame* const game = CGame::GetInstance();
     // Holding Shell
     isHolding = false;
     if (game->IsKeyDown(KEY_RUN))
@@ -129,7 +118,7 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
         velocity.x = move_towards(velocity.x, 0, SKIDDING_DECELERATION);
     }
 
-    if (run || (abs(velocity.x) > MAXIMUM_WALK_SPEED + WALKING_ACCELERATION && runBeforeWalkTimer > 0)) 
+    if (run || (abs(velocity.x) > MAXIMUM_WALK_SPEED + WALKING_ACCELERATION && runBeforeWalkTimer > 0))
         velocity.x = clampf(velocity.x, -MAXIMUM_RUNNING_SPEED, MAXIMUM_RUNNING_SPEED);
     else
         velocity.x = clampf(velocity.x, -MAXIMUM_WALK_SPEED, MAXIMUM_WALK_SPEED);
@@ -143,9 +132,9 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
     else
     {
         gravity = JUMP_GRAVITY;
-    } 
+    }
     accel.y = gravity;
-    
+
     if (game->IsKeyJustPressed(KEY_JUMP) && isOnGround) {
         float initVel = -JUMP_INIT_VEL;
         int temp = trunc(abs(velocity.x) * MAX_DELTA_TIME);
@@ -171,78 +160,74 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
+void CMario::marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
+{
+    if (GetTickCount64() - powerUpStartTimer > POWER_UP_ANIMATION_TIME)
+    {
+        powerUp = MARIO_POWERUP_BIG;
+        SetState(MARIO_STATE_NORMAL);
+        position.y -= 9.0f;
+    }
+}
+
+
+void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
+
+    switch (state)
+    {
+    case MARIO_STATE_NORMAL: marioNormalUpdate(dt, coObjects); break;
+    case MARIO_STATE_POWER_UP: marioPowerupUpdate(dt, coObjects); break;
+    }
+}
+
 void CMario::Render() {
     CAnimations* const animations = CAnimations::GetInstance();
 
     LPANIMATION animation = animations->Get(GetAnimationID());
-    if (!shouldPowerUp)
+    switch (state)
     {
-        if (abs(velocity.x) <= MAXIMUM_WALK_SPEED + WALKING_ACCELERATION)
-            animation->SetTimeScale(1.0f);
-        else
-            animation->SetTimeScale(0.5f);
-    }
+    case MARIO_STATE_NORMAL:
+        {
+            if (abs(velocity.x) <= MAXIMUM_WALK_SPEED + WALKING_ACCELERATION)
+                animation->SetTimeScale(1.0f);
+            else
+                animation->SetTimeScale(0.5f);
 
-    bool flipX = nx > 0 ? true : false;
-    if (shouldPowerUp && animation->GetCurrentFrameIndex() == 1)
-        animation->Render(position.x, position.y - 8.0f, GetLayer(layer, orderInLayer), flipX);
-    else
-        animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
-    RenderBoundingBox();
-    cast.RenderBoundingBox();
-}
-
-int CMario::GetAnimationIDSmall()
-{
-    if (shouldPowerUp)
-        return MARIO_ID_ANIMATION_LEVEL_UP;
-    if (isHolding)
-    {
-        if (abs(velocity.x) > 0)
-            return MARIO_ID_ANIMATION_HOLD_WALK;
-        else
-            return MARIO_ID_ANIMATION_HOLD_IDLE;
+            bool flipX = nx > 0 ? true : false;
+            animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
+        }
+        break;
+    case MARIO_STATE_POWER_UP:
+        {
+            bool flipX = nx > 0 ? true : false;
+            if (animation->GetCurrentFrameIndex() == 1)
+                animation->Render(position.x, position.y - 8.0f, GetLayer(layer, orderInLayer), flipX);
+            else
+                animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
+        }
+        break;
     }
-    if (!isOnGround)
-        return MARIO_ID_ANIMATION_JUMP;
-    if (skidding)
-        return MARIO_ID_ANIMATION_SKIDDING;
-    if (abs(velocity.x) > 0)
-        return MARIO_ID_ANIMATION_WALK;
-    else
-        return MARIO_ID_ANIMATION_IDLE;
-}
-
-int CMario::GetAnimationIDBig()
-{
-    if (isHolding)
-    {
-        if (abs(velocity.x) > 0)
-            return MARIO_BIG_ID_ANIMATION_HOLD_WALK;
-        else            
-            return MARIO_BIG_ID_ANIMATION_HOLD_IDLE;
-    }
-    if (!isOnGround)
-        return MARIO_BIG_ID_ANIMATION_JUMP;
-    if (skidding)
-        return MARIO_BIG_ID_ANIMATION_SKIDDING;
-    if (abs(velocity.x) > 0)
-        return MARIO_BIG_ID_ANIMATION_WALK;
-    else
-        return MARIO_BIG_ID_ANIMATION_IDLE;
-}
-
-int CMario::GetAnimationID()
-{
-    switch (powerUp)
-    {
-    case MARIO_POWERUP_SMALL: return GetAnimationIDSmall();
-    case MARIO_POWERUP_BIG: return GetAnimationIDBig();
-    }
-    return 0;
+    //RenderBoundingBox();
+    //cast.RenderBoundingBox();
 }
 
 void CMario::SetState(int state) {
+    switch (state)
+    {
+    case MARIO_STATE_NORMAL:
+        {
+            
+        }
+        break;
+    case MARIO_STATE_POWER_UP:
+        {
+            if (this->state == MARIO_STATE_NORMAL)
+            {
+                powerUpStartTimer = GetTickCount64();
+            }
+        }
+        break;
+    }
     this->state = state;
 }
 
@@ -289,8 +274,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     else if (dynamic_cast<CMushroom*>(e->obj))
     {
         e->obj->Delete();
-        powerUpStartTimer = GetTickCount64();
-        shouldPowerUp = true;
+        SetState(MARIO_STATE_POWER_UP);
         //powerUp = MARIO_POWERUP_BIG;
     }
     else if (dynamic_cast<CGreenKoopa*>(e->obj))
@@ -309,9 +293,61 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             //if (abs(position.x - koopa->GetPosition().x) <= 4)
             //    koopa->PlayerHit(0);
             //else    
+            //if (!koopa->IsInShell())
+            int posSign = sign(position.x - koopa->GetPosition().x);
             if (!koopa->IsInShell())
                 velocity.y = -ENEMY_BOUNCE;
-            koopa->PlayerHit(sign(position.x - koopa->GetPosition().x));
+            koopa->PlayerHit(posSign);
         }
     }
+}
+
+int CMario::GetAnimationIDSmall()
+{
+    if (state == MARIO_STATE_POWER_UP)
+        return MARIO_ID_ANIMATION_LEVEL_UP;
+    if (isHolding)
+    {
+        if (abs(velocity.x) > 0)
+            return MARIO_ID_ANIMATION_HOLD_WALK;
+        else
+            return MARIO_ID_ANIMATION_HOLD_IDLE;
+    }
+    if (!isOnGround)
+        return MARIO_ID_ANIMATION_JUMP;
+    if (skidding)
+        return MARIO_ID_ANIMATION_SKIDDING;
+    if (abs(velocity.x) > 0)
+        return MARIO_ID_ANIMATION_WALK;
+    else
+        return MARIO_ID_ANIMATION_IDLE;
+}
+
+int CMario::GetAnimationIDBig()
+{
+    if (isHolding)
+    {
+        if (abs(velocity.x) > 0)
+            return MARIO_BIG_ID_ANIMATION_HOLD_WALK;
+        else
+            return MARIO_BIG_ID_ANIMATION_HOLD_IDLE;
+    }
+    if (!isOnGround)
+        return MARIO_BIG_ID_ANIMATION_JUMP;
+    if (skidding)
+        return MARIO_BIG_ID_ANIMATION_SKIDDING;
+    if (abs(velocity.x) > 0)
+        return MARIO_BIG_ID_ANIMATION_WALK;
+    else
+        return MARIO_BIG_ID_ANIMATION_IDLE;
+}
+
+int CMario::GetAnimationID()
+{
+    switch (powerUp)
+    {
+    case MARIO_POWERUP_SMALL: return GetAnimationIDSmall();
+    case MARIO_POWERUP_BIG: return GetAnimationIDBig();
+    }
+    return 0;
 }
