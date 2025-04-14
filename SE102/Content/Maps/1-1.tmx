@@ -132,7 +132,7 @@
 </data>
  </layer>
  <objectgroup id="3" name="Objects">
-  <object id="102" template="QuestionBlock.tx" x="160" y="256">
+  <object id="102" template="QuestionBlock.tx" x="176" y="256">
    <properties>
     <property name="spawnCount" type="int" value="1"/>
     <property name="type" type="int" value="1"/>
@@ -141,6 +141,7 @@
   <object id="24" template="QuestionBlock.tx" x="192" y="256">
    <properties>
     <property name="spawnCount" type="int" value="1"/>
+    <property name="type" type="int" value="1"/>
    </properties>
   </object>
   <object id="25" template="QuestionBlock.tx" x="224" y="208">
@@ -206,7 +207,6 @@
   <object id="133" template="FirePiranha.tx" type="CFirePiranha" x="360" y="256"/>
   <object id="134" name="GreenKoopa" type="CGreenKoopa" gid="1476" x="320" y="304" width="16" height="32"/>
   <object id="135" template="RedKoopa.tx" type="CRedKoopa" x="592" y="272"/>
-  <object id="136" template="RedKoopa.tx" x="192" y="240"/>
   <object id="137" template="RedKoopa.tx" x="240" y="192"/>
  </objectgroup>
 </map>

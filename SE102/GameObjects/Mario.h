@@ -37,6 +37,7 @@ constexpr float ENEMY_BOUNCE = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 #pragma region Others
 
+constexpr float POWER_UP_ANIMATION_TIME = 1500;
 
 #pragma endregion
 
@@ -103,6 +104,8 @@ private:
 	CGreenKoopa* holdShell;
 	bool isHolding = false;
 	int powerUp = 0;
+	float powerUpStartTimer = 0.0f;
+	bool shouldPowerUp = false;
 
     static bool IsContentLoaded;
     static void LoadContent();

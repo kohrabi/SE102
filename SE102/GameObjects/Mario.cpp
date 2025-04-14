@@ -45,6 +45,18 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
 void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
     CGame* const game = CGame::GetInstance();
     float dts = dt / 1000.f;
+
+    if (shouldPowerUp)
+    {
+        if (GetTickCount64() - powerUpStartTimer > POWER_UP_ANIMATION_TIME)
+        {
+            powerUp = MARIO_POWERUP_BIG;
+            shouldPowerUp = false;
+            position.y -= 9.0f;
+        }
+        else
+            return;
+    }
     
     // Holding Shell
     isHolding = false;
@@ -163,19 +175,27 @@ void CMario::Render() {
     CAnimations* const animations = CAnimations::GetInstance();
 
     LPANIMATION animation = animations->Get(GetAnimationID());
-    if (abs(velocity.x) <= MAXIMUM_WALK_SPEED + WALKING_ACCELERATION)
-        animation->SetTimeScale(1.0f);
-    else
-        animation->SetTimeScale(0.5f);
+    if (!shouldPowerUp)
+    {
+        if (abs(velocity.x) <= MAXIMUM_WALK_SPEED + WALKING_ACCELERATION)
+            animation->SetTimeScale(1.0f);
+        else
+            animation->SetTimeScale(0.5f);
+    }
 
     bool flipX = nx > 0 ? true : false;
-    animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
+    if (shouldPowerUp && animation->GetCurrentFrameIndex() == 1)
+        animation->Render(position.x, position.y - 8.0f, GetLayer(layer, orderInLayer), flipX);
+    else
+        animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
     RenderBoundingBox();
     cast.RenderBoundingBox();
 }
 
 int CMario::GetAnimationIDSmall()
 {
+    if (shouldPowerUp)
+        return MARIO_ID_ANIMATION_LEVEL_UP;
     if (isHolding)
     {
         if (abs(velocity.x) > 0)
@@ -269,8 +289,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     else if (dynamic_cast<CMushroom*>(e->obj))
     {
         e->obj->Delete();
-        powerUp = MARIO_POWERUP_BIG;
-        position.y -= 16;
+        powerUpStartTimer = GetTickCount64();
+        shouldPowerUp = true;
+        //powerUp = MARIO_POWERUP_BIG;
     }
     else if (dynamic_cast<CGreenKoopa*>(e->obj))
     {

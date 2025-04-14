@@ -12,6 +12,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 
 void CAnimation::Render(float x, float y, float z, bool flipX, bool flipY)
 {
+	frames[currentFrame]->GetSprite()->Draw(x, y, z, flipX, flipY);
 	ULONGLONG now = GetTickCount64();
 	if (!stop) {
 		if (currentFrame == -1)
@@ -32,6 +33,5 @@ void CAnimation::Render(float x, float y, float z, bool flipX, bool flipY)
 		}
 	}
 
-	frames[currentFrame]->GetSprite()->Draw(x, y, z, flipX, flipY);
 }
 

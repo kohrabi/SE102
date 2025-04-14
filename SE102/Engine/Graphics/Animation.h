@@ -21,10 +21,12 @@ class CAnimation
 	bool stop = false;
 public:
 	CAnimation(int defaultTime = 100) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = 0; }
-	const LPANIMATION_FRAME& getCurrentAnimationFrame() { 
+	const LPANIMATION_FRAME& GetCurrentAnimationFrame() { 
 		ASSERT(currentFrame >= 0 && currentFrame < frames.size(), "How can i get the current frame. Frames is empty");
 		return frames[currentFrame]; 
 	}
+
+	int GetCurrentFrameIndex() const { return currentFrame; }
 
 	void SetTimeScale(float newValue) { timeScale = newValue; }
 

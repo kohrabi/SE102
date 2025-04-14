@@ -207,9 +207,9 @@ void CGreenKoopa::Render() {
     case KOOPA_STATE_RESPAWNING:
         {
             auto animation = animations->Get(GetAnimationId());
-            if (GetTickCount64() % 5 == 0)
-                respawnNx *= -1;
-            animation->Render(position.x + respawnNx * 1, position.y + 8, GetLayer(layer, orderInLayer), nx > 0, false);
+            if (GetTickCount64() % 3 == 0)
+                respawnNx = (respawnNx + 1) % 2;
+            animation->Render(position.x + (respawnNx - 1) * 1, position.y + 8, GetLayer(layer, orderInLayer), nx > 0, false);
         }
         break;
     }
