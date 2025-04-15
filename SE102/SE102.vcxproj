@@ -143,6 +143,7 @@
     <ClCompile Include="Engine\debug.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
+    <ClCompile Include="GameObjects\ScorePopup.cpp" />
     <ClCompile Include="GameObjects\Coin.cpp" />
     <ClCompile Include="Engine\CollisionCast.cpp" />
     <ClCompile Include="GameObjects\NPC\FirePiranha.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="ContentIds\Mushroom.h" />
     <ClInclude Include="ContentIds\QuestionBlock.h" />
     <ClInclude Include="ContentIds\RedKoopa.h" />
+    <ClInclude Include="ContentIds\UI.h" />
     <ClInclude Include="contents.h" />
     <ClInclude Include="Engine\Collision.h" />
     <ClInclude Include="Engine\Graphics\Animation.h" />
@@ -197,6 +199,7 @@
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Helper.h" />
+    <ClInclude Include="GameObjects\ScorePopup.h" />
     <ClInclude Include="GameObjects\Coin.h" />
     <ClInclude Include="Engine\CollisionCast.h" />
     <ClInclude Include="GameObjects\NPC\FirePiranha.h" />
@@ -232,11 +235,16 @@
       <DeploymentContent>true</DeploymentContent>
     </Text>
     <Text Include="Content\Sprites\coin.txt" />
+    <Text Include="Content\Sprites\fireball.txt" />
     <Text Include="Content\Sprites\fire_piranha.txt" />
     <Text Include="Content\Sprites\goomba.txt" />
+    <Text Include="Content\Sprites\green_koopa.txt" />
     <Text Include="Content\Sprites\mario.txt" />
+    <Text Include="Content\Sprites\mariobig.txt" />
     <Text Include="Content\Sprites\mushroom.txt" />
     <Text Include="Content\Sprites\questionBlock.txt" />
+    <Text Include="Content\Sprites\red_koopa.txt" />
+    <Text Include="Content\Sprites\ui.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

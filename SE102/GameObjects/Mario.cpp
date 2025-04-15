@@ -15,6 +15,7 @@
 #include "NPC/Goomba.h"
 #include "NPC/GreenKoopa.h"
 #include "NPC/Mushroom.h"
+#include "ScorePopup.h"
 
 #include <iostream>
 using namespace std;
@@ -173,6 +174,7 @@ void CMario::marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
 
+    if (kickTimer > 0) kickTimer -= dt;
     switch (state)
     {
     case MARIO_STATE_NORMAL: marioNormalUpdate(dt, coObjects); break;
@@ -284,6 +286,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         {
             if (koopa->IsInShell() && koopa->GetVelocity().x == 0.0f)
             {
+                if (e->ny == 0)
+                    kickTimer = KICK_ANIMATION_TIME;
                 koopa->SetNx(nx);
             }
             cout << "ouch!!!\n";
@@ -295,9 +299,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             //else    
             //if (!koopa->IsInShell())
             int posSign = sign(position.x - koopa->GetPosition().x);
-            if (!koopa->IsInShell())
-                velocity.y = -ENEMY_BOUNCE;
+            CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y));
+            velocity.y = -ENEMY_BOUNCE;
             koopa->PlayerHit(posSign);
+            cout << "ny: " << e->ny << '\n';
         }
     }
 }
@@ -313,6 +318,8 @@ int CMario::GetAnimationIDSmall()
         else
             return MARIO_ID_ANIMATION_HOLD_IDLE;
     }
+    if (kickTimer > 0)
+        return MARIO_ID_ANIMATION_SHELL_KICK;
     if (!isOnGround)
         return MARIO_ID_ANIMATION_JUMP;
     if (skidding)
@@ -332,6 +339,8 @@ int CMario::GetAnimationIDBig()
         else
             return MARIO_BIG_ID_ANIMATION_HOLD_IDLE;
     }
+    if (kickTimer > 0)
+        return MARIO_BIG_ID_ANIMATION_SHELL_KICK;
     if (!isOnGround)
         return MARIO_BIG_ID_ANIMATION_JUMP;
     if (skidding)

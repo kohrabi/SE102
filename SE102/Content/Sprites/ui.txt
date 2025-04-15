@@ -1,0 +1,14 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\VS\SE102\SE102\
+# EDITOR startID 11000
+# EDITOR objectName UI
+
+[TEXTURES]
+Content\ui.png 0
+
+[SPRITES]
+11001 2 2 15 13 0
+# EDITOR frameName 100
+
+
+[ANIMATIONS]

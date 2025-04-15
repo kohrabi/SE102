@@ -1,6 +1,7 @@
 #include "Goomba.h"
 
 #include "Engine/Loaders/SpritesLoader.h"
+#include "GameObjects/ScorePopup.h"
 
 #include "ContentIds/Goomba.h"
 #include <iostream>
@@ -17,6 +18,31 @@ void CGoomba::LoadContent()
     IsContentLoaded = true;
     SpritesLoader loader;
     loader.Load(GOOMBA_SPRITES_PATH);
+}
+
+void CGoomba::SetState(int state)
+{
+    switch (state)
+    {
+    case GOOMBA_STATE_DEAD:
+    {
+        CGame* const game = CGame::GetInstance();
+        game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
+        killTimer = GOOMBA_KILL_TIME;
+    }
+    break;
+    case GOOMBA_STATE_DEAD_BOUNCE:
+    {
+        CGame* const game = CGame::GetInstance();
+        game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
+        layer = SortingLayer::CORPSE;
+        velocity.y = -OBJECT_DEAD_BOUNCE;
+        velocity.x = OBJECT_DEAD_X_VEL;
+    }
+    break;
+    default: break;
+    }
+    this->state = state;
 }
 
 void CGoomba::OnNoCollision(float dt)

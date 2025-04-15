@@ -29,7 +29,7 @@ public:
         LoadContent(); 
         nx = -1;
         layer = SortingLayer::NPC;
-        state = GOOMBA_STATE_NORMAL;
+        SetState(GOOMBA_STATE_NORMAL);
     }
 	int IsCollidable() override { 
         return !isDeleted && state == GOOMBA_STATE_NORMAL; };
@@ -42,18 +42,16 @@ public:
         bottom = position.y + 8; 
     }
 
+    void SetState(int state) override;
+
     void SetKill()
     {
         SetState(GOOMBA_STATE_DEAD);
-        killTimer = GOOMBA_KILL_TIME;
     }
 
     void DeadBounce()
     {
         SetState(GOOMBA_STATE_DEAD_BOUNCE);
-        layer = SortingLayer::CORPSE;
-        velocity.y = -OBJECT_DEAD_BOUNCE;
-        velocity.x = OBJECT_DEAD_X_VEL;
     }
 
     void OnNoCollision(float dt) override;

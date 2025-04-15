@@ -64,10 +64,11 @@ void CGreenKoopa::PlayerHit(int nx)
     }
     else
     {
-        if (this->nx == -nx)
+        if (velocity.x != 0)
             this->nx = 0;
         else
             this->nx = -nx;
+        cout << -nx << " " << this->nx << '\n';
     }
 }
 

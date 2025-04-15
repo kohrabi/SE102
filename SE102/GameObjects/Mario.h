@@ -38,6 +38,7 @@ constexpr float ENEMY_BOUNCE = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 #pragma region Others
 
 constexpr float POWER_UP_ANIMATION_TIME = 1500;
+constexpr float KICK_ANIMATION_TIME = 300;
 
 #pragma endregion
 
@@ -104,6 +105,8 @@ private:
 
 	int powerUp = 0;
 	float powerUpStartTimer = 0.0f;
+
+	float kickTimer = 0.0f;
 
 	CCollisionCast cast;
 	CGreenKoopa* holdShell;

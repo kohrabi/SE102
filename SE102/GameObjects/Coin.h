@@ -6,7 +6,7 @@
 
 #include "Engine/Graphics/Animations.h"
 
-#define COIN_KILL_TIME 450
+#define COIN_KILL_TIME 550
 constexpr float COIN_INIT_Y_VEL = 0x07A00 * SUBSUBSUBPIXEL_DELTA_TIME;
 constexpr float COIN_Y_DESTROY = 0x02000 * SUBSUBSUBPIXEL;
 
@@ -31,6 +31,8 @@ public:
     }
 
     void SetState(int state) override;
+
+    void OnDelete() override;
 
 
 	int IsCollidable() override { return true; };

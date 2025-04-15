@@ -3,6 +3,7 @@
 #include "Engine/Loaders/SpritesLoader.h"
 
 #include "ContentIds/Coin.h"
+#include "GameObjects/ScorePopup.h"
 
 #include <iostream>
 #include <algorithm>
@@ -35,6 +36,12 @@ void CCoin::SetState(int state)
     }
 }
 
+void CCoin::OnDelete()
+{
+    CGame* const game = CGame::GetInstance();
+    game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
+}
+
 void CCoin::Update(float dt, vector<LPGAMEOBJECT>* coObjects)
 {
     if (state != COIN_STATE_INTRO)
@@ -43,13 +50,13 @@ void CCoin::Update(float dt, vector<LPGAMEOBJECT>* coObjects)
     velocity.y = min(velocity.y + OBJECT_FALL * 2.0f, OBJECT_MAX_FALL * 2.0f);
     position.y += velocity.y * dt;
 
-    if (velocity.y >= OBJECT_MAX_FALL * 1.0f)
-        Delete();
-
-    //if (killTimer > 0) killTimer -= dt;
-    //else {
+    //if (velocity.y >= OBJECT_MAX_FALL * 1.0f)
     //    Delete();
-    //}
+
+    if (killTimer > 0) killTimer -= dt;
+    else {
+        Delete();
+    }
 }
 
 void CCoin::Render() {
