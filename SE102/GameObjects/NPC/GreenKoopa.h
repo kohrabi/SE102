@@ -40,7 +40,7 @@ public:
         LoadContent();
         nx = -1;
         layer = SortingLayer::NPC;
-        state = KOOPA_STATE_NORMAL;
+        SetState(KOOPA_STATE_NORMAL);
     }
 	int IsCollidable() override { return !isDeleted && state != KOOPA_STATE_DEAD_BOUNCE; };
     int IsBlocking() override { return false; }
@@ -59,10 +59,7 @@ public:
     void DetachHold();
     void DeadBounce(bool kill)
     {
-        state = KOOPA_STATE_DEAD_BOUNCE;
-        layer = SortingLayer::CORPSE;
-        velocity.y = -OBJECT_DEAD_BOUNCE;
-        velocity.x = OBJECT_DEAD_X_VEL;
+        SetState(KOOPA_STATE_DEAD_BOUNCE);
     }
 
     void OnNoCollision(float dt) override;

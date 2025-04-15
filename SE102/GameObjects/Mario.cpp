@@ -288,21 +288,17 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             {
                 if (e->ny == 0)
                     kickTimer = KICK_ANIMATION_TIME;
+                CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score200));
                 koopa->SetNx(nx);
             }
             cout << "ouch!!!\n";
         }
         else
         {
-            //if (abs(position.x - koopa->GetPosition().x) <= 4)
-            //    koopa->PlayerHit(0);
-            //else    
-            //if (!koopa->IsInShell())
             int posSign = sign(position.x - koopa->GetPosition().x);
-            CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y));
+            CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score100));
             velocity.y = -ENEMY_BOUNCE;
             koopa->PlayerHit(posSign);
-            cout << "ny: " << e->ny << '\n';
         }
     }
 }

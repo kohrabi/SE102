@@ -157,12 +157,13 @@
   </object>
   <object id="29" template="QuestionBlock.tx" x="656" y="288">
    <properties>
-    <property name="spawnCount" type="int" value="0"/>
+    <property name="spawnCount" type="int" value="1"/>
+    <property name="type" type="int" value="2"/>
    </properties>
   </object>
   <object id="30" template="QuestionBlock.tx" x="704" y="256">
    <properties>
-    <property name="spawnCount" type="int" value="0"/>
+    <property name="spawnCount" type="int" value="1"/>
    </properties>
   </object>
   <object id="31" template="QuestionBlock.tx" x="1488" y="272">

@@ -24,5 +24,17 @@ void CScorePopup::Update(float dt, vector<LPGAMEOBJECT>* coObjects)
 void CScorePopup::Render()
 {
 	CSprites* const sprites = CSprites::GetInstance();
-	sprites->Get(UI_ID_SPRITE_100)->Draw(position.x, position.y, GetLayer(layer, 0));
+	int animationId = UI_ID_SPRITE_100;
+	switch (scoreType)
+	{
+	case Score100: animationId = UI_ID_SPRITE_100; break;
+	case Score200: animationId = UI_ID_SPRITE_200; break;
+	case Score400: animationId = UI_ID_SPRITE_400; break;
+	case Score800: animationId = UI_ID_SPRITE_800; break;
+	case Score1000: animationId = UI_ID_SPRITE_1000; break;
+	case Score2000: animationId = UI_ID_SPRITE_2000; break;
+	case Score4000: animationId = UI_ID_SPRITE_4000; break;
+	case Score8000: animationId = UI_ID_SPRITE_8000; break;
+	}
+	sprites->Get(animationId)->Draw(position.x, position.y, GetLayer(layer, 0));
 }

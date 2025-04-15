@@ -6,18 +6,32 @@ constexpr float SCORE_POPUP_RISE_VELOCITY = 0x02000 * SUBSUBSUBPIXEL_DELTA_TIME;
 constexpr float SCORE_POPUP_GRAVITY = 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME;
 constexpr float SCORE_POPUP_DESTROY_TIMER = 800;
 
+enum ScoreType
+{
+	Score100,
+	Score200,
+	Score400,
+	Score800,
+	Score1000,
+	Score2000,
+	Score4000,
+	Score8000,
+};
+
 class CScorePopup : public CGameObject
 {
 private:
 	static void LoadContent();
 	static bool IsContentLoaded;
 	float destroyTimer = SCORE_POPUP_DESTROY_TIMER;
+	ScoreType scoreType = ScoreType::Score100;
 public:
-	CScorePopup(float x, float y)
+	CScorePopup(float x, float y, ScoreType scoreType = ScoreType::Score100)
 		: CGameObject(x, y, 0.0f)
 	{
 		velocity.y = -SCORE_POPUP_RISE_VELOCITY;
 		layer = SortingLayer::CORPSE;
+		this->scoreType = scoreType;
 		LoadContent();
 	}
 

@@ -9,6 +9,9 @@
 
 #include "Goomba.h"
 #include "FirePiranha.h"
+#include "GameObjects/QuestionBlock.h"
+
+#include "GameObjects/ScorePopup.h"
 
 using namespace std;
 
@@ -44,13 +47,25 @@ void CGreenKoopa::SetState(int state)
     switch (state)
     {
     case KOOPA_STATE_NORMAL:
-        {
+    {
 
-        }
-        break;
-    case KOOPA_STATE_RESPAWNING:
-        break;
     }
+    break;
+    case KOOPA_STATE_RESPAWNING:
+    {
+
+    }
+    break;
+    case KOOPA_STATE_DEAD_BOUNCE:
+    {
+        CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, Score400));
+        layer = SortingLayer::CORPSE;
+        velocity.y = -OBJECT_DEAD_BOUNCE;
+        velocity.x = OBJECT_DEAD_X_VEL;
+    }
+    break;
+    }
+    this->state = state;
 }
 
 void CGreenKoopa::PlayerHit(int nx)
@@ -116,6 +131,11 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
         {
             CGreenKoopa* koopa = dynamic_cast<CGreenKoopa*>(e->obj);
             koopa->DeadBounce(true);
+        }
+        if (dynamic_cast<CQuestionBlock*>(e->obj) && e->ny == 0)
+        {
+            CQuestionBlock* questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
+            questionBlock->Hit(1);
         }
     }
 }
