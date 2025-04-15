@@ -276,7 +276,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     else if (dynamic_cast<CMushroom*>(e->obj))
     {
         e->obj->Delete();
-        SetState(MARIO_STATE_POWER_UP);
+        if (powerUp == MARIO_POWERUP_SMALL)
+            SetState(MARIO_STATE_POWER_UP);
+        else
+            CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
         //powerUp = MARIO_POWERUP_BIG;
     }
     else if (dynamic_cast<CGreenKoopa*>(e->obj))
