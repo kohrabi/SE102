@@ -96,6 +96,9 @@
     <ClCompile Include="GameObjects\ScorePopup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects\NPC\Fireball.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -266,6 +269,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\ScorePopup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\NPC\Fireball.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

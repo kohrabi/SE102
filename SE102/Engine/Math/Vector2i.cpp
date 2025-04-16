@@ -25,7 +25,7 @@ void Vector2i::normalize()
 	y /= leng;
 }
 
-Vector2i Vector2i::normalizeVector2() const
+Vector2i Vector2i::normalized() const
 {
 	Vector2i newVector = *this;
 	newVector.normalize();

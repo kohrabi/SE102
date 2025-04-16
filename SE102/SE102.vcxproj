@@ -143,6 +143,7 @@
     <ClCompile Include="Engine\debug.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
+    <ClCompile Include="GameObjects\NPC\Fireball.cpp" />
     <ClCompile Include="GameObjects\ScorePopup.cpp" />
     <ClCompile Include="GameObjects\Coin.cpp" />
     <ClCompile Include="Engine\CollisionCast.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Helper.h" />
+    <ClInclude Include="GameObjects\NPC\Fireball.h" />
     <ClInclude Include="GameObjects\ScorePopup.h" />
     <ClInclude Include="GameObjects\Coin.h" />
     <ClInclude Include="Engine\CollisionCast.h" />

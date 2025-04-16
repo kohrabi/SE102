@@ -27,7 +27,7 @@ public:
 	float lengthSquared() const;
 	float dot() const;
 	void normalize();
-	Vector2 normalizeVector2() const;
+	Vector2 normalized() const;
 
 	float distance(const Vector2& b) const;
 

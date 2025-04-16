@@ -3,13 +3,15 @@
 
 #include "Engine/GameObject.h"
 
+#include "Engine/Math/Vector2i.h"
 
 #include "Engine/Graphics/Animations.h"
 
-#define FIRE_PIRANHA_INTRO_Y_VELOCITY 0.03f
-
-#define FIRE_PIRANHA_Y_SPEED 0.03f
+constexpr float FIRE_PIRANHA_Y_SPEED = 0x00A00 * SUBSUBSUBPIXEL_DELTA_TIME;
+constexpr float FIRE_PIRANHA_DOWN_POS = 33.0f;
 #define FIRE_PIRANHA_UP_TIME 5000
+#define FIRE_PIRANHA_WAIT_SHOOT_TIMER 1000
+#define FIRE_PIRANHA_SHOOT_ANIMATION_TIME 500
 #define FIRE_PIRANHA_MOVE_TIME 2000
 #define FIRE_PIRANHA_DOWN_TIME 5000
 
@@ -22,8 +24,14 @@ private:
     static void LoadContent();
     static bool IsContentLoaded;
 
-    Vector2 ogPosition = Vector2::Zero;
-    float timer = 0;
+    Vector2 spawnPosition = Vector2::Zero;
+    Vector2i lookDir = Vector2i::Zero;
+
+    float timer = 0.0f;
+    float shootTimer = 0.0f;
+    bool canShoot = false;
+
+    float shootAnimation = 0.0f;
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0
@@ -31,9 +39,9 @@ public:
     { 
         LoadContent(); 
         nx = -1;
-        ogPosition = position;
+        spawnPosition = position;
         SetState(FIRE_PIRANHA_DOWN);
-        position.y = y + 32.0f;
+        position.y = y + FIRE_PIRANHA_DOWN_POS;
         layer = SortingLayer::NPC;
     }
     void SetState(int state) override;
