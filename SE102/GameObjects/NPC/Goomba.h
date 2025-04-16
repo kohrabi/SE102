@@ -11,6 +11,14 @@
 #define GOOMBA_X_SPEED 0x00A00 * SUBSUBSUBPIXEL_DELTA_TIME
 #define GOOMBA_KILL_TIME 500
 
+#define GOOMBA_WING_X_SPEED 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME
+#define GOOMBA_WING_X_MAX_SPEED 0x01400 * SUBSUBSUBPIXEL_DELTA_TIME
+#define GOOMBA_WING_HOP 0x01000 * SUBSUBSUBPIXEL_DELTA_TIME
+#define GOOMBA_WING_BIG_HOP 0x03000 * SUBSUBSUBPIXEL_DELTA_TIME
+#define GOOMBA_WING_HOP_COUNT 4
+#define GOOMBA_WING_HOP_TIME 140 * 2
+#define GOOMBA_WING_ACTIVATE 1070 * 2
+
 #define GOOMBA_STATE_NORMAL 1
 #define GOOMBA_STATE_DEAD 2
 #define GOOMBA_STATE_DEAD_BOUNCE 3
@@ -21,6 +29,11 @@ private:
     static bool IsContentLoaded;
 
     float killTimer = 0.0f;
+    bool hasWing = true;
+    int hopCount = 0;
+    float hopTimer = 0.0f;
+    float wingActivateTimer = GOOMBA_WING_ACTIVATE;
+    bool wingActivate = false;
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0

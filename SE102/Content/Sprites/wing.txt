@@ -1,0 +1,25 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\VS\SE102\SE102\
+# EDITOR startID 12000
+# EDITOR objectName Wing
+
+[TEXTURES]
+Content\enemies.png 0
+
+[SPRITES]
+
+# WING ACTIVE
+12001 160 0 175 15 0
+12002 176 0 191 15 0
+
+# WING IDLE
+12003 160 0 175 15 0
+
+
+[ANIMATIONS]
+12004 12001 140 12002 140 
+# EDITOR animationName Wing Active
+
+12005 12003 10 
+# EDITOR animationName Wing Idle
+

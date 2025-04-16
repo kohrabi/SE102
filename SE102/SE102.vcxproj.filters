@@ -274,6 +274,9 @@
     <ClInclude Include="GameObjects\NPC\Fireball.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ContentIds\Wing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Content\Scenes\1-1.txt" />

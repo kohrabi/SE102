@@ -1,0 +1,25 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\VS\SE102\SE102
+# EDITOR startID 50000
+# EDITOR objectName Red Goomba
+
+[TEXTURES]
+Content\enemies.png 0
+
+[SPRITES]
+
+# WALK
+50001 112 0 127 15 0
+50002 128 0 143 15 0
+
+# DEAD
+50003 144 0 159 15 0
+
+
+[ANIMATIONS]
+50004 50001 200 50002 200 
+# EDITOR animationName Walk
+
+50005 50003 1000 
+# EDITOR animationName Dead
+

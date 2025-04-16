@@ -183,6 +183,7 @@
     <ClInclude Include="ContentIds\QuestionBlock.h" />
     <ClInclude Include="ContentIds\RedKoopa.h" />
     <ClInclude Include="ContentIds\UI.h" />
+    <ClInclude Include="ContentIds\Wing.h" />
     <ClInclude Include="contents.h" />
     <ClInclude Include="Engine\Collision.h" />
     <ClInclude Include="Engine\Graphics\Animation.h" />
