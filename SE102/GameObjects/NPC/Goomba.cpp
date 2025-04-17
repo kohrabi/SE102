@@ -8,6 +8,7 @@
 #include <iostream>
 #include <algorithm>
 #include <Engine/Helper.h>
+#include "ContentIds/RedGoomba.h"
 
 using namespace std;
 
@@ -21,19 +22,20 @@ void CGoomba::LoadContent()
     SpritesLoader loader;
     loader.Load(GOOMBA_SPRITES_PATH);
     loader.Load(WING_SPRITES_PATH);
+    loader.Load(RED_GOOMBA_SPRITES_PATH);
 }
 
 void CGoomba::SetState(int state)
 {
+    if (this->state == state)
+        return;
     switch (state)
     {
     case GOOMBA_STATE_DEAD:
     {
-        if (hasWing)
+        if (this->state == GOOMBA_STATE_WING)
         {
-            hasWing = false;
-            this->state = GOOMBA_STATE_NORMAL;
-            return;
+            state = GOOMBA_STATE_NORMAL;
         }
         else
         {
@@ -61,6 +63,7 @@ void CGoomba::OnNoCollision(float dt)
 {
     position.x += velocity.x * dt;
     position.y += velocity.y * dt;
+    onGround = false;
 }
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -72,10 +75,12 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
     }
     if (e->ny != 0 && e->obj->IsBlocking())
     {
-        //if (hasWing)
-        //    velocity.y += 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME;
-        //else
+        if (state == GOOMBA_STATE_WING && e->ny > 0)
+            velocity.y = 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME;
+        else
             velocity.y = 0.0f;
+        if (e->ny < 0)
+            onGround = true;
     }
     
 }
@@ -84,19 +89,36 @@ void CGoomba::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
     if (!IsColliderInCamera())
         return;
-    if (hasWing)
+    switch (state)
+    {
+    case GOOMBA_STATE_WING:
     {
         velocity.x = GOOMBA_X_SPEED * nx;
-        //velocity.x = clampf(velocity.x + GOOMBA_WING_X_SPEED * nx, -GOOMBA_WING_X_MAX_SPEED, GOOMBA_WING_X_MAX_SPEED);
         velocity.y = min(velocity.y + OBJECT_FALL / 1.5f, OBJECT_MAX_FALL / 1.5);
+
+        if (hopTimer > 0) hopTimer -= dt;
         if (wingActivateTimer > 0) wingActivateTimer -= dt;
-        else
+        if (changeDirTimer > 0) changeDirTimer -= dt;
+        
+        if (onGround)
         {
-            wingActivate = !wingActivate;
-            wingActivateTimer = GOOMBA_WING_ACTIVATE;
-            hopCount = 0;
-            hopTimer = GOOMBA_WING_HOP_TIME;
-            if (!wingActivate)
+            if (wingActivateTimer <= 0)
+            {
+                if (hopTimer <= 0)
+                {
+                    hopTimer = GOOMBA_WING_HOP_TIME;
+                    hopCount = (hopCount + 1);
+                    velocity.y = -GOOMBA_WING_HOP;
+                    if (hopCount == 4)
+                    {
+                        velocity.y = -GOOMBA_WING_BIG_HOP;
+                        wingActivateTimer = GOOMBA_WING_ACTIVATE_TIME;
+                        hopCount = 0;
+                    }
+                }
+            }
+            // Change Goomba direction to player
+            else if (changeDirTimer <= 0)
             {
                 LPGAMEOBJECT player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
                 if (player != NULL)
@@ -105,72 +127,71 @@ void CGoomba::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
                 }
             }
         }
-        if (wingActivate && hopCount <= GOOMBA_WING_HOP_COUNT)
-        {
-            if (hopTimer > 0) hopTimer -= dt;
-            else
-            {
-                if (hopCount == 3)
-                    velocity.y = -GOOMBA_WING_BIG_HOP;
-                else 
-                    velocity.y = -GOOMBA_WING_HOP;
-                hopCount = (hopCount + 1);
-                hopTimer = GOOMBA_WING_HOP_TIME;
-            }
-        }
         CCollision::GetInstance()->Process(this, dt, coObjects);
-        return;
-    }
-    switch (state)
-    {
-    case GOOMBA_STATE_NORMAL:
-        {
-            velocity.y += OBJECT_FALL;
-            velocity.y = min(velocity.y, OBJECT_MAX_FALL);
-            velocity.x = GOOMBA_X_SPEED * nx;
-            CCollision::GetInstance()->Process(this, dt, coObjects);
-        }
-        break;
-    case GOOMBA_STATE_DEAD:
-        {
-            killTimer -= dt;
-            if (killTimer < 0)
-                Delete();
-        }
-        break;
-    case GOOMBA_STATE_DEAD_BOUNCE:
-        {
-            velocity.y += OBJECT_FALL;
-            velocity.y = min(velocity.y, OBJECT_MAX_FALL);
-            velocity.x = GOOMBA_X_SPEED * nx;
 
-            // Handle physics here
-            position.x += velocity.x * dt;
-            position.y += velocity.y * dt;
-        }
-        break;
+    }
+    break;
+    case GOOMBA_STATE_NORMAL:
+    {
+        velocity.y += OBJECT_FALL;
+        velocity.y = min(velocity.y, OBJECT_MAX_FALL);
+        velocity.x = GOOMBA_X_SPEED * nx;
+        CCollision::GetInstance()->Process(this, dt, coObjects);
+    }
+    break;
+    case GOOMBA_STATE_DEAD:
+    {
+        killTimer -= dt;
+        if (killTimer < 0)
+            Delete();
+    }
+    break;
+    case GOOMBA_STATE_DEAD_BOUNCE:
+    {
+        velocity.y += OBJECT_FALL;
+        velocity.y = min(velocity.y, OBJECT_MAX_FALL);
+        velocity.x = GOOMBA_X_SPEED * nx;
+
+        // Handle physics here
+        position.x += velocity.x * dt;
+        position.y += velocity.y * dt;
+    }
+    break;
     }
 }
 
 void CGoomba::Render() {
     CAnimations* const animations = CAnimations::GetInstance();
 
-    if (hasWing)
+
+    if (state == GOOMBA_STATE_WING)
     {
-        if (wingActivate)
+        const Vector2 wingOffset = Vector2(6.0f, 10.0f);
+        if (wingActivateTimer <= 0.0f || (wingActivateTimer >= 0.0f && !onGround))
         {
-            animations->Get(WING_ID_ANIMATION_WING_ACTIVE)->Render(position.x - 6.0f, position.y - 5.0f, GetLayer(layer, orderInLayer), true);
-            animations->Get(WING_ID_ANIMATION_WING_ACTIVE)->Render(position.x + 6.0f, position.y - 5.0f, GetLayer(layer, orderInLayer));
+            animations->Get(WING_ID_ANIMATION_WING_ACTIVE)->Render(position.x - wingOffset.x, position.y - wingOffset.y, GetLayer(layer, orderInLayer), true);
+            animations->Get(WING_ID_ANIMATION_WING_ACTIVE)->Render(position.x + wingOffset.x, position.y - wingOffset.y, GetLayer(layer, orderInLayer));
         }
         else
         {
-            animations->Get(WING_ID_ANIMATION_WING_IDLE)->Render(position.x - 6.0f, position.y - 5.0f, GetLayer(layer, orderInLayer), true);
-            animations->Get(WING_ID_ANIMATION_WING_IDLE)->Render(position.x + 6.0f, position.y - 5.0f, GetLayer(layer, orderInLayer));
+            animations->Get(WING_ID_ANIMATION_WING_IDLE)->Render(position.x - wingOffset.x, position.y - wingOffset.y, GetLayer(layer, orderInLayer), true);
+            animations->Get(WING_ID_ANIMATION_WING_IDLE)->Render(position.x + wingOffset.x, position.y - wingOffset.y, GetLayer(layer, orderInLayer));
 
         }
     }
-    if (state == GOOMBA_STATE_DEAD)
-        animations->Get(GOOMBA_ID_ANIMATION_DEAD)->Render(position.x, position.y, GetLayer(layer, orderInLayer), false);
+
+    if (isRedGoomba)
+    {
+        if (state == GOOMBA_STATE_DEAD)
+            animations->Get(RED_GOOMBA_ID_ANIMATION_DEAD)->Render(position.x, position.y, GetLayer(layer, orderInLayer), false);
+        else
+            animations->Get(RED_GOOMBA_ID_ANIMATION_WALK)->Render(position.x, position.y, GetLayer(layer, orderInLayer), false, state == GOOMBA_STATE_DEAD_BOUNCE);
+    }
     else
-        animations->Get(GOOMBA_ID_ANIMATION_WALK)->Render(position.x, position.y, GetLayer(layer, orderInLayer), false, state == GOOMBA_STATE_DEAD_BOUNCE);
+    {
+        if (state == GOOMBA_STATE_DEAD)
+            animations->Get(GOOMBA_ID_ANIMATION_DEAD)->Render(position.x, position.y, GetLayer(layer, orderInLayer), false);
+        else
+            animations->Get(GOOMBA_ID_ANIMATION_WALK)->Render(position.x, position.y, GetLayer(layer, orderInLayer), false, state == GOOMBA_STATE_DEAD_BOUNCE);
+    }
 }

@@ -290,6 +290,13 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 				else if (layerObject.getClass() == "CGoomba")
 				{
 					CGoomba* obj = new CGoomba(position.x, position.y);
+					if (layerObject.getName() == "RedGoomba")
+						obj->SetRedGoomba();
+					for (const auto& property : layerObject.getProperties())
+					{
+						if (property.getName() == "hasWing" && property.getBoolValue())
+							obj->SetHasWing();
+					}
 					objects.push_back(obj);
 				}
 				else if (layerObject.getClass() == "CFirePiranha")

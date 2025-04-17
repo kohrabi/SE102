@@ -160,7 +160,7 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
             if (player != NULL)
             {
                 nx = player->GetNx();
-                position = player->GetPosition() + Vector2(12 * nx, holdYOffset);
+                position = player->GetPosition() + Vector2(12.0f * nx, holdYOffset);
                 velocity.x = 0;
                 velocity.y = 0;
             }
@@ -197,7 +197,7 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     if (player != NULL)
     {
         nx = player->GetNx();
-        position = player->GetPosition() + Vector2(12 * nx, holdYOffset);
+        position = player->GetPosition() + Vector2(12.0f * nx, holdYOffset);
         velocity.x = 0;
         velocity.y = 0;
     }

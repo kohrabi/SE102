@@ -181,6 +181,7 @@
     <ClInclude Include="ContentIds\MarioBig.h" />
     <ClInclude Include="ContentIds\Mushroom.h" />
     <ClInclude Include="ContentIds\QuestionBlock.h" />
+    <ClInclude Include="ContentIds\RedGoomba.h" />
     <ClInclude Include="ContentIds\RedKoopa.h" />
     <ClInclude Include="ContentIds\UI.h" />
     <ClInclude Include="ContentIds\Wing.h" />
@@ -246,8 +247,10 @@
     <Text Include="Content\Sprites\mariobig.txt" />
     <Text Include="Content\Sprites\mushroom.txt" />
     <Text Include="Content\Sprites\questionBlock.txt" />
+    <Text Include="Content\Sprites\red_goomba.txt" />
     <Text Include="Content\Sprites\red_koopa.txt" />
     <Text Include="Content\Sprites\ui.txt" />
+    <Text Include="Content\Sprites\wing.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

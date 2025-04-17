@@ -27,8 +27,8 @@
             "scale": 4,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 665,
-                "y": 292.875
+                "x": 944.75,
+                "y": 292.375
             }
         },
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx": {
@@ -93,7 +93,7 @@
         "1-1.tmx"
     ],
     "project": "game.tiled-project",
-    "property.type": "file",
+    "property.type": "bool",
     "recentFiles": [
         "1-1.tmx",
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx",

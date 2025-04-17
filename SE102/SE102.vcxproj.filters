@@ -277,6 +277,9 @@
     <ClInclude Include="ContentIds\Wing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ContentIds\RedGoomba.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Content\Scenes\1-1.txt" />
@@ -293,5 +296,7 @@
     <Text Include="Content\Sprites\mariobig.txt" />
     <Text Include="Content\Sprites\green_koopa.txt" />
     <Text Include="Content\Sprites\fireball.txt" />
+    <Text Include="Content\Sprites\red_goomba.txt" />
+    <Text Include="Content\Sprites\wing.txt" />
   </ItemGroup>
 </Project>

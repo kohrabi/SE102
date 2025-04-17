@@ -263,14 +263,17 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     else if (dynamic_cast<CGoomba*>(e->obj))
     {
         CGoomba* const goomba = dynamic_cast<CGoomba*>(e->obj);
-        if (e->ny >= 0)
+        if (goomba->GetState() != GOOMBA_STATE_DEAD && goomba->GetState() != GOOMBA_STATE_DEAD_BOUNCE)
         {
-            cout << "ouch!!!\n";
-        }
-        else
-        {
-            goomba->SetKill();
-            velocity.y = -ENEMY_BOUNCE;
+            if (e->ny >= 0)
+            {
+                cout << "ouch!!!\n";
+            }
+            else
+            {
+                goomba->SetKill();
+                velocity.y = -ENEMY_BOUNCE;
+            }
         }
     }
     else if (dynamic_cast<CMushroom*>(e->obj))

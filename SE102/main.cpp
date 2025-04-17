@@ -33,6 +33,7 @@
 #include <tmxlite/TileLayer.hpp>
 #include <tmxlite/ObjectGroup.hpp>
 #include <iostream>
+#include <Engine/Helper.h>
 
 #define WINDOW_CLASS_NAME L"Game Window"
 #define MAIN_WINDOW_TITLE L"MARIO"
@@ -209,6 +210,7 @@ int Run()
 		// dt: the time between (beginning of last frame) and now
 		// this frame: the frame we are about to render
 		float dt = (now - frameStart) * CGame::GetInstance()->GetTimeScale();
+		dt = clampf(dt, 0.0f, 50.0f);
 
 		if (dt >= tickPerFrame)
 		{
