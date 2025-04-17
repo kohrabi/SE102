@@ -64,7 +64,7 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
             if (holdShell == NULL)
             {
                 holdShell = dynamic_cast<CGreenKoopa*>(cast.collision[0]);
-                if (holdShell->IsInShell())
+                if (holdShell->IsInShell() && holdShell->GetVelocity().x == 0.0f)
                 {
                     if (powerUp == MARIO_POWERUP_SMALL)
                         holdShell->AttachHold(this, -8.0f);
@@ -301,6 +301,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         }
         else
         {
+
             int posSign = sign(position.x - koopa->GetPosition().x);
             CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score100));
             velocity.y = -ENEMY_BOUNCE;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="20" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#aff9f0" nextlayerid="8" nextobjectid="143">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="20" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#aff9f0" nextlayerid="8" nextobjectid="147">
  <properties>
   <property name="collisionMap" type="file" value="1-1.txt"/>
  </properties>
@@ -203,12 +203,9 @@
   <object id="126" template="Coin.tx" x="1136" y="160"/>
   <object id="127" template="Coin.tx" x="1168" y="128"/>
   <object id="128" template="Coin.tx" x="1200" y="96"/>
-  <object id="129" template="Coin.tx" x="144" y="272"/>
   <object id="130" template="Goomba.tx" type="CGoomba" x="224" y="304"/>
   <object id="133" template="FirePiranha.tx" type="CFirePiranha" x="360" y="256"/>
-  <object id="134" name="GreenKoopa" type="CGreenKoopa" gid="1476" x="320" y="304" width="16" height="32"/>
   <object id="135" template="RedKoopa.tx" type="CRedKoopa" x="592" y="272"/>
-  <object id="137" template="RedKoopa.tx" x="240" y="192"/>
   <object id="138" template="Goomba.tx" x="832" y="288"/>
   <object id="139" template="Goomba.tx" x="880" y="288"/>
   <object id="141" template="RedGoomba.tx" type="CGoomba" x="944" y="288">
@@ -216,5 +213,6 @@
     <property name="hasWing" type="bool" value="true"/>
    </properties>
   </object>
+  <object id="146" template="Goomba.tx" x="528" y="304"/>
  </objectgroup>
 </map>
