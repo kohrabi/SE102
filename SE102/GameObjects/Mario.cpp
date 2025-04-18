@@ -165,6 +165,7 @@ void CMario::marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
 {
     if (GetTickCount64() - powerUpStartTimer > POWER_UP_ANIMATION_TIME)
     {
+        CGame::GetInstance()->SetTimeScale(1.0f);
         powerUp = MARIO_POWERUP_BIG;
         SetState(MARIO_STATE_NORMAL);
         position.y -= 9.0f;
@@ -225,6 +226,7 @@ void CMario::SetState(int state) {
         {
             if (this->state == MARIO_STATE_NORMAL)
             {
+                CGame::GetInstance()->SetTimeScale(0.0f);
                 powerUpStartTimer = GetTickCount64();
             }
         }

@@ -193,7 +193,8 @@ int Run()
 	MSG msg;
 	int done = 0;
 	ULONGLONG frameStart = GetTickCount64();
-	ULONGLONG tickPerFrame = 1000 / MAX_FRAME_RATE;
+	constexpr ULONGLONG tickPerFrame = 1000 / MAX_FRAME_RATE;
+	CGame* const game = CGame::GetInstance();
 
 	while (!done)
 	{
@@ -210,9 +211,9 @@ int Run()
 		// dt: the time between (beginning of last frame) and now
 		// this frame: the frame we are about to render
 		float dt = (now - frameStart) * CGame::GetInstance()->GetTimeScale();
-		dt = clampf(dt, 0.0f, 50.0f);
+		dt = clampf(dt, 0.0001f, 50.0f);
 
-		if (dt >= tickPerFrame)
+		if (dt >= tickPerFrame || CGame::GetInstance()->GetTimeScale() == 0)
 		{
 			frameStart = now;
 		
@@ -222,7 +223,7 @@ int Run()
 			CGame::GetInstance()->SwitchScene();
 		}
 		else
-			Sleep(tickPerFrame - dt);	
+			Sleep(tickPerFrame - dt);
 	}
 
 	UnloadResources();
