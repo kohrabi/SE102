@@ -571,6 +571,26 @@ void CGame::SwitchScene()
 	s->Load();
 }
 
+
+void CGame::ResetScene()
+{
+	if (!resetScene)
+	{
+		DebugOut(L"[ERROR] Cannot reset scene this->resetScene is false\n");
+		return;
+	}
+	DebugOut(L"[INFO] Reset scene %d\n", current_scene);
+
+	scenes[current_scene]->Unload();
+
+	resetScene = false;
+	LPSCENE s = scenes[current_scene];
+	s->Load();
+
+	timeScale = 1.0f;
+
+}
+
 void CGame::InitiateSwitchScene(int scene_id)
 {
 	next_scene = scene_id;

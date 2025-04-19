@@ -25,7 +25,7 @@ public:
 
 	void Render() override {
 		CTileLayer::Render();
-		RenderBoundingBox();
+		// RenderBoundingBox();
 	}
 };
 

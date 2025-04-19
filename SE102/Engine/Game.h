@@ -48,6 +48,7 @@ class CGame
 	void _ParseSection_SCENES(string line);
 
 	float timeScale = 1.0f;
+	bool resetScene = false;
 
 public:
 	bool leftMouseDown = false;
@@ -117,6 +118,9 @@ public:
 
 	void Load(LPCWSTR gameFile);
 	void SwitchScene();
+	bool GetResetScene() const { return resetScene; }
+	void SetResetScene(bool resetScene) { this->resetScene = resetScene; }
+	void ResetScene();
 	void InitiateSwitchScene(int scene_id);
 
 	void _ParseSection_TEXTURES(string line);

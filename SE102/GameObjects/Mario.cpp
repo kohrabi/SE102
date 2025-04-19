@@ -15,6 +15,8 @@
 #include "NPC/Goomba.h"
 #include "NPC/GreenKoopa.h"
 #include "NPC/Mushroom.h"
+#include "NPC/Fireball.h"
+#include "NPC/FirePiranha.h"
 #include "ScorePopup.h"
 
 #include <iostream>
@@ -123,7 +125,7 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
         velocity.x = clampf(velocity.x, -MAXIMUM_RUNNING_SPEED, MAXIMUM_RUNNING_SPEED);
     else
         velocity.x = clampf(velocity.x, -MAXIMUM_WALK_SPEED, MAXIMUM_WALK_SPEED);
-
+    
     // Y MOVEMENT
     float gravity = 0.0f;
     if (game->IsKeyDown(KEY_JUMP) && velocity.y < JUMP_MAX_NEGATIVE)
@@ -180,6 +182,39 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
     {
     case MARIO_STATE_NORMAL: marioNormalUpdate(dt, coObjects); break;
     case MARIO_STATE_POWER_UP: marioPowerupUpdate(dt, coObjects); break;
+    case MARIO_STATE_DEAD: 
+    {
+        float unscaledDT = GetTickCount64() - deadPrev;
+        deadPrev = GetTickCount64();
+        if (deadTimer > 0) deadTimer -= unscaledDT;
+        else
+        {
+            if (!deadJump)
+            {
+                velocity.y = -0.8f;
+                deadJump = true;
+            }
+            //velocity.y = min(velocity.y + JUMP_GRAVITY / 2.0f, MAX_FALL_SPEED / 2.0f);
+            velocity.y = velocity.y + JUMP_GRAVITY / 2.0f;
+            position.y += velocity.y / 2.0f * unscaledDT;
+        }
+
+        if (!IsColliderInCamera())
+        {
+            if (!isResetting)
+            {
+                isResetting = true;
+                levelResetTimer = DEAD_RESET_TIMER;
+            }
+
+            if (levelResetTimer > 0) levelResetTimer -= unscaledDT;
+            else
+            {
+                CGame::GetInstance()->SetResetScene(true);
+            }
+        }
+    }
+    break;
     }
 }
 
@@ -189,6 +224,7 @@ void CMario::Render() {
     LPANIMATION animation = animations->Get(GetAnimationID());
     switch (state)
     {
+    case MARIO_STATE_DEAD:
     case MARIO_STATE_NORMAL:
         {
             if (abs(velocity.x) <= MAXIMUM_WALK_SPEED + WALKING_ACCELERATION)
@@ -218,19 +254,36 @@ void CMario::SetState(int state) {
     switch (state)
     {
     case MARIO_STATE_NORMAL:
-        {
-            
-        }
-        break;
+    {
+                
+    }
+    break;
     case MARIO_STATE_POWER_UP:
+    {
+        if (this->state == MARIO_STATE_NORMAL)
         {
-            if (this->state == MARIO_STATE_NORMAL)
-            {
-                CGame::GetInstance()->SetTimeScale(0.0f);
-                powerUpStartTimer = GetTickCount64();
-            }
+            CGame::GetInstance()->SetTimeScale(0.0f);
+            powerUpStartTimer = GetTickCount64();
         }
-        break;
+    }
+    break;
+    case MARIO_STATE_DEAD:
+    {
+        if (powerUp != MARIO_POWERUP_SMALL)
+        {
+            powerUp = MARIO_POWERUP_SMALL;
+            state = MARIO_STATE_NORMAL;
+        }
+        else 
+        {
+            deadTimer = DEAD_STAY_TIMER;
+            velocity = Vector2::Zero;
+            CGame::GetInstance()->SetTimeScale(0.0f);
+            layer = SortingLayer::CORPSE;
+            deadPrev = GetTickCount64();
+        }
+    }
+    break;
     }
     this->state = state;
 }
@@ -260,7 +313,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     else if (dynamic_cast<CCoin*>(e->obj) && e->obj->GetState() == COIN_STATE_NORMAL)
     {
         e->obj->Delete();
-        cout<<"AddCoin\n";
     }
     else if (dynamic_cast<CGoomba*>(e->obj))
     {
@@ -269,7 +321,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         {
             if (e->ny >= 0)
             {
-                cout << "ouch!!!\n";
+                SetState(MARIO_STATE_DEAD);
             }
             else
             {
@@ -299,7 +351,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
                 CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score200));
                 koopa->SetNx(nx);
             }
-            cout << "ouch!!!\n";
+            else
+            {
+                SetState(MARIO_STATE_DEAD);
+            }
         }
         else
         {
@@ -310,10 +365,20 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             koopa->PlayerHit(posSign);
         }
     }
+    else if (dynamic_cast<CFireball*>(e->obj))
+    {
+        SetState(MARIO_STATE_DEAD);
+    }
+    else if (dynamic_cast<CFirePiranha*>(e->obj))
+    {
+        SetState(MARIO_STATE_DEAD);
+    }
 }
 
 int CMario::GetAnimationIDSmall()
 {
+    if (state == MARIO_STATE_DEAD)
+        return MARIO_ID_ANIMATION_DEAD;
     if (state == MARIO_STATE_POWER_UP)
         return MARIO_ID_ANIMATION_LEVEL_UP;
     if (isHolding)

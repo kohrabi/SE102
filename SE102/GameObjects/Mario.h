@@ -37,8 +37,11 @@ constexpr float ENEMY_BOUNCE = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 #pragma region Others
 
-constexpr float POWER_UP_ANIMATION_TIME = 1500;
-constexpr float KICK_ANIMATION_TIME = 300;
+constexpr float POWER_UP_ANIMATION_TIME = 1500.0f;
+constexpr float KICK_ANIMATION_TIME = 300.0f;
+
+constexpr float DEAD_STAY_TIMER = 1000.0f;
+constexpr float DEAD_RESET_TIMER = 1000.0f;
 
 #pragma endregion
 
@@ -46,13 +49,14 @@ constexpr float KICK_ANIMATION_TIME = 300;
 #define MARIO_POWERUP_BIG 1
 #define MARIO_POWERUP_RACOON 2
 
-#define KEY_MOVE_LEFT 'A'
-#define KEY_MOVE_RIGHT 'D'
-#define KEY_RUN 'J'
-#define KEY_JUMP 'K'
+#define KEY_MOVE_LEFT VK_LEFT
+#define KEY_MOVE_RIGHT VK_RIGHT
+#define KEY_RUN 'A'
+#define KEY_JUMP 'S'
 
 #define MARIO_STATE_NORMAL 1
 #define MARIO_STATE_POWER_UP 2
+#define MARIO_STATE_DEAD 3
 
 // Y ofset
 // Held object Large: -$02
@@ -112,6 +116,13 @@ private:
 	CGreenKoopa* holdShell;
 	bool isHolding = false;
 
+	float deadTimer = 0.0f;
+	ULONGLONG deadPrev = 0;
+	bool deadJump = false;
+
+	bool isResetting = false;
+	float levelResetTimer = 0.0f;
+
 	void marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
 	void marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
 
@@ -124,7 +135,7 @@ public:
     void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
 
-	int IsCollidable() override { return !isDeleted; };
+	int IsCollidable() override { return !isDeleted && (state != MARIO_STATE_DEAD); };
 	void OnNoCollision(float dt) override;
 	void OnCollisionWith(LPCOLLISIONEVENT e) override;
 	int IsBlocking() override { return 0; }

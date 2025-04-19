@@ -155,6 +155,8 @@ void CGoomba::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
         // Handle physics here
         position.x += velocity.x * dt;
         position.y += velocity.y * dt;
+        if (!IsColliderInCamera())
+            Delete();
     }
     break;
     }

@@ -77,6 +77,10 @@ void CPlayScene::Update(float dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
+	CGame* const game = CGame::GetInstance();
+	if (game->GetResetScene())
+		game->ResetScene();
+
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
@@ -96,7 +100,6 @@ void CPlayScene::Update(float dt)
 	// Update camera to follow mario
 	Vector2 position = player->GetPosition();
 
-	CGame* const game = CGame::GetInstance();
 	position.x -= game->GetBackBufferWidth() / 2;
 	position.y -= game->GetBackBufferHeight() / 2;
 	position.y = 500.f;
@@ -104,7 +107,7 @@ void CPlayScene::Update(float dt)
 	position.x = clampf(position.x, levelBounds.left, levelBounds.right - game->GetBackBufferWidth());
 	position.y = clampf(position.y, levelBounds.top, levelBounds.bottom - game->GetBackBufferHeight());
 
-	CGame::GetInstance()->SetCamPos(position.x, position.y /*cy*/);
+	game->SetCamPos(position.x, position.y /*cy*/);
 
 	PurgeDeletedObjects();
 }

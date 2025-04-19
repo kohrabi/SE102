@@ -47,7 +47,7 @@ public:
     void SetState(int state) override;
 	int IsCollidable() override { return !isDeleted; };
     int IsBlocking() override { return false; }
-    int IsDirectionColliable(float nx, float ny) override { return false; }
+    int IsDirectionColliable(float nx, float ny) override { return 1; }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) { 
         left = position.x - 8; 
         top = position.y - 16; 

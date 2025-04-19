@@ -20,7 +20,7 @@ public:
         layer = SortingLayer::NPC;
         velocity = Vector2((float)nx, (float)ny).normalized() * FIREBALL_VELOCITY;
     }
-    int IsDirectionColliable(float nx, float ny) override { return 0; }
+    int IsDirectionColliable(float nx, float ny) override { return 1; }
 
     void GetBoundingBox(float& left, float& top, float& right, float& bottom) {
         left = position.x - 8;
