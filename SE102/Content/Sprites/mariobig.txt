@@ -38,32 +38,39 @@ Content\mario.png 0
 # SHELL KICK
 12 304 32 335 63 0
 
+# LEVEL UP
+13 0 32 15 63 0
+14 0 0 15 15 0
+
 
 [ANIMATIONS]
-13 1 10 
+15 1 10 
 # EDITOR animationName Idle
 
-14 2 100 3 100 
+16 2 100 3 100 
 # EDITOR animationName Walk
 
-15 4 100 
+17 4 100 
 # EDITOR animationName Jump
 
-16 5 10 6 10 
+18 5 10 6 10 
 # EDITOR animationName RunFly
 
-17 7 100 
+19 7 100 
 # EDITOR animationName Fly
 
-18 8 100 
+20 8 100 
 # EDITOR animationName Skidding
 
-19 9 100 
+21 9 100 
 # EDITOR animationName Hold Idle
 
-20 10 100 11 100 
+22 10 100 11 100 
 # EDITOR animationName Hold Walk
 
-21 12 10 
+23 12 10 
 # EDITOR animationName Shell Kick
+
+24 13 100 14 100 
+# EDITOR animationName Level Up
 

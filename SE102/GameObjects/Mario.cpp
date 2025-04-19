@@ -168,9 +168,12 @@ void CMario::marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     if (GetTickCount64() - powerUpStartTimer > POWER_UP_ANIMATION_TIME)
     {
         CGame::GetInstance()->SetTimeScale(1.0f);
-        powerUp = MARIO_POWERUP_BIG;
+        powerUp = nextPowerUp;
         SetState(MARIO_STATE_NORMAL);
-        position.y -= 9.0f;
+        if (nextPowerUp != MARIO_POWERUP_SMALL)
+            position.y -= 9.0f;
+        else
+            invincibleTimer = INVINCIBLE_TIME;
     }
 }
 
@@ -178,6 +181,7 @@ void CMario::marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
 void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
 
     if (kickTimer > 0) kickTimer -= dt;
+    if (invincibleTimer > 0) invincibleTimer -= dt;
     switch (state)
     {
     case MARIO_STATE_NORMAL: marioNormalUpdate(dt, coObjects); break;
@@ -204,7 +208,7 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
             if (!isResetting)
             {
                 isResetting = true;
-                levelResetTimer = DEAD_RESET_TIMER;
+                levelResetTimer = DEAD_RESET_TIME;
             }
 
             if (levelResetTimer > 0) levelResetTimer -= unscaledDT;
@@ -220,6 +224,10 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
 
 void CMario::Render() {
     CAnimations* const animations = CAnimations::GetInstance();
+
+    if (invincibleTimer > 0 && (int)(invincibleTimer) % 200 <= 100)
+        return;
+
 
     LPANIMATION animation = animations->Get(GetAnimationID());
     switch (state)
@@ -239,10 +247,12 @@ void CMario::Render() {
     case MARIO_STATE_POWER_UP:
         {
             bool flipX = nx > 0 ? true : false;
-            if (animation->GetCurrentFrameIndex() == 1)
-                animation->Render(position.x, position.y - 8.0f, GetLayer(layer, orderInLayer), flipX);
-            else
-                animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
+            float yOffset = 0.0f;
+            if (animation->GetCurrentFrameIndex() == 1 && nextPowerUp == MARIO_POWERUP_BIG)
+                yOffset = -8.0f;
+            if (animation->GetCurrentFrameIndex() == 0 && nextPowerUp == MARIO_POWERUP_SMALL)
+                yOffset = -8.0f;
+            animation->Render(position.x, position.y + yOffset, GetLayer(layer, orderInLayer), flipX);
         }
         break;
     }
@@ -264,19 +274,25 @@ void CMario::SetState(int state) {
         {
             CGame::GetInstance()->SetTimeScale(0.0f);
             powerUpStartTimer = GetTickCount64();
+            nextPowerUp = MARIO_POWERUP_BIG;
         }
     }
     break;
     case MARIO_STATE_DEAD:
     {
+        if (invincibleTimer > 0)
+            return;
         if (powerUp != MARIO_POWERUP_SMALL)
         {
-            powerUp = MARIO_POWERUP_SMALL;
-            state = MARIO_STATE_NORMAL;
+            state = MARIO_STATE_POWER_UP;
+            CGame::GetInstance()->SetTimeScale(0.0f);
+            nextPowerUp = MARIO_POWERUP_SMALL;
+            position.y += 8.0f;
+            powerUpStartTimer = GetTickCount64();
         }
         else 
         {
-            deadTimer = DEAD_STAY_TIMER;
+            deadTimer = DEAD_STAY_TIME;
             velocity = Vector2::Zero;
             CGame::GetInstance()->SetTimeScale(0.0f);
             layer = SortingLayer::CORPSE;
@@ -402,6 +418,8 @@ int CMario::GetAnimationIDSmall()
 
 int CMario::GetAnimationIDBig()
 {
+    if (state == MARIO_STATE_POWER_UP)
+        return MARIO_BIG_ID_ANIMATION_LEVEL_UP;
     if (isHolding)
     {
         if (abs(velocity.x) > 0)

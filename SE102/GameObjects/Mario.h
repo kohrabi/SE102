@@ -40,8 +40,10 @@ constexpr float ENEMY_BOUNCE = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 constexpr float POWER_UP_ANIMATION_TIME = 1500.0f;
 constexpr float KICK_ANIMATION_TIME = 300.0f;
 
-constexpr float DEAD_STAY_TIMER = 1000.0f;
-constexpr float DEAD_RESET_TIMER = 1000.0f;
+constexpr float DEAD_STAY_TIME = 1000.0f;
+constexpr float DEAD_RESET_TIME = 1000.0f;
+
+constexpr float INVINCIBLE_TIME = 1000.0F;
 
 #pragma endregion
 
@@ -108,7 +110,10 @@ private:
 	bool isOnGround = false;
 
 	int powerUp = 0;
+	int nextPowerUp = 0;
 	float powerUpStartTimer = 0.0f;
+
+	float invincibleTimer = 0.0f;
 
 	float kickTimer = 0.0f;
 
