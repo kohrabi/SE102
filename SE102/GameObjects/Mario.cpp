@@ -121,34 +121,88 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
         velocity.x = move_towards(velocity.x, 0, SKIDDING_DECELERATION);
     }
 
-    if (run || (abs(velocity.x) > MAXIMUM_WALK_SPEED + WALKING_ACCELERATION && runBeforeWalkTimer > 0))
+    // Dashing
+    flightMode = false;
+    isDashing = false;
+    if (run)
+    {
+        if (abs(velocity.x) >= MAXIMUM_RUNNING_SPEED)
+            isDashing = true;
+
+        if (isDashing)
+        {
+            if (dashPTimer > 0) dashPTimer -= dt;
+            else
+            {
+                dashPTimer = DASH_P_TIMER;
+                dashPCounter = clampi(dashPCounter + 1, 0, DASH_P_COUNT);
+            }
+        }
+
+        if (dashPCounter >= DASH_P_COUNT)
+            flightMode = true;
+
+        if (!isDashing && flightMode)
+        {
+            dashPCounter--;
+            flightMode = false;
+        }
+
+        if (!game->IsKeyDown(KEY_RUN))
+
+            if (dashPTimer > 0) dashPTimer -= dt;
+            else if (!game->IsKeyDown(KEY_RUN))
+            {
+                dashPTimer = DASH_P_REDUCE_TIMER;
+                dashPCounter = clampi(dashPCounter - 1, 0, DASH_P_COUNT);
+            }
+    }
+
+    if (flightMode)
+        velocity.x = clampf(velocity.x, -MAXIMUM_POWER_SPEED, MAXIMUM_POWER_SPEED);
+    else if (run || (abs(velocity.x) > MAXIMUM_WALK_SPEED + WALKING_ACCELERATION && runBeforeWalkTimer > 0))
         velocity.x = clampf(velocity.x, -MAXIMUM_RUNNING_SPEED, MAXIMUM_RUNNING_SPEED);
     else
         velocity.x = clampf(velocity.x, -MAXIMUM_WALK_SPEED, MAXIMUM_WALK_SPEED);
-    
+
+
+
     // Y MOVEMENT
     float gravity = 0.0f;
-    if (game->IsKeyDown(KEY_JUMP) && velocity.y < JUMP_MAX_NEGATIVE)
-    {
+    if ((game->IsKeyDown(KEY_JUMP) && velocity.y <= JUMP_MAX_NEGATIVE))
         gravity = JUMP_HELD_GRAVITY;
-    }
     else
-    {
         gravity = JUMP_GRAVITY;
-    }
     accel.y = gravity;
+
+    if (flightTimer > 0) flightTimer -= dt;
+
+    constexpr float FLY_FLY_TIME = 0x0F * 1000 / 60;
+    constexpr int FLY_APEX = 0x08 * 1000 / 60;
+    if (velocity.y >= FLY_Y_VELOCITY)
+    {
+        if (flightTimer > 0 && flightTimer < FLY_FLY_TIME && (int)(flightTimer) % FLY_APEX == 0)
+        {
+            accel.y = 0;
+        }
+    }
+
 
     if (game->IsKeyJustPressed(KEY_JUMP) && isOnGround) {
         float initVel = -JUMP_INIT_VEL;
-        int temp = trunc(abs(velocity.x) * MAX_DELTA_TIME);
-        if (temp == 0)
+        float absVelX = abs(velocity.x);
+        if (absVelX <= 0.0f)
             initVel -= 0x00000 * SUBSUBSUBPIXEL_DELTA_TIME;
-        else if (temp == 1)
+        else if (absVelX <= MAXIMUM_WALK_SPEED)
             initVel -= 0x00200 * SUBSUBSUBPIXEL_DELTA_TIME;
-        else if (temp == 2)
+        else if (absVelX <= MAXIMUM_RUNNING_SPEED)
             initVel -= 0x00400 * SUBSUBSUBPIXEL_DELTA_TIME;
-        else if (temp == 3)
+        else if (absVelX <= MAXIMUM_POWER_SPEED)
             initVel -= 0x00800 * SUBSUBSUBPIXEL_DELTA_TIME;
+
+        //if (flightMode && flightTimer <= 0)
+        //    flightTimer = FLY_P_TIMER;
+
         accel.y = initVel;
     }
 
@@ -280,6 +334,7 @@ void CMario::SetState(int state) {
     break;
     case MARIO_STATE_DEAD:
     {
+        return;
         if (invincibleTimer > 0)
             return;
         if (powerUp != MARIO_POWERUP_SMALL)
@@ -404,12 +459,14 @@ int CMario::GetAnimationIDSmall()
         else
             return MARIO_ID_ANIMATION_HOLD_IDLE;
     }
+    if (skidding)
+        return MARIO_ID_ANIMATION_SKIDDING;
+    if (flightMode)
+        return MARIO_ID_ANIMATION_WALKFLY;
     if (kickTimer > 0)
         return MARIO_ID_ANIMATION_SHELL_KICK;
     if (!isOnGround)
         return MARIO_ID_ANIMATION_JUMP;
-    if (skidding)
-        return MARIO_ID_ANIMATION_SKIDDING;
     if (abs(velocity.x) > 0)
         return MARIO_ID_ANIMATION_WALK;
     else
@@ -427,12 +484,14 @@ int CMario::GetAnimationIDBig()
         else
             return MARIO_BIG_ID_ANIMATION_HOLD_IDLE;
     }
+    if (skidding)
+        return MARIO_BIG_ID_ANIMATION_SKIDDING;
+    if (flightMode)
+        return MARIO_BIG_ID_ANIMATION_RUNFLY;
     if (kickTimer > 0)
         return MARIO_BIG_ID_ANIMATION_SHELL_KICK;
     if (!isOnGround)
         return MARIO_BIG_ID_ANIMATION_JUMP;
-    if (skidding)
-        return MARIO_BIG_ID_ANIMATION_SKIDDING;
     if (abs(velocity.x) > 0)
         return MARIO_BIG_ID_ANIMATION_WALK;
     else

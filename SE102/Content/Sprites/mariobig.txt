@@ -53,7 +53,7 @@ Content\mario.png 0
 17 4 100 
 # EDITOR animationName Jump
 
-18 5 10 6 10 
+18 5 50 6 50 
 # EDITOR animationName RunFly
 
 19 7 100 

@@ -6,10 +6,6 @@
 #include "Engine/Math/Vector2i.h"
 
 class CCollidableTile : public CTile {
-private:
-	RECT textureRegion;
-	LPTEXTURE texture;
-	Vector2i tileSize;
 public:
 	CCollidableTile(float x, float y, LPTEXTURE texture, int xTile, int yTile, int tileSizeX, int tileSizeY) 
 		: CTile(x, y, texture, xTile, yTile, tileSizeX, tileSizeY) {

@@ -82,10 +82,10 @@ void CPlayScene::Update(float dt)
 		game->ResetScene();
 
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 	{
 		LPGAMEOBJECT obj = objects[i];
-		if (obj->IsCollidable() && obj->IsColliderInCamera())
+		if (obj != NULL && obj->IsCollidable() && obj->IsColliderInCamera())
 			coObjects.push_back(objects[i]);
 	}
 
@@ -354,7 +354,7 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 								objTileLayer->AddTile(Tile(tileset.getImagePath(), position, textureRegion));
 							}
 							else {
-								if (collisionObjects.size() > 0 && collisionLoader.map[j][i] - 1 > 0)
+								if (collisionObjects.size() > 0 && collisionLoader.map[j][i] - 1 >= 0)
 								{
 									collisionObjects[collisionLoader.map[j][i] - 1]
 										->AddTile(Tile(tileset.getImagePath(), position, textureRegion));
