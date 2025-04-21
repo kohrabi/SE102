@@ -17,7 +17,7 @@ public:
     CFireball(float x, float y, int nx, int ny) : CGameObject(x, y, 0.0f)
     {
         LoadContent();
-        layer = SortingLayer::NPC;
+        layer = SortingLayer::CORPSE;
         velocity = Vector2((float)nx, (float)ny).normalized() * FIREBALL_VELOCITY;
     }
     int IsBlocking() override { return 0; }

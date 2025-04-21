@@ -7,6 +7,8 @@
 #include "Engine/CollisionCast.h"
 #include "NPC/GreenKoopa.h"
 
+#define DEBUG_INVINCIBLE false
+
 #pragma region X MOVEMENT
 constexpr float MINIMUM_WALK_VELOCITY = 0x00098 * SUBSUBSUBPIXEL_DELTA_TIME;
 constexpr float WALKING_ACCELERATION = 0x00098 * SUBSUBSUBPIXEL_DELTA_TIME;
@@ -41,9 +43,9 @@ constexpr float ENEMY_BOUNCE = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 #pragma region Others
 
-constexpr float DASH_P_TIME = 8 * 1000.0f / 60.0f * 1.2f;
-constexpr float DASH_P_REDUCE_TIME = 23 * 1000.0f / 60.0f;
-constexpr float DASH_P_COUNT = 7;
+constexpr float POWER_TIME = 8 * 1000.0f / 60.0f * 1.2f;
+constexpr float POWER_REDUCE_TIME = 23 * 1000.0f / 60.0f;
+constexpr float MAX_POWER_COUNT = 7;
 constexpr float FLY_P_TIMER = 0x80 * 1000.0f / 60.0f;
 
 constexpr float POWER_UP_ANIMATION_TIME = 1500.0f;
@@ -124,12 +126,11 @@ private:
 	int nextPowerUp = 0;
 	float powerUpStartTimer = 0.0f;
 
-	float dashPTimer = 0.0f;
-	int dashPCounter = 0;
-	float dashPDecreaseTimer = 0.0f;
+	float powerTimer = 0.0f;
+	int powerCounter = 0;
+	float powerReduceTimer = 0.0f;
 	float wagTimer = 0.0f;
 
-	bool flightMode = false;
 	bool flying = false;
 	float flightTimer = 0.0f;
 

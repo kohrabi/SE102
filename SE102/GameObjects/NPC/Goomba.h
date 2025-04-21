@@ -53,10 +53,10 @@ public:
     int IsBlocking() override { return false; }
     int IsDirectionColliable(float nx, float ny) override { return state != GOOMBA_STATE_DEAD || state != GOOMBA_STATE_DEAD_BOUNCE; }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) { 
-        left = position.x - 8; 
-        top = position.y - 8; 
-        right = position.x + 8; 
-        bottom = position.y + 8; 
+        left = position.x - 4; 
+        top = position.y - 4 + 4; 
+        right = position.x + 4; 
+        bottom = position.y + 4 + 4; 
     }
 
     void SetState(int state) override;
