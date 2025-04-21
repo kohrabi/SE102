@@ -39,8 +39,8 @@ constexpr float ENEMY_BOUNCE = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 #pragma region Others
 
-constexpr float DASH_P_TIMER = 120.0f;
-constexpr float DASH_P_REDUCE_TIMER = 390.0f;
+constexpr float DASH_P_TIME = 8 * 1000.0f / 60.0f * 1.2f;
+constexpr float DASH_P_REDUCE_TIME = 23 * 1000.0f / 60.0f;
 constexpr float DASH_P_COUNT = 7;
 constexpr float FLY_P_TIMER = 0x80 * 1000.0f / 60.0f;
 
@@ -111,6 +111,7 @@ class CMario : public CGameObject {
 private:
 	int GetAnimationIDSmall();
 	int GetAnimationIDBig();
+	int GetAnimationIDRacoon();
 	int GetAnimationID();
 	Vector2 accel;
 	float runBeforeWalkTimer = 0.0f;
@@ -124,6 +125,7 @@ private:
 
 	float dashPTimer = 0.0f;
 	int dashPCounter = 0;
+	float dashPDecreaseTimer = 0.0f;
 	bool isDashing = false;
 	bool flightMode = false;
 
@@ -159,6 +161,7 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e) override;
 	int IsBlocking() override { return 0; }
 	int IsDirectionColliable(float nx, float ny) override { return 1; }
+	int GetPowerUp() const { return powerUp; }
 
 	void SetState(int state) override;
 

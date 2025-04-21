@@ -7,6 +7,7 @@
 Content\mario.png 0
 
 [SPRITES]
+
 # IDLE
 10001 0 0 15 15 0
 
@@ -14,7 +15,7 @@ Content\mario.png 0
 10002 0 0 15 15 0
 10003 16 0 31 15 0
 
-# WALKFLY
+# RUNFLY
 10004 48 0 63 15 0
 10005 64 0 79 15 0
 
@@ -42,8 +43,6 @@ Content\mario.png 0
 # SHELL KICK
 10014 160 0 175 15 0
 
-# DEAD
-
 
 [ANIMATIONS]
 10015 10001 100 
@@ -53,7 +52,7 @@ Content\mario.png 0
 # EDITOR animationName Walk
 
 10017 10004 50 10005 50 
-# EDITOR animationName WalkFly
+# EDITOR animationName RUNFLY
 
 10018 10006 100 
 # EDITOR animationName Jump

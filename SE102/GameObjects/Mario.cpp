@@ -6,6 +6,7 @@
 
 #include "ContentIds/Mario.h"
 #include "ContentIds/MarioBig.h"
+#include "ContentIds/MarioRacoon.h"
 
 #include "Engine/Helper.h"
 #include <Engine/debug.h>
@@ -14,12 +15,13 @@
 #include "Coin.h"
 #include "NPC/Goomba.h"
 #include "NPC/GreenKoopa.h"
-#include "NPC/Mushroom.h"
+#include "Powerups/Mushroom.h"
 #include "NPC/Fireball.h"
 #include "NPC/FirePiranha.h"
 #include "ScorePopup.h"
 
 #include <iostream>
+#include "Powerups/Leaf.h"
 using namespace std;
 
 bool CMario::IsContentLoaded = false;
@@ -33,6 +35,7 @@ void CMario::LoadContent()
     SpritesLoader loader;
     loader.Load(MARIO_SPRITES_PATH);
     loader.Load(MARIO_BIG_SPRITES_PATH);
+    loader.Load(MARIO_RACOON_SPRITES_PATH);
 }
 
 CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
@@ -88,9 +91,9 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     // X Movement
     accel.x = 0;
 
-    bool run = false;
+    bool keyRunDown = false;
     if (game->IsKeyDown(KEY_RUN))
-        run = true;
+        keyRunDown = true;
     if (game->IsKeyJustReleased(KEY_RUN)) {
         runBeforeWalkTimer = RUN_TIME_BEFORE_WALK;
     }
@@ -99,11 +102,11 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
         runBeforeWalkTimer -= dt;
 
     if (game->IsKeyDown(KEY_MOVE_LEFT)) {
-        accel.x = -(run ? RUNNING_ACCELERATION : WALKING_ACCELERATION);
+        accel.x = -(keyRunDown ? RUNNING_ACCELERATION : WALKING_ACCELERATION);
         nx = -1;
     }
     if (game->IsKeyDown(KEY_MOVE_RIGHT)) {
-        accel.x = (run ? RUNNING_ACCELERATION : WALKING_ACCELERATION);
+        accel.x = (keyRunDown ? RUNNING_ACCELERATION : WALKING_ACCELERATION);
         nx = 1;
     }
 
@@ -124,7 +127,7 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     // Dashing
     flightMode = false;
     isDashing = false;
-    if (run)
+    if (keyRunDown)
     {
         if (abs(velocity.x) >= MAXIMUM_RUNNING_SPEED)
             isDashing = true;
@@ -134,9 +137,10 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
             if (dashPTimer > 0) dashPTimer -= dt;
             else
             {
-                dashPTimer = DASH_P_TIMER;
+                dashPTimer = DASH_P_TIME;
                 dashPCounter = clampi(dashPCounter + 1, 0, DASH_P_COUNT);
             }
+            dashPDecreaseTimer = DASH_P_REDUCE_TIME;
         }
 
         if (dashPCounter >= DASH_P_COUNT)
@@ -147,20 +151,19 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
             dashPCounter--;
             flightMode = false;
         }
+    }
 
-        if (!game->IsKeyDown(KEY_RUN))
 
-            if (dashPTimer > 0) dashPTimer -= dt;
-            else if (!game->IsKeyDown(KEY_RUN))
-            {
-                dashPTimer = DASH_P_REDUCE_TIMER;
-                dashPCounter = clampi(dashPCounter - 1, 0, DASH_P_COUNT);
-            }
+    if (dashPDecreaseTimer > 0) dashPDecreaseTimer -= dt;
+    else if (dashPCounter > 0)
+    {
+        dashPDecreaseTimer = DASH_P_REDUCE_TIME;
+        dashPCounter = clampi(dashPCounter - 1, 0, DASH_P_COUNT);
     }
 
     if (flightMode)
         velocity.x = clampf(velocity.x, -MAXIMUM_POWER_SPEED, MAXIMUM_POWER_SPEED);
-    else if (run || (abs(velocity.x) > MAXIMUM_WALK_SPEED + WALKING_ACCELERATION && runBeforeWalkTimer > 0))
+    else if (keyRunDown || (abs(velocity.x) > MAXIMUM_WALK_SPEED + WALKING_ACCELERATION && runBeforeWalkTimer > 0))
         velocity.x = clampf(velocity.x, -MAXIMUM_RUNNING_SPEED, MAXIMUM_RUNNING_SPEED);
     else
         velocity.x = clampf(velocity.x, -MAXIMUM_WALK_SPEED, MAXIMUM_WALK_SPEED);
@@ -300,9 +303,11 @@ void CMario::Render() {
         break;
     case MARIO_STATE_POWER_UP:
         {
+        if (powerUp == MARIO_POWERUP_RACOON)
+            return;
             bool flipX = nx > 0 ? true : false;
             float yOffset = 0.0f;
-            if (animation->GetCurrentFrameIndex() == 1 && nextPowerUp == MARIO_POWERUP_BIG)
+            if (animation->GetCurrentFrameIndex() >= 1 && nextPowerUp == MARIO_POWERUP_BIG)
                 yOffset = -8.0f;
             if (animation->GetCurrentFrameIndex() == 0 && nextPowerUp == MARIO_POWERUP_SMALL)
                 yOffset = -8.0f;
@@ -328,7 +333,6 @@ void CMario::SetState(int state) {
         {
             CGame::GetInstance()->SetTimeScale(0.0f);
             powerUpStartTimer = GetTickCount64();
-            nextPowerUp = MARIO_POWERUP_BIG;
         }
     }
     break;
@@ -404,11 +408,21 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     else if (dynamic_cast<CMushroom*>(e->obj))
     {
         e->obj->Delete();
-        if (powerUp == MARIO_POWERUP_SMALL)
+        nextPowerUp = MARIO_POWERUP_BIG;
+        if (powerUp != nextPowerUp)
             SetState(MARIO_STATE_POWER_UP);
         else
             CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
-        //powerUp = MARIO_POWERUP_BIG;
+    }
+    else if (dynamic_cast<CLeaf*>(e->obj))
+    {
+        e->obj->Delete();
+        nextPowerUp = MARIO_POWERUP_RACOON;
+        if (powerUp != nextPowerUp)
+            SetState(MARIO_STATE_POWER_UP);
+        else
+            CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
+       
     }
     else if (dynamic_cast<CGreenKoopa*>(e->obj))
     {
@@ -462,7 +476,7 @@ int CMario::GetAnimationIDSmall()
     if (skidding)
         return MARIO_ID_ANIMATION_SKIDDING;
     if (flightMode)
-        return MARIO_ID_ANIMATION_WALKFLY;
+        return MARIO_ID_ANIMATION_RUNFLY;
     if (kickTimer > 0)
         return MARIO_ID_ANIMATION_SHELL_KICK;
     if (!isOnGround)
@@ -498,12 +512,39 @@ int CMario::GetAnimationIDBig()
         return MARIO_BIG_ID_ANIMATION_IDLE;
 }
 
+
+int CMario::GetAnimationIDRacoon()
+{
+    if (state == MARIO_STATE_POWER_UP)
+        return MARIO_RACOON_ID_ANIMATION_LEVEL_UP;
+    if (isHolding)
+    {
+        if (abs(velocity.x) > 0)
+            return MARIO_RACOON_ID_ANIMATION_HOLD_WALK;
+        else
+            return MARIO_RACOON_ID_ANIMATION_HOLD_IDLE;
+    }
+    if (skidding)
+        return MARIO_RACOON_ID_ANIMATION_SKIDDING;
+    if (flightMode)
+        return MARIO_RACOON_ID_ANIMATION_RUNFLY;
+    if (kickTimer > 0)
+        return MARIO_RACOON_ID_ANIMATION_SHELL_KICK;
+    if (!isOnGround)
+        return MARIO_RACOON_ID_ANIMATION_JUMP;
+    if (abs(velocity.x) > 0)
+        return MARIO_RACOON_ID_ANIMATION_WALK;
+    else
+        return MARIO_RACOON_ID_ANIMATION_IDLE;
+}
+
 int CMario::GetAnimationID()
 {
     switch (powerUp)
     {
     case MARIO_POWERUP_SMALL: return GetAnimationIDSmall();
     case MARIO_POWERUP_BIG: return GetAnimationIDBig();
+    case MARIO_POWERUP_RACOON: return GetAnimationIDRacoon();
     }
     return 0;
 }

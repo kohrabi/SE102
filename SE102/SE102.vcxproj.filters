@@ -69,7 +69,7 @@
     <ClCompile Include="GameObjects\Coin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\NPC\Mushroom.cpp">
+    <ClCompile Include="GameObjects\Powerups\Mushroom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\NPC\Goomba.cpp">
@@ -97,6 +97,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\NPC\Fireball.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Powerups\Leaf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -199,7 +202,7 @@
     <ClInclude Include="GameObjects\OneWay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\NPC\Mushroom.h">
+    <ClInclude Include="GameObjects\Powerups\Mushroom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\NPC\Goomba.h">
@@ -280,6 +283,15 @@
     <ClInclude Include="ContentIds\RedGoomba.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameObjects\Powerups\Leaf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentIds\Leaf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentIds\MarioRacoon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Content\Scenes\1-1.txt" />
@@ -298,5 +310,7 @@
     <Text Include="Content\Sprites\fireball.txt" />
     <Text Include="Content\Sprites\red_goomba.txt" />
     <Text Include="Content\Sprites\wing.txt" />
+    <Text Include="Content\Sprites\leaf.txt" />
+    <Text Include="Content\Sprites\marioracoon.txt" />
   </ItemGroup>
 </Project>

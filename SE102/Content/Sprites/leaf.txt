@@ -1,0 +1,14 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\VS\SE102\SE102\
+# EDITOR startID 14000
+# EDITOR objectName Leaf
+
+[TEXTURES]
+Content\mariotiles.png 0
+
+[SPRITES]
+14001 144 128 159 143 0
+# EDITOR frameName Idle
+
+
+[ANIMATIONS]

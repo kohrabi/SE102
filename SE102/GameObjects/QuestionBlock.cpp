@@ -10,7 +10,8 @@
 #include "QuestionBlock.h"
 
 #include "Coin.h"
-#include "NPC/Mushroom.h"
+#include "Powerups/Mushroom.h"
+#include "Powerups/Leaf.h"
 
 #include "ContentIds/QuestionBlock.h"
 
@@ -116,11 +117,24 @@ void CQuestionBlock::Hit(int dx)
         game->GetCurrentScene()->AddObject(coin); 
     }
     break;
-    case QUESTION_BLOCK_SPAWN_MUSHROOM:
+    case QUESTION_BLOCK_SPAWN_LEAF:
     {
-        CMushroom* mushroom = new CMushroom(position.x, position.y);
-        mushroom->SetNx(dx);
-        game->GetCurrentScene()->AddObject(mushroom); 
+        CMario* player = dynamic_cast<CMario*>(game->GetCurrentScene()->GetPlayer());
+        if (player != NULL)
+        {
+            LPGAMEOBJECT powerUp = NULL;
+            if (player->GetPowerUp() == MARIO_POWERUP_SMALL)
+            {
+                powerUp = new CMushroom(position.x, position.y);
+                powerUp->SetNx(dx);
+            }
+            else
+            {
+                powerUp = new CLeaf(position.x, position.y);
+                powerUp->SetNx(dx);
+            }
+            game->GetCurrentScene()->AddObject(powerUp); 
+        }
     }
     break;
     default:
