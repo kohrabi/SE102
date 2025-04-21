@@ -46,6 +46,7 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
         return dynamic_cast<CGreenKoopa*>(obj) != nullptr;
     });
     layer = SortingLayer::MARIO;
+    //nextPowerUp = MARIO_POWERUP_RACOON;
     SetState(MARIO_STATE_NORMAL);
 }
 
@@ -125,8 +126,9 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     }
 
     // Dashing
+    // TODO: Clean this up
     flightMode = false;
-    isDashing = false;
+    bool isDashing = false;
     if (keyRunDown)
     {
         if (abs(velocity.x) >= MAXIMUM_RUNNING_SPEED)
@@ -143,8 +145,9 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
             dashPDecreaseTimer = DASH_P_REDUCE_TIME;
         }
 
-        if (dashPCounter >= DASH_P_COUNT)
+        if (dashPCounter >= DASH_P_COUNT && isOnGround)
             flightMode = true;
+
 
         if (!isDashing && flightMode)
         {
@@ -152,6 +155,9 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
             flightMode = false;
         }
     }
+
+    if (powerUp != MARIO_POWERUP_SMALL && flightMode)
+        flightTimer = FLY_P_TIMER;
 
 
     if (dashPDecreaseTimer > 0) dashPDecreaseTimer -= dt;
@@ -168,8 +174,6 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     else
         velocity.x = clampf(velocity.x, -MAXIMUM_WALK_SPEED, MAXIMUM_WALK_SPEED);
 
-
-
     // Y MOVEMENT
     float gravity = 0.0f;
     if ((game->IsKeyDown(KEY_JUMP) && velocity.y <= JUMP_MAX_NEGATIVE))
@@ -179,18 +183,34 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     accel.y = gravity;
 
     if (flightTimer > 0) flightTimer -= dt;
-
-    constexpr float FLY_FLY_TIME = 0x0F * 1000 / 60;
-    constexpr int FLY_APEX = 0x08 * 1000 / 60;
-    if (velocity.y >= FLY_Y_VELOCITY)
+    if (flying && flightTimer <= 0.0f)
     {
-        if (flightTimer > 0 && flightTimer < FLY_FLY_TIME && (int)(flightTimer) % FLY_APEX == 0)
-        {
-            accel.y = 0;
-        }
+        dashPCounter = 0;
+    }
+    if (flying && isOnGround)
+        flying = false;
+    cout << dashPCounter << '\n';
+
+    // Tail things
+    constexpr float FLY_SMALL_TIME = 0x0F * 1000 / 60;
+    constexpr int FLY_APEX = 0x08 * 1000 / 60;
+    if (velocity.y >= FLY_Y_VELOCITY && flightTimer > 0)
+    {
+        if (game->IsKeyDown(KEY_JUMP))
+            accel.y = FLY_Y_VELOCITY;
+        // Does this really matter?
+        //if (flightTimer > 0 && flightTimer < FLY_SMALL_TIME && (int)(flightTimer) % FLY_APEX == 0)
+        //{
+        //    accel.y = 0;
+        //}
     }
 
 
+    if (wagTimer > 0) wagTimer -= dt;
+    if (game->IsKeyJustPressed(KEY_JUMP) && !flightMode && powerUp == MARIO_POWERUP_RACOON)
+        wagTimer = WAG_TIME;
+
+    // JUmp
     if (game->IsKeyJustPressed(KEY_JUMP) && isOnGround) {
         float initVel = -JUMP_INIT_VEL;
         float absVelX = abs(velocity.x);
@@ -203,8 +223,9 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
         else if (absVelX <= MAXIMUM_POWER_SPEED)
             initVel -= 0x00800 * SUBSUBSUBPIXEL_DELTA_TIME;
 
-        //if (flightMode && flightTimer <= 0)
-        //    flightTimer = FLY_P_TIMER;
+        wagTimer = 0.0f;
+        if (flightTimer > 0)
+            flying = true;
 
         accel.y = initVel;
     }
@@ -212,10 +233,10 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     velocity.x += accel.x;
     velocity.y += accel.y;
 
-    velocity.y = min(velocity.y, MAX_FALL_SPEED);
-
-
-    //cout << velocity.y << '\n';
+    if (wagTimer > 0.0f)
+        velocity.y = min(velocity.y, MAX_TAILWAG_FALL_SPDED);
+    else
+        velocity.y = min(velocity.y, MAX_FALL_SPEED);
 
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -291,29 +312,29 @@ void CMario::Render() {
     {
     case MARIO_STATE_DEAD:
     case MARIO_STATE_NORMAL:
-        {
-            if (abs(velocity.x) <= MAXIMUM_WALK_SPEED + WALKING_ACCELERATION)
-                animation->SetTimeScale(1.0f);
-            else
-                animation->SetTimeScale(0.5f);
+    {
+        if (abs(velocity.x) <= MAXIMUM_WALK_SPEED + WALKING_ACCELERATION)
+            animation->SetTimeScale(1.0f);
+        else
+            animation->SetTimeScale(0.5f);
 
-            bool flipX = nx > 0 ? true : false;
-            animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
-        }
-        break;
+        bool flipX = nx > 0 ? true : false;
+        animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
+    }
+    break;
     case MARIO_STATE_POWER_UP:
-        {
-        if (powerUp == MARIO_POWERUP_RACOON)
+    {
+        if (nextPowerUp == MARIO_POWERUP_RACOON)
             return;
-            bool flipX = nx > 0 ? true : false;
-            float yOffset = 0.0f;
-            if (animation->GetCurrentFrameIndex() >= 1 && nextPowerUp == MARIO_POWERUP_BIG)
-                yOffset = -8.0f;
-            if (animation->GetCurrentFrameIndex() == 0 && nextPowerUp == MARIO_POWERUP_SMALL)
-                yOffset = -8.0f;
-            animation->Render(position.x, position.y + yOffset, GetLayer(layer, orderInLayer), flipX);
-        }
-        break;
+        bool flipX = nx > 0 ? true : false;
+        float yOffset = 0.0f;
+        if (animation->GetCurrentFrameIndex() >= 1 && nextPowerUp == MARIO_POWERUP_BIG)
+            yOffset = -8.0f;
+        if (animation->GetCurrentFrameIndex() == 0 && nextPowerUp == MARIO_POWERUP_SMALL)
+            yOffset = -8.0f;
+        animation->Render(position.x, position.y + yOffset, GetLayer(layer, orderInLayer), flipX);
+    }
+    break;
     }
     //RenderBoundingBox();
     //cast.RenderBoundingBox();
@@ -338,7 +359,6 @@ void CMario::SetState(int state) {
     break;
     case MARIO_STATE_DEAD:
     {
-        return;
         if (invincibleTimer > 0)
             return;
         if (powerUp != MARIO_POWERUP_SMALL)
@@ -526,12 +546,20 @@ int CMario::GetAnimationIDRacoon()
     }
     if (skidding)
         return MARIO_RACOON_ID_ANIMATION_SKIDDING;
+    if (flying)
+        return MARIO_RACOON_ID_ANIMATION_FLY;
     if (flightMode)
         return MARIO_RACOON_ID_ANIMATION_RUNFLY;
     if (kickTimer > 0)
         return MARIO_RACOON_ID_ANIMATION_SHELL_KICK;
     if (!isOnGround)
-        return MARIO_RACOON_ID_ANIMATION_JUMP;
+    {
+        if (wagTimer > 0)
+            return MARIO_RACOON_ID_ANIMATION_AIR_TAILWAG;
+        if (velocity.y < 0.0f)
+            return MARIO_RACOON_ID_ANIMATION_JUMP;
+        return MARIO_RACOON_ID_ANIMATION_FALL;
+    }
     if (abs(velocity.x) > 0)
         return MARIO_RACOON_ID_ANIMATION_WALK;
     else

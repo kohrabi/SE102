@@ -102,7 +102,7 @@ void CPlayScene::Update(float dt)
 
 	position.x -= game->GetBackBufferWidth() / 2;
 	position.y -= game->GetBackBufferHeight() / 2;
-	position.y = 500.f;
+	//position.y = 500.f;
 
 	position.x = clampf(position.x, levelBounds.left, levelBounds.right - game->GetBackBufferWidth());
 	position.y = clampf(position.y, levelBounds.top, levelBounds.bottom - game->GetBackBufferHeight());

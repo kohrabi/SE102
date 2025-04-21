@@ -31,8 +31,10 @@ constexpr float JUMP_GRAVITY = 0x00500 * SUBSUBSUBPIXEL_DELTA_TIME;
 constexpr float JUMP_MAX_NEGATIVE = -0x02000 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 constexpr float MAX_FALL_SPEED = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
+constexpr float MAX_TAILWAG_FALL_SPDED = 0x01000 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 constexpr float FLY_Y_VELOCITY = -0x01800 * SUBSUBSUBPIXEL_DELTA_TIME;
+
 
 constexpr float ENEMY_BOUNCE = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 #pragma endregion
@@ -50,8 +52,8 @@ constexpr float KICK_ANIMATION_TIME = 300.0f;
 constexpr float DEAD_STAY_TIME = 1000.0f;
 constexpr float DEAD_RESET_TIME = 1000.0f;
 
-constexpr float INVINCIBLE_TIME = 1000.0F;
-
+constexpr float INVINCIBLE_TIME = 1000.0f;
+constexpr float WAG_TIME = 0x10 * 1000.0f / 60.0f;
 
 #pragma endregion
 
@@ -121,13 +123,15 @@ private:
 	int powerUp = 0;
 	int nextPowerUp = 0;
 	float powerUpStartTimer = 0.0f;
-	float flightTimer = 0.0f;
 
 	float dashPTimer = 0.0f;
 	int dashPCounter = 0;
 	float dashPDecreaseTimer = 0.0f;
-	bool isDashing = false;
+	float wagTimer = 0.0f;
+
 	bool flightMode = false;
+	bool flying = false;
+	float flightTimer = 0.0f;
 
 	float invincibleTimer = 0.0f;
 
