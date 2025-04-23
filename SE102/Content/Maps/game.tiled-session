@@ -24,11 +24,11 @@
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 4,
-            "selectedLayer": 5,
+            "scale": 0.75,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 49.5,
-                "y": 423.625
+                "x": 2018.6666666666665,
+                "y": 367.33333333333326
             }
         },
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx": {

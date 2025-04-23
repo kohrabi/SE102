@@ -46,7 +46,7 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
         return dynamic_cast<CGreenKoopa*>(obj) != nullptr;
     });
     layer = SortingLayer::MARIO;
-    nextPowerUp = MARIO_POWERUP_SMALL;
+    nextPowerUp = MARIO_POWERUP_BIG;
     SetState(MARIO_STATE_POWER_UP);
 }
 
@@ -225,6 +225,9 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
         accel.y = initVel;
     }
 
+    if (game->IsKeyDown(KEY_DOWN) && powerUp != MARIO_POWERUP_SMALL && isOnGround)
+        SetState(MARIO_STATE_SIT);
+
     velocity.x += accel.x;
     velocity.y += accel.y;
 
@@ -292,6 +295,15 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
         }
     }
     break;
+    case MARIO_STATE_SIT:
+    {
+        if (!CGame::GetInstance()->IsKeyDown(KEY_DOWN))
+            SetState(MARIO_STATE_NORMAL);
+        velocity.x = move_towards(velocity.x, 0, RELEASE_DECELERATION);
+        velocity.y = min(velocity.y + JUMP_GRAVITY, MAX_FALL_SPEED);
+        CCollision::GetInstance()->Process(this, dt, coObjects);
+    }
+    break;
     }
 }
 
@@ -303,21 +315,7 @@ void CMario::Render() {
 
 
     LPANIMATION animation = animations->Get(GetAnimationID());
-    switch (state)
-    {
-    case MARIO_STATE_DEAD:
-    case MARIO_STATE_NORMAL:
-    {
-        if (abs(velocity.x) <= MAXIMUM_WALK_SPEED + WALKING_ACCELERATION)
-            animation->SetTimeScale(1.0f);
-        else
-            animation->SetTimeScale(0.5f);
-
-        bool flipX = nx > 0 ? true : false;
-        animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
-    }
-    break;
-    case MARIO_STATE_POWER_UP:
+    if (state == MARIO_STATE_POWER_UP)
     {
         if (nextPowerUp == MARIO_POWERUP_RACOON)
             return;
@@ -329,9 +327,18 @@ void CMario::Render() {
             yOffset = -8.0f;
         animation->Render(position.x, position.y + yOffset, GetLayer(layer, orderInLayer), flipX);
     }
-    break;
+    else
+    {
+        if (abs(velocity.x) <= MAXIMUM_WALK_SPEED + WALKING_ACCELERATION)
+            animation->SetTimeScale(1.0f);
+        else
+            animation->SetTimeScale(0.5f);
+
+        bool flipX = nx > 0 ? true : false;
+        animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
+
     }
-    //RenderBoundingBox();
+    RenderBoundingBox();
     //cast.RenderBoundingBox();
 }
 
@@ -340,7 +347,8 @@ void CMario::SetState(int state) {
     {
     case MARIO_STATE_NORMAL:
     {
-                
+        if (this->state == MARIO_STATE_SIT)
+            position.y -= 0.0f;
     }
     break;
     case MARIO_STATE_POWER_UP:
@@ -508,6 +516,8 @@ int CMario::GetAnimationIDSmall()
 
 int CMario::GetAnimationIDBig()
 {
+    if (state == MARIO_STATE_SIT)
+        return MARIO_BIG_ID_ANIMATION_SIT;
     if (state == MARIO_STATE_POWER_UP)
         return MARIO_BIG_ID_ANIMATION_DEAD;
     if (isHolding)
@@ -536,6 +546,8 @@ int CMario::GetAnimationIDBig()
 
 int CMario::GetAnimationIDRacoon()
 {
+    if (state == MARIO_STATE_SIT)
+        return MARIO_RACOON_ID_ANIMATION_SIT;
     if (state == MARIO_STATE_POWER_UP)
         return MARIO_RACOON_ID_ANIMATION_DEAD;
     if (isHolding)

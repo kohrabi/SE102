@@ -65,12 +65,14 @@ constexpr float WAG_TIME = 0x10 * 1000.0f / 60.0f;
 
 #define KEY_MOVE_LEFT VK_LEFT
 #define KEY_MOVE_RIGHT VK_RIGHT
+#define KEY_DOWN VK_DOWN
 #define KEY_RUN 'A'
 #define KEY_JUMP 'S'
 
 #define MARIO_STATE_NORMAL 1
 #define MARIO_STATE_POWER_UP 2
-#define MARIO_STATE_DEAD 3
+#define MARIO_STATE_SIT 3
+#define MARIO_STATE_DEAD 4
 
 // Y ofset
 // Held object Large: -$02
@@ -181,13 +183,24 @@ public:
 		}
 		else
 		{
-			const float yOffset = 4.0f;
-			const Vector2 marioSize = Vector2(12.f, 24.f) / 2.0f;
-			left = position.x - marioSize.x;
-			top = position.y - marioSize.y + yOffset;
-			right = position.x + marioSize.x;
-			bottom = position.y + marioSize.y + yOffset;
-
+			if (state == MARIO_STATE_SIT)
+			{
+				const float yOffset = 10.0f;
+				const Vector2 marioSize = Vector2(12.f, 12.f) / 2.0f;
+				left = position.x - marioSize.x;
+				top = position.y - marioSize.y + yOffset;
+				right = position.x + marioSize.x;
+				bottom = position.y + marioSize.y + yOffset;
+			}
+			else
+			{
+				const float yOffset = 4.0f;
+				const Vector2 marioSize = Vector2(12.f, 24.f) / 2.0f;
+				left = position.x - marioSize.x;
+				top = position.y - marioSize.y + yOffset;
+				right = position.x + marioSize.x;
+				bottom = position.y + marioSize.y + yOffset;
+			}
 		}
 	}
 };
