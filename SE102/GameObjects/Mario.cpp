@@ -420,11 +420,15 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         CQuestionBlock* const questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
         questionBlock->Hit(sign(questionBlock->GetPosition().x - position.x));
         if (questionBlock->GetSpawnType() == QUESTION_BLOCK_SPAWN_COIN)
+        {
             coinCounter++;
+            score += 100;
+        }
     }
     else if (dynamic_cast<CCoin*>(e->obj) && e->obj->GetState() == COIN_STATE_NORMAL)
     {
         coinCounter++;
+        score += 100;
         e->obj->Delete();
     }
     else if (dynamic_cast<CGoomba*>(e->obj))
@@ -439,6 +443,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             else
             {
                 goomba->SetKill();
+                score += 100;
                 velocity.y = -ENEMY_BOUNCE;
             }
         }
@@ -450,7 +455,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         if (powerUp != nextPowerUp)
             SetState(MARIO_STATE_POWER_UP);
         else
+        {
             CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
+            score += 1000;
+        }
     }
     else if (dynamic_cast<CLeaf*>(e->obj))
     {
@@ -459,7 +467,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         if (powerUp != nextPowerUp)
             SetState(MARIO_STATE_POWER_UP);
         else
+        {
             CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
+            score += 1000;
+        }
        
     }
     else if (dynamic_cast<CGreenKoopa*>(e->obj))
@@ -472,6 +483,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
                 if (e->ny == 0)
                     kickTimer = KICK_ANIMATION_TIME;
                 CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score200));
+                score += 200;
                 koopa->SetNx(nx);
             }
             else
@@ -484,6 +496,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 
             int posSign = sign(position.x - koopa->GetPosition().x);
             CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score100));
+            score += 100;
             velocity.y = -ENEMY_BOUNCE;
             koopa->PlayerHit(posSign);
         }

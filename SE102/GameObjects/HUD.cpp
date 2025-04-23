@@ -86,9 +86,12 @@ void CHUD::Render()
 	}
 
 	// Score
+	string score = to_string(mario->GetScore());
+	while (score.size() < 7)
+		score.insert(score.begin(), '0');
 	for (int i = 0; i < 7; i++)
 	{
-		sprites->Get(getNumberSpriteId('0'))->DrawScreen(60.0f + i * 8.0f, game->GetBackBufferHeight() - 15.0f, 1.0f);
+		sprites->Get(getNumberSpriteId(score[i]))->DrawScreen(60.0f + i * 8.0f, game->GetBackBufferHeight() - 15.0f, 1.0f);
 	}
 
 	// Timer

@@ -153,6 +153,7 @@ private:
 	float levelResetTimer = 0.0f;
 
 	int coinCounter = 0;
+	int score = 0;
 
 	void marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
 	void marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
@@ -168,6 +169,7 @@ public:
 
 	int GetCoinCount() const { return coinCounter; }
 	int GetPowerCount() const { return powerCounter; }
+	int GetScore() const { return score; }
 
 	int IsCollidable() override { return !isDeleted && (state != MARIO_STATE_DEAD); };
 	void OnNoCollision(float dt) override;
