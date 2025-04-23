@@ -57,7 +57,7 @@ public:
     void PlayerHit(int nx);
     void AttachHold(LPGAMEOBJECT player, float holdYOffset);
     void DetachHold();
-    void DeadBounce(bool kill)
+    void DeadBounce()
     {
         SetState(KOOPA_STATE_DEAD_BOUNCE);
     }

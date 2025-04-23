@@ -12,7 +12,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 
 void CAnimation::Render(float x, float y, float z, bool flipX, bool flipY)
 {
-	frames[currentFrame]->GetSprite()->Draw(x, y, z, flipX, flipY);
+	frames.at(currentFrame)->GetSprite()->Draw(x, y, z, flipX, flipY);
 	ULONGLONG now = GetTickCount64();
 	if (!stop) {
 		if (currentFrame == -1)
@@ -22,12 +22,17 @@ void CAnimation::Render(float x, float y, float z, bool flipX, bool flipY)
 		}
 		else
 		{
-			DWORD t = frames[currentFrame]->GetTime();
+			DWORD t = frames.at(currentFrame)->GetTime();
 			if (now - lastFrameTime > t * timeScale)
 			{
-				currentFrame++;
+				if (loop)
+					currentFrame = (currentFrame + 1) % frames.size();
+				else
+				{
+					if (currentFrame < frames.size() - 1)
+						currentFrame = currentFrame + 1;
+				}
 				lastFrameTime = now;
-				if (currentFrame == frames.size()) currentFrame = 0;
 				//DebugOut(L"now: %d, lastFrameTime: %d, t: %d\n", now, lastFrameTime, t);
 			}
 		}
@@ -37,7 +42,7 @@ void CAnimation::Render(float x, float y, float z, bool flipX, bool flipY)
 
 void CAnimation::RenderScreen(float x, float y, float z, bool flipX, bool flipY)
 {
-	frames[currentFrame]->GetSprite()->DrawScreen(x, y, z, flipX, flipY);
+	frames.at(currentFrame)->GetSprite()->DrawScreen(x, y, z, flipX, flipY);
 	ULONGLONG now = GetTickCount64();
 	if (!stop) {
 		if (currentFrame == -1)
@@ -47,12 +52,19 @@ void CAnimation::RenderScreen(float x, float y, float z, bool flipX, bool flipY)
 		}
 		else
 		{
-			DWORD t = frames[currentFrame]->GetTime();
+			DWORD t = frames.at(currentFrame)->GetTime();
 			if (now - lastFrameTime > t * timeScale)
 			{
-				currentFrame++;
+				if (loop)
+					currentFrame = (currentFrame + 1) % frames.size();
+				else
+				{
+					if (currentFrame < frames.size() - 1)
+						currentFrame = currentFrame + 1;
+
+				}
 				lastFrameTime = now;
-				if (currentFrame == frames.size()) currentFrame = 0;
+				//if (currentFrame == frames.size()) currentFrame = 0;
 				//DebugOut(L"now: %d, lastFrameTime: %d, t: %d\n", now, lastFrameTime, t);
 			}
 		}

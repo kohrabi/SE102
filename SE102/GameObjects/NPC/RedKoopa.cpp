@@ -40,7 +40,7 @@ CRedKoopa::CRedKoopa(float x, float y) : CGreenKoopa(x, y)
 {
     LoadContent();
     nx = -1;
-    cast.SetConditionFunction([this](LPGAMEOBJECT obj) {
+    holdCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
         return !(obj == this || obj->GetVelocity().length() > 0);
     });
     layer = SortingLayer::NPC;
@@ -53,9 +53,9 @@ void CRedKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 
     if (state == KOOPA_STATE_NORMAL)
     {
-        cast.SetBoundingBox(position + Vector2((7.0f) * nx, 16.0f), Vector2(4.0f, 6.0f));
-        cast.CheckOverlap(coObjects);
-        if (cast.collision.size() <= 0)
+        holdCast.SetBoundingBox(position + Vector2((7.0f) * nx, 16.0f), Vector2(4.0f, 6.0f));
+        holdCast.CheckOverlap(coObjects);
+        if (holdCast.collision.size() <= 0)
         {
             nx *= -1;
         }
@@ -65,5 +65,5 @@ void CRedKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CRedKoopa::Render() {
     CGreenKoopa::Render();
-    cast.Render();
+    holdCast.Render();
 }

@@ -42,11 +42,16 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
 {
     LoadContent();
     nx = 1;
-    cast.SetConditionFunction([this](LPGAMEOBJECT obj) {
+    holdCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
         return dynamic_cast<CGreenKoopa*>(obj) != nullptr;
     });
+    spinCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
+        return dynamic_cast<CGreenKoopa*>(obj) != nullptr ||
+            dynamic_cast<CGoomba*>(obj) != nullptr || 
+            dynamic_cast<CFirePiranha*>(obj) != nullptr;
+    });
     layer = SortingLayer::MARIO;
-    nextPowerUp = MARIO_POWERUP_BIG;
+    nextPowerUp = MARIO_POWERUP_RACOON;
     SetState(MARIO_STATE_POWER_UP);
 }
 
@@ -59,17 +64,17 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     if (game->IsKeyDown(KEY_RUN))
     {
         if (powerUp == MARIO_POWERUP_SMALL)
-            cast.SetBoundingBox(position + Vector2((10.0f) * nx, 0.0f), Vector2(4.0f, 6.0f));
+            holdCast.SetBoundingBox(position + Vector2((10.0f) * nx, 0.0f), Vector2(4.0f, 6.0f));
         else
-            cast.SetBoundingBox(position + Vector2((10.0f) * nx, 8.0f), Vector2(4.0f, 6.0f));
+            holdCast.SetBoundingBox(position + Vector2((10.0f) * nx, 8.0f), Vector2(4.0f, 6.0f));
 
-        cast.CheckOverlap(coObjects);
-        if (cast.collision.size() > 0)
+        holdCast.CheckOverlap(coObjects);
+        if (holdCast.collision.size() > 0)
         {
             isHolding = true;
             if (holdShell == NULL)
             {
-                holdShell = dynamic_cast<CGreenKoopa*>(cast.collision[0]);
+                holdShell = dynamic_cast<CGreenKoopa*>(holdCast.collision[0]);
                 if (holdShell->IsInShell() && holdShell->GetVelocity().x == 0.0f)
                 {
                     if (powerUp == MARIO_POWERUP_SMALL)
@@ -81,6 +86,54 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
                     isHolding = false;
             }
         }
+    }
+
+    if (spinTimer > 0)
+    {
+        LPANIMATION animation = CAnimations::GetInstance()->Get(MARIO_RACOON_ID_ANIMATION_SPIN);
+
+        spinCast.SetBoundingBox(position + Vector2(0.0f, 8.0f), Vector2(34.0f, 15.0f));
+        //spinCast.CheckOverlap(coObjects);
+        if (animation->GetCurrentFrameIndex() == 0 || animation->GetCurrentFrameIndex() == 4)
+        {
+            //spinCast.SetBoundingBox(position + Vector2(10.0f * nx, 8.0f), Vector2(25.0f, 15.0f));
+            spinCast.CheckOverlap(coObjects);
+        }
+        if (animation->GetCurrentFrameIndex() == 2)
+        {
+            //spinCast.SetBoundingBox(position + Vector2(10.0f * -nx, 8.0f), Vector2(25.0f, 15.0f));
+            spinCast.CheckOverlap(coObjects);
+        }
+
+        if (spinCast.collision.size() > 0)
+        {
+            for (LPGAMEOBJECT obj : spinCast.collision)
+            {
+                if (dynamic_cast<CGoomba*>(obj) != NULL)
+                {
+                    CGoomba* goomba = dynamic_cast<CGoomba*>(obj);
+                    goomba->DeadBounce();
+                }
+                else if (dynamic_cast<CGreenKoopa*>(obj) != NULL)
+                {
+                    CGreenKoopa* koopa = dynamic_cast<CGreenKoopa*>(obj);
+                    koopa->DeadBounce();
+                }
+                else if (dynamic_cast<CFirePiranha*>(obj) != NULL)
+                {
+                    CFirePiranha* piranha = dynamic_cast<CFirePiranha*>(obj);
+                    piranha->Delete();
+                }
+            }
+        }
+    }
+
+    if (game->IsKeyJustPressed(KEY_RUN) && powerUp == MARIO_POWERUP_RACOON)
+    {
+        LPANIMATION animation = CAnimations::GetInstance()->Get(MARIO_RACOON_ID_ANIMATION_SPIN);
+        animation->Reset();
+        animation->SetLoop(false);
+        spinTimer = SPIN_TIME;
     }
 
     if (!isHolding && holdShell != NULL)
@@ -268,6 +321,7 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
 
     if (kickTimer > 0) kickTimer -= dt;
     if (invincibleTimer > 0) invincibleTimer -= dt;
+    if (spinTimer > 0) spinTimer -= dt;
     switch (state)
     {
     case MARIO_STATE_NORMAL: marioNormalUpdate(dt, coObjects); break;
@@ -344,12 +398,15 @@ void CMario::Render() {
         else
             animation->SetTimeScale(0.5f);
 
+        if (spinTimer > 0.0f)
+            animation->SetTimeScale(1.0f);
+
         bool flipX = nx > 0 ? true : false;
         animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
 
     }
-    RenderBoundingBox();
-    //cast.RenderBoundingBox();
+    //RenderBoundingBox();
+    spinCast.RenderBoundingBox();
 }
 
 void CMario::SetState(int state) {
@@ -418,12 +475,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     if (dynamic_cast<CQuestionBlock*>(e->obj) && e->ny > 0) 
     {
         CQuestionBlock* const questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
-        questionBlock->Hit(sign(questionBlock->GetPosition().x - position.x));
-        if (questionBlock->GetSpawnType() == QUESTION_BLOCK_SPAWN_COIN)
+        if (questionBlock->GetSpawnType() == QUESTION_BLOCK_SPAWN_COIN && questionBlock->GetSpawnCount() > 0)
         {
             coinCounter++;
             score += 100;
         }
+        questionBlock->Hit(sign(questionBlock->GetPosition().x - position.x));
     }
     else if (dynamic_cast<CCoin*>(e->obj) && e->obj->GetState() == COIN_STATE_NORMAL)
     {
@@ -583,6 +640,8 @@ int CMario::GetAnimationIDRacoon()
         else
             return MARIO_RACOON_ID_ANIMATION_HOLD_IDLE;
     }
+    if (spinTimer > 0.0f)
+        return MARIO_RACOON_ID_ANIMATION_SPIN;
     if (powerCounter >= MAX_POWER_COUNT && !isOnGround)
         return MARIO_RACOON_ID_ANIMATION_FLY;
     if (skidding)

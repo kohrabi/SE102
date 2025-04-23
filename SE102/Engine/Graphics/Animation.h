@@ -19,15 +19,17 @@ class CAnimation
 	float timeScale = 1.0f;
 	vector<LPANIMATION_FRAME> frames;
 	bool stop = false;
+	bool loop = true;
 public:
 	CAnimation(int defaultTime = 100) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = 0; }
 	const LPANIMATION_FRAME& GetCurrentAnimationFrame() { 
 		ASSERT(currentFrame >= 0 && currentFrame < frames.size(), "How can i get the current frame. Frames is empty");
-		return frames[currentFrame]; 
+		return frames.at(currentFrame); 
 	}
 
 	int GetCurrentFrameIndex() const { return currentFrame; }
 
+	void SetLoop(bool loop) { this->loop = loop; }
 	void SetTimeScale(float newValue) { timeScale = newValue; }
 
 	void Add(int spriteId, DWORD time = 0);

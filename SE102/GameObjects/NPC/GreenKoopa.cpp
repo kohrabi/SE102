@@ -130,7 +130,7 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
         if (dynamic_cast<CGreenKoopa*>(e->obj))
         {
             CGreenKoopa* koopa = dynamic_cast<CGreenKoopa*>(e->obj);
-            koopa->DeadBounce(true);
+            koopa->DeadBounce();
         }
         if (dynamic_cast<CQuestionBlock*>(e->obj) && e->ny == 0)
         {

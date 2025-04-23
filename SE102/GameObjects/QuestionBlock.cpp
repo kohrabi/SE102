@@ -41,7 +41,7 @@ CQuestionBlock::CQuestionBlock(float x, float y, int type, int count)
     ASSERT(spawnCount >= 0, "Invalid spawn count");
     ogYPos = y;
     LoadContent();
-    cast.SetConditionFunction([this](LPGAMEOBJECT obj) {
+    holdCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
         return (dynamic_cast<CGoomba*>(obj) != NULL) ||
             (dynamic_cast<CGreenKoopa*>(obj) != NULL) ||
             (dynamic_cast<CRedKoopa*>(obj) != NULL);
@@ -64,13 +64,13 @@ void CQuestionBlock::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
         CCollision::GetInstance()->Process(this, dt, coObjects);
     }
 
-    cast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
+    holdCast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
     if (isHit)
     {
-        cast.CheckOverlap(coObjects);
-        if (cast.collision.size() > 0)
+        holdCast.CheckOverlap(coObjects);
+        if (holdCast.collision.size() > 0)
         {
-            for (LPGAMEOBJECT obj : cast.collision)
+            for (LPGAMEOBJECT obj : holdCast.collision)
             {
                 if (dynamic_cast<CGoomba*>(obj))
                 {
@@ -80,12 +80,12 @@ void CQuestionBlock::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
                 else if (dynamic_cast<CGreenKoopa*>(obj))
                 {
                     CGreenKoopa* greenKoopa = dynamic_cast<CGreenKoopa*>(obj);
-                    greenKoopa->DeadBounce(false);
+                    greenKoopa->DeadBounce();
                 }
                 else if (dynamic_cast<CRedKoopa*>(obj))
                 {
                     CRedKoopa* redKoopa = dynamic_cast<CRedKoopa*>(obj);
-                    redKoopa->DeadBounce(false);
+                    redKoopa->DeadBounce();
                 }
             }
         }
@@ -100,7 +100,7 @@ void CQuestionBlock::Render()
 
     LPANIMATION animation = animations->Get(spawnCount > 0 ? QUESTION_BLOCK_ID_ANIMATION_IDLE : QUESTION_BLOCK_ID_ANIMATION_EMPTY);
     animation->Render(position.x, position.y, GetLayer(layer, orderInLayer));
-    cast.RenderBoundingBox();
+    holdCast.RenderBoundingBox();
 }
 
 void CQuestionBlock::Hit(int dx)

@@ -19,7 +19,7 @@ private:
 	float animationTimer = 0.0f;
 	float ogYPos = 0.0f;
 	bool isHit = false;
-	CCollisionCast cast;
+	CCollisionCast holdCast;
 	
 	static bool IsContentLoaded;
 	static void LoadContent();
@@ -32,6 +32,7 @@ public:
     
 	void Hit(int dx);
 
+	int GetSpawnCount() const { return spawnCount; }
 	int GetSpawnType() const { return spawnType; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {

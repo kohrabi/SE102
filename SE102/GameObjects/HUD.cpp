@@ -101,14 +101,14 @@ void CHUD::Render()
 		sprites->Get(getNumberSpriteId(currentTime[i]))->DrawScreen(132.0f + i * 8.0f, game->GetBackBufferHeight() - 15.0f, 1.0f);
 	}
 
+	// Money counter
 	int coinCount = 0;
 	if (mario != NULL)
 		coinCount = min(mario->GetCoinCount(), 99);
 	string coin = to_string(coinCount);
-	// Money counter
 	for (int i = 0; i < coin.size(); i++)
 	{
-		sprites->Get(getNumberSpriteId(coin[i]))->DrawScreen(148.0f - i * 8.0f, game->GetBackBufferHeight() - 23.0f, 1.0f);
+		sprites->Get(getNumberSpriteId(coin[coin.size() - i - 1]))->DrawScreen(148.0f - i * 8.0f, game->GetBackBufferHeight() - 23.0f, 1.0f);
 	}
 
 	// World count

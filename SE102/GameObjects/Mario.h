@@ -57,6 +57,8 @@ constexpr float DEAD_RESET_TIME = 1000.0f;
 constexpr float INVINCIBLE_TIME = 1000.0f;
 constexpr float WAG_TIME = 0x10 * 1000.0f / 60.0f;
 
+constexpr float SPIN_TIME = 6 * 50.0f;
+
 #pragma endregion
 
 #define MARIO_POWERUP_SMALL 0
@@ -141,7 +143,10 @@ private:
 
 	float kickTimer = 0.0f;
 
-	CCollisionCast cast;
+	float spinTimer = 0.0f;
+
+	CCollisionCast holdCast;
+	CCollisionCast spinCast;
 	CGreenKoopa* holdShell;
 	bool isHolding = false;
 

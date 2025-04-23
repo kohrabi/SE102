@@ -9,7 +9,7 @@ private:
     static bool IsContentLoaded;
 protected:
 
-    CCollisionCast cast;
+    CCollisionCast holdCast;
 
 	int GetAnimationId() override;
 public:
