@@ -88,6 +88,18 @@ public:
 		RECT* rect = NULL, bool flipX = false, bool flipY = false, 
 		float alpha = 1.0f, int sprite_width = 0, int sprite_height = 0);
 
+	void DrawScreen(float x, float y, float rotation, float z, LPTEXTURE tex,
+		int l, int t, int r, int b, bool flipX = false, bool flipY = false,
+		float alpha = 1.0f, int sprite_width = 0, int sprite_height = 0)
+	{
+		RECT rect;
+		rect.left = l;
+		rect.top = t;
+		rect.right = r;
+		rect.bottom = b;
+		this->DrawScreen(x, y, rotation, z, tex, &rect, flipX, flipY, alpha, sprite_width, sprite_height);
+	}
+
 	LPTEXTURE LoadTexture(LPCWSTR texturePath);
 
 	ID3D10Device * GetDirect3DDevice() { return this->pD3DDevice; }

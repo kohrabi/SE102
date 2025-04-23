@@ -64,8 +64,10 @@ void CPlayScene::Load()
 		}
 	}
 
+	levelTimer = LEVEL_TIME;
 	CTextures* const textures = CTextures::GetInstance();
 	textures->Add(L"Content/menu.png");
+	hud = new CHUD(this);
 
 	f.close();
 
@@ -79,7 +81,11 @@ void CPlayScene::Update(float dt)
 
 	CGame* const game = CGame::GetInstance();
 	if (game->GetResetScene())
+	{
 		game->ResetScene();
+	}
+
+	levelTimer -= dt;
 
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
@@ -136,7 +142,8 @@ void CPlayScene::Render()
 	}
 
 
-	game->DrawScreen(256.0f / 2.0f - 8.f, game->GetBackBufferHeight() - (60.0f - 48.0f), 0.0f, 1.0f, textures->Get(L"Content/menu.png"));
+	//game->DrawScreen(256.0f / 2.0f - 8.f, game->GetBackBufferHeight() - (60.0f - 48.0f), 0.0f, 1.0f, textures->Get(L"Content/menu.png"));
+	hud->Render();
 }
 
 /*

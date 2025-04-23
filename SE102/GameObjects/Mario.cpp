@@ -179,12 +179,20 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     {
         // Disable flying
         if (flightTimer <= 0.0f)
+        {
             powerCounter = 0;
+        }
         if (isOnGround)
         {
-            //powerCounter--;
+            powerCounter = 0;
             flying = false;
         }
+    }
+
+    if (superJump && isOnGround)
+    {
+        superJump = false;
+        //powerCounter = 0;
     }
 
     // Tail things
@@ -221,6 +229,8 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
         wagTimer = 0.0f;
         if (flightTimer > 0)
             flying = true;
+        if (powerCounter >= MAX_POWER_COUNT)
+            superJump = true;
 
         accel.y = initVel;
     }
@@ -264,8 +274,8 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
     case MARIO_STATE_POWER_UP: marioPowerupUpdate(dt, coObjects); break;
     case MARIO_STATE_DEAD: 
     {
-        float unscaledDT = GetTickCount64() - deadPrev;
-        deadPrev = GetTickCount64();
+        float unscaledDT = (float)GetTickCount64() - deadPrev;
+        deadPrev = (float)GetTickCount64();
         if (deadTimer > 0) deadTimer -= unscaledDT;
         else
         {
@@ -356,7 +366,7 @@ void CMario::SetState(int state) {
         if (this->state == MARIO_STATE_NORMAL)
         {
             CGame::GetInstance()->SetTimeScale(0.0f);
-            powerUpStartTimer = GetTickCount64();
+            powerUpStartTimer = (float)GetTickCount64();
         }
     }
     break;
@@ -372,7 +382,7 @@ void CMario::SetState(int state) {
             CGame::GetInstance()->SetTimeScale(0.0f);
             nextPowerUp = MARIO_POWERUP_SMALL;
             position.y += 8.0f;
-            powerUpStartTimer = GetTickCount64();
+            powerUpStartTimer = (float)GetTickCount64();
         }
         else 
         {
@@ -409,9 +419,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     {
         CQuestionBlock* const questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
         questionBlock->Hit(sign(questionBlock->GetPosition().x - position.x));
+        if (questionBlock->GetSpawnType() == QUESTION_BLOCK_SPAWN_COIN)
+            coinCounter++;
     }
     else if (dynamic_cast<CCoin*>(e->obj) && e->obj->GetState() == COIN_STATE_NORMAL)
     {
+        coinCounter++;
         e->obj->Delete();
     }
     else if (dynamic_cast<CGoomba*>(e->obj))

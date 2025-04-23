@@ -32,6 +32,7 @@ public:
 	}
 
 	void Draw(float x, float y, float z, bool flipX = false, bool flipY = false);
+	void DrawScreen(float x, float y, float z, bool flipX = false, bool flipY = false);
 };
 
 typedef CSprite* LPSPRITE;

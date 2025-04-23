@@ -32,6 +32,7 @@ public:
     
 	void Hit(int dx);
 
+	int GetSpawnType() const { return spawnType; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
 		const float size = 16.0f / 2.0f;

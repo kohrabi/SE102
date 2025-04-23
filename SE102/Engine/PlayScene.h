@@ -13,18 +13,28 @@
 #include <tmxlite/TileLayer.hpp>
 #include <tmxlite/ObjectGroup.hpp>
 #include <tmxlite/LayerGroup.hpp>
+#include <GameObjects/HUD.h>
 
 using namespace std;
 //#include "Koopas.h"
 
+#define LEVEL_TIME 300000
 
+class CHUD;
 class CPlayScene: public CScene
 {
 protected: 
+
 	// A play scene has to have player, right? 			
 	void _ParseSection_PROPERTIES(string line);
+	CHUD* hud;
+	float levelTimer = 0.0f;
+	int marioLife = 4;
 public: 
 	CPlayScene(int id, wstring filePath);
+
+	float GetLevelTime() const { return levelTimer; }
+	int GetMarioLife() const { return marioLife; }
 
 	virtual void Load();
 	virtual void Update(float dt);

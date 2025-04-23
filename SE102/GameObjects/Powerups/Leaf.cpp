@@ -97,7 +97,7 @@ void CLeaf::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
         position.y += velocity.y * dt;
         // CCollision::GetInstance()->Process(this, dt, coObjects);
     }
-    cout << velocity.x << '\n';
+    //cout << velocity.x << '\n';
 }
 
 void CLeaf::Render() {

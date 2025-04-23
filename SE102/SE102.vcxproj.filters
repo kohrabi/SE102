@@ -102,6 +102,9 @@
     <ClCompile Include="GameObjects\Powerups\Leaf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects\HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -290,6 +293,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContentIds\MarioRacoon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentIds\HUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

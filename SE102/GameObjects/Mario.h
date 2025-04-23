@@ -7,7 +7,7 @@
 #include "Engine/CollisionCast.h"
 #include "NPC/GreenKoopa.h"
 
-#define DEBUG_INVINCIBLE false
+#define DEBUG_INVINCIBLE true
 
 #pragma region X MOVEMENT
 constexpr float MINIMUM_WALK_VELOCITY = 0x00098 * SUBSUBSUBPIXEL_DELTA_TIME;
@@ -45,7 +45,7 @@ constexpr float ENEMY_BOUNCE = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 constexpr float POWER_TIME = 8 * 1000.0f / 60.0f * 1.2f;
 constexpr float POWER_REDUCE_TIME = 23 * 1000.0f / 60.0f;
-constexpr float MAX_POWER_COUNT = 7;
+constexpr int MAX_POWER_COUNT = 7;
 constexpr float FLY_P_TIMER = 0x80 * 1000.0f / 60.0f;
 
 constexpr float POWER_UP_ANIMATION_TIME = 1500.0f;
@@ -134,6 +134,7 @@ private:
 	float wagTimer = 0.0f;
 
 	bool flying = false;
+	bool superJump = false;
 	float flightTimer = 0.0f;
 
 	float invincibleTimer = 0.0f;
@@ -151,6 +152,8 @@ private:
 	bool isResetting = false;
 	float levelResetTimer = 0.0f;
 
+	int coinCounter = 0;
+
 	void marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
 	void marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
 
@@ -162,6 +165,9 @@ public:
 
     void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
+
+	int GetCoinCount() const { return coinCounter; }
+	int GetPowerCount() const { return powerCounter; }
 
 	int IsCollidable() override { return !isDeleted && (state != MARIO_STATE_DEAD); };
 	void OnNoCollision(float dt) override;

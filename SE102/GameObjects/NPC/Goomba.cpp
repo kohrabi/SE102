@@ -94,7 +94,7 @@ void CGoomba::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     case GOOMBA_STATE_WING:
     {
         velocity.x = GOOMBA_X_SPEED * nx;
-        velocity.y = min(velocity.y + OBJECT_FALL / 1.5f, OBJECT_MAX_FALL / 1.5);
+        velocity.y = min(velocity.y + OBJECT_FALL / 1.5f, OBJECT_MAX_FALL / 1.5f);
 
         if (hopTimer > 0) hopTimer -= dt;
         if (wingActivateTimer > 0) wingActivateTimer -= dt;

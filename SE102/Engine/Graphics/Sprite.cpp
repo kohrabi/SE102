@@ -40,3 +40,9 @@ void CSprite::Draw(float x, float y, float z, bool flipX, bool flipY)
 	//g->GetSpriteHandler()->DrawSpritesImmediate(&sprite, 1, 0, 0);
 }
 
+void CSprite::DrawScreen(float x, float y, float z, bool flipX, bool flipY)
+{
+	CGame* g = CGame::GetInstance();
+	g->DrawScreen(x, y, 0.0f, z, texture, left, top, right, bottom, flipX, flipY);
+}
+

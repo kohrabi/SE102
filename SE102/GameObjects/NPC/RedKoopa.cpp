@@ -53,7 +53,7 @@ void CRedKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 
     if (state == KOOPA_STATE_NORMAL)
     {
-        cast.SetBoundingBox(position + Vector2((7) * nx, 16), Vector2(4, 6));
+        cast.SetBoundingBox(position + Vector2((7.0f) * nx, 16.0f), Vector2(4.0f, 6.0f));
         cast.CheckOverlap(coObjects);
         if (cast.collision.size() <= 0)
         {

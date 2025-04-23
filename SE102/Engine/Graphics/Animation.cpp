@@ -35,3 +35,27 @@ void CAnimation::Render(float x, float y, float z, bool flipX, bool flipY)
 
 }
 
+void CAnimation::RenderScreen(float x, float y, float z, bool flipX, bool flipY)
+{
+	frames[currentFrame]->GetSprite()->DrawScreen(x, y, z, flipX, flipY);
+	ULONGLONG now = GetTickCount64();
+	if (!stop) {
+		if (currentFrame == -1)
+		{
+			currentFrame = 0;
+			lastFrameTime = now;
+		}
+		else
+		{
+			DWORD t = frames[currentFrame]->GetTime();
+			if (now - lastFrameTime > t * timeScale)
+			{
+				currentFrame++;
+				lastFrameTime = now;
+				if (currentFrame == frames.size()) currentFrame = 0;
+				//DebugOut(L"now: %d, lastFrameTime: %d, t: %d\n", now, lastFrameTime, t);
+			}
+		}
+	}
+}
+

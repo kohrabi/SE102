@@ -143,6 +143,7 @@
     <ClCompile Include="Engine\debug.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
+    <ClCompile Include="GameObjects\HUD.cpp" />
     <ClCompile Include="GameObjects\NPC\Fireball.cpp" />
     <ClCompile Include="GameObjects\Powerups\Leaf.cpp" />
     <ClCompile Include="GameObjects\ScorePopup.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="ContentIds\FirePiranha.h" />
     <ClInclude Include="ContentIds\Goomba.h" />
     <ClInclude Include="ContentIds\GreenKoopa.h" />
+    <ClInclude Include="ContentIds\HUD.h" />
     <ClInclude Include="ContentIds\Leaf.h" />
     <ClInclude Include="ContentIds\Mario.h" />
     <ClInclude Include="ContentIds\MarioBig.h" />
@@ -205,6 +207,7 @@
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Helper.h" />
+    <ClInclude Include="GameObjects\HUD.h" />
     <ClInclude Include="GameObjects\NPC\Fireball.h" />
     <ClInclude Include="GameObjects\Powerups\Leaf.h" />
     <ClInclude Include="GameObjects\ScorePopup.h" />
