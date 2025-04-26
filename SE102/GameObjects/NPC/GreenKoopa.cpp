@@ -12,6 +12,7 @@
 #include "GameObjects/QuestionBlock.h"
 
 #include "GameObjects/ScorePopup.h"
+#include <ContentIds/Wing.h>
 
 using namespace std;
 
@@ -23,6 +24,7 @@ void CGreenKoopa::LoadContent()
         return;
     IsContentLoaded = true;
     SpritesLoader loader;
+    loader.Load(WING_SPRITES_PATH);
     loader.Load(GREEN_KOOPA_SPRITES_PATH);
 }
 
@@ -30,7 +32,7 @@ int CGreenKoopa::GetAnimationId()
 {
     if (state == KOOPA_STATE_RESPAWNING)
         return GREEN_KOOPA_ID_ANIMATION_RESPAWN;
-    if (state == KOOPA_STATE_NORMAL)
+    if (state == KOOPA_STATE_NORMAL || state == KOOPA_STATE_WING)
         return GREEN_KOOPA_ID_ANIMATION_WALK;
     else
     {
@@ -46,16 +48,6 @@ void CGreenKoopa::SetState(int state)
 {
     switch (state)
     {
-    case KOOPA_STATE_NORMAL:
-    {
-
-    }
-    break;
-    case KOOPA_STATE_RESPAWNING:
-    {
-
-    }
-    break;
     case KOOPA_STATE_DEAD_BOUNCE:
     {
         CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, Score400));
@@ -64,6 +56,7 @@ void CGreenKoopa::SetState(int state)
         velocity.x = OBJECT_DEAD_X_VEL;
     }
     break;
+    default: break;
     }
     this->state = state;
 }
@@ -73,7 +66,11 @@ void CGreenKoopa::PlayerHit(int nx)
     if (state != KOOPA_STATE_IN_SHELL)
     {
         velocity.x = 0;
-        state = KOOPA_STATE_IN_SHELL;
+
+        if (this->state == KOOPA_STATE_WING)
+            state = KOOPA_STATE_NORMAL;
+        else
+            state = KOOPA_STATE_IN_SHELL;
         respawnTimer = GREEN_KOOPA_SPAWN_TIME;
         this->nx = 0;
     }
@@ -83,7 +80,6 @@ void CGreenKoopa::PlayerHit(int nx)
             this->nx = 0;
         else
             this->nx = -nx;
-        cout << -nx << " " << this->nx << '\n';
     }
 }
 
@@ -107,6 +103,7 @@ void CGreenKoopa::OnNoCollision(float dt)
 {
     position.x += velocity.x * dt;
     position.y += velocity.y * dt;
+    onGround = false;
 }
 
 void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -117,7 +114,12 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
     }
     if (e->ny != 0 && e->obj->IsBlocking())
     {
-        velocity.y = 0.0f;
+        if (state == KOOPA_STATE_WING && e->ny > 0)
+            velocity.y = 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME;
+        else
+           velocity.y = 0.0f;
+        if (e->ny < 0)
+            onGround = true;
     }
     
     if (state == KOOPA_STATE_IN_SHELL)
@@ -145,53 +147,99 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     if (!IsColliderInCamera())
         return;
 
-    velocity.y += OBJECT_FALL;
-    velocity.y = min(velocity.y, OBJECT_MAX_FALL);
+    if (state == KOOPA_STATE_WING)
+        velocity.y = min(velocity.y + OBJECT_FALL / 1.5f, OBJECT_MAX_FALL / 1.5f);
+    else
+        velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL);
 
+
+    cout << "onGround: " << onGround << '\n';
     switch (state)
     {
-    case KOOPA_STATE_NORMAL:
+    case KOOPA_STATE_WING:
+    {
+        velocity.x = GREEN_KOOPA_X_SPEED * (nx > 0 ? 1 : -1);
+
+        if (hopTimer > 0) hopTimer -= dt;
+        if (wingActivateTimer > 0) wingActivateTimer -= dt;
+        if (changeDirTimer > 0) changeDirTimer -= dt;
+
+        if (onGround)
         {
-            velocity.x = GREEN_KOOPA_X_SPEED * (nx > 0 ? 1 : -1);
-        }
-        break;
-    case KOOPA_STATE_IN_SHELL:
-        {
-            if (player != NULL)
+            if (wingActivateTimer <= 0)
             {
-                nx = player->GetNx();
-                position = player->GetPosition() + Vector2(12.0f * nx, holdYOffset);
-                velocity.x = 0;
-                velocity.y = 0;
-            }
-            else
-            {
-                velocity.x = GREEN_KOOPA_SHELL_X_SPEED * nx;
-            }
-            if (velocity.x == 0)
-            {
-                if (respawnTimer > 0) respawnTimer -= dt;
-                else
+                if (hopTimer <= 0)
                 {
-                    respawnTimer = KOOPA_RESPAWNING_TIME;
-                    state = KOOPA_STATE_RESPAWNING;
+                    hopTimer = KOOPA_WING_HOP_TIME;
+                    hopCount = (hopCount + 1);
+                    velocity.y = -KOOPA_WING_HOP;
+                    if (hopCount == 4)
+                    {
+                        velocity.y = -KOOPA_WING_BIG_HOP;
+                        wingActivateTimer = KOOPA_WING_ACTIVATE_TIME;
+                        hopCount = 0;
+                    }
+                }
+            }
+            // Change Goomba direction to player
+            else if (changeDirTimer <= 0)
+            {
+                LPGAMEOBJECT player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
+                if (player != NULL)
+                {
+                    nx = sign(player->GetPosition().x - position.x);
                 }
             }
         }
-        break;
-    case KOOPA_STATE_RESPAWNING:
+
+    }
+    break;
+    case KOOPA_STATE_NORMAL:
+    {
+        velocity.x = GREEN_KOOPA_X_SPEED * (nx > 0 ? 1 : -1);
+    }
+    break;
+    case KOOPA_STATE_IN_SHELL:
+    {
+        if (player != NULL)
+        {
+            nx = player->GetNx();
+            position = player->GetPosition() + Vector2(12.0f * nx, holdYOffset);
+            velocity.x = 0;
+            velocity.y = 0;
+        }
+        else
+        {
+            velocity.x = GREEN_KOOPA_SHELL_X_SPEED * nx;
+        }
+        if (velocity.x == 0)
         {
             if (respawnTimer > 0) respawnTimer -= dt;
             else
             {
-                DetachHold();
-                nx = -1;
                 respawnTimer = KOOPA_RESPAWNING_TIME;
-                state = KOOPA_STATE_NORMAL;
+                state = KOOPA_STATE_RESPAWNING;
             }
         }
-        break;
-    case KOOPA_STATE_DEAD_BOUNCE: break;
+    }
+    break;
+    case KOOPA_STATE_RESPAWNING:
+    {
+
+        if (respawnTimer > 0) respawnTimer -= dt;
+        else
+        {
+            DetachHold();
+            nx = -1;
+            respawnTimer = KOOPA_RESPAWNING_TIME;
+            state = KOOPA_STATE_NORMAL;
+        }
+    }
+    break;
+    case KOOPA_STATE_DEAD_BOUNCE:
+    {
+    }
+    break;
     }
 
     if (player != NULL)
@@ -208,8 +256,23 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 void CGreenKoopa::Render() {
     CAnimations* const animations = CAnimations::GetInstance();
 
+
+    if (state == KOOPA_STATE_WING)
+    {
+        Vector2 wingOffset = Vector2(2.0f * (nx > 0 ? -1 : 1), 7.0f);
+        if (wingActivateTimer <= 0.0f || (wingActivateTimer >= 0.0f && !onGround))
+        {
+            animations->Get(WING_ID_ANIMATION_WING_ACTIVE)->Render(position.x + wingOffset.x, position.y - wingOffset.y, GetLayer(layer, orderInLayer), nx > 0);
+        }
+        else
+        {
+            animations->Get(WING_ID_ANIMATION_WING_IDLE)->Render(position.x + wingOffset.x, position.y - wingOffset.y, GetLayer(layer, orderInLayer), nx > 0);
+        }
+    }
+
     switch (state)
     {
+    case KOOPA_STATE_WING:
     case KOOPA_STATE_NORMAL:
         {
             animations->Get(GetAnimationId())->Render(position.x, position.y - 0, GetLayer(layer, orderInLayer), nx > 0);

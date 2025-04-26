@@ -14,10 +14,18 @@
 #define GREEN_KOOPA_SPAWN_TIME 8000
 #define KOOPA_RESPAWNING_TIME 2000
 
+#define KOOPA_WING_HOP 0x01000 * SUBSUBSUBPIXEL_DELTA_TIME
+#define KOOPA_WING_BIG_HOP 0x03000 * SUBSUBSUBPIXEL_DELTA_TIME
+#define KOOPA_WING_HOP_COUNT 4
+#define KOOPA_WING_HOP_TIME 140
+#define KOOPA_WING_ACTIVATE_TIME 1400
+#define KOOPA_WING_CHANG_DIR 1040
+
 #define KOOPA_STATE_NORMAL 1
-#define KOOPA_STATE_IN_SHELL 2
-#define KOOPA_STATE_RESPAWNING 3
-#define KOOPA_STATE_DEAD_BOUNCE 4
+#define KOOPA_STATE_WING 2
+#define KOOPA_STATE_IN_SHELL 3
+#define KOOPA_STATE_RESPAWNING 4
+#define KOOPA_STATE_DEAD_BOUNCE 5
 
 class CGreenKoopa : public CGameObject {
 private:
@@ -26,6 +34,14 @@ private:
 
 protected:
     LPGAMEOBJECT player = NULL;
+
+    int hopCount = 0;
+    float hopTimer = 0.0f;
+    float changeDirTimer = 0.0f;
+    float wingActivateTimer = KOOPA_WING_ACTIVATE_TIME;
+
+    bool onGround = false;
+
     float holdYOffset = 0.0f;
     float respawnTimer = 0.f;
 
@@ -57,10 +73,10 @@ public:
     void PlayerHit(int nx);
     void AttachHold(LPGAMEOBJECT player, float holdYOffset);
     void DetachHold();
-    void DeadBounce()
-    {
-        SetState(KOOPA_STATE_DEAD_BOUNCE);
-    }
+
+    void DeadBounce() { SetState(KOOPA_STATE_DEAD_BOUNCE); }
+
+    void SetHasWing() { SetState(KOOPA_STATE_WING); }
 
     void OnNoCollision(float dt) override;
     void OnCollisionWith(LPCOLLISIONEVENT e) override;

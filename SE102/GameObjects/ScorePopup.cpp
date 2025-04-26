@@ -35,6 +35,7 @@ void CScorePopup::Render()
 	case Score2000: animationId = UI_ID_SPRITE_2000; break;
 	case Score4000: animationId = UI_ID_SPRITE_4000; break;
 	case Score8000: animationId = UI_ID_SPRITE_8000; break;
+	case OneUp: animationId = UI_ID_SPRITE_ONEUP; break;
 	}
 	sprites->Get(animationId)->Draw(position.x, position.y, GetLayer(layer, 0));
 }

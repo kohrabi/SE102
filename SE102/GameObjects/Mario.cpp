@@ -22,6 +22,8 @@
 
 #include <iostream>
 #include "Powerups/Leaf.h"
+#include "Powerups/OneUp.h"
+#include <Engine/PlayScene.h>
 using namespace std;
 
 bool CMario::IsContentLoaded = false;
@@ -109,6 +111,7 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
         {
             for (LPGAMEOBJECT obj : spinCast.collision)
             {
+                if (obj == NULL) continue;
                 if (dynamic_cast<CGoomba*>(obj) != NULL)
                 {
                     CGoomba* goomba = dynamic_cast<CGoomba*>(obj);
@@ -223,8 +226,6 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     else
         gravity = JUMP_GRAVITY;
     accel.y = gravity;
-
-    cout << powerCounter << '\n';
 
     // Flying
     if (flightTimer > 0) flightTimer -= dt;
@@ -437,7 +438,10 @@ void CMario::SetState(int state) {
         {
             state = MARIO_STATE_POWER_UP;
             CGame::GetInstance()->SetTimeScale(0.0f);
-            nextPowerUp = MARIO_POWERUP_SMALL;
+            if (powerUp == MARIO_POWERUP_RACOON)
+                nextPowerUp = MARIO_POWERUP_BIG;
+            else    
+                nextPowerUp = MARIO_POWERUP_SMALL;
             position.y += 8.0f;
             powerUpStartTimer = (float)GetTickCount64();
         }
@@ -504,6 +508,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
                 velocity.y = -ENEMY_BOUNCE;
             }
         }
+    }
+    else if (dynamic_cast<COneUp*>(e->obj))
+    {
+        e->obj->Delete();
+        dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->AddOneUp();
+
     }
     else if (dynamic_cast<CMushroom*>(e->obj))
     {

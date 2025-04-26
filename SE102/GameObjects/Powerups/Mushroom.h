@@ -21,13 +21,11 @@ class CMushroom : public CGameObject {
 private:
     static void LoadContent();
     static bool IsContentLoaded;
-
+protected:
     long startTime;
     float maxYPos;
     bool inIntro = false;
 public:
-	// Tile number xTile counting from 0
-	// Tile number yTile counting from 0
 	CMushroom(float x, float y) : CGameObject(x, y, 0.0f) 
     { 
         LoadContent(); 

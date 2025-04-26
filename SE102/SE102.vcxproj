@@ -146,6 +146,7 @@
     <ClCompile Include="GameObjects\HUD.cpp" />
     <ClCompile Include="GameObjects\NPC\Fireball.cpp" />
     <ClCompile Include="GameObjects\Powerups\Leaf.cpp" />
+    <ClCompile Include="GameObjects\Powerups\OneUp.cpp" />
     <ClCompile Include="GameObjects\ScorePopup.cpp" />
     <ClCompile Include="GameObjects\Coin.cpp" />
     <ClCompile Include="Engine\CollisionCast.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="ContentIds\MarioBig.h" />
     <ClInclude Include="ContentIds\MarioRacoon.h" />
     <ClInclude Include="ContentIds\Mushroom.h" />
+    <ClInclude Include="ContentIds\OneUp.h" />
     <ClInclude Include="ContentIds\QuestionBlock.h" />
     <ClInclude Include="ContentIds\RedGoomba.h" />
     <ClInclude Include="ContentIds\RedKoopa.h" />
@@ -210,6 +212,7 @@
     <ClInclude Include="GameObjects\HUD.h" />
     <ClInclude Include="GameObjects\NPC\Fireball.h" />
     <ClInclude Include="GameObjects\Powerups\Leaf.h" />
+    <ClInclude Include="GameObjects\Powerups\OneUp.h" />
     <ClInclude Include="GameObjects\ScorePopup.h" />
     <ClInclude Include="GameObjects\Coin.h" />
     <ClInclude Include="Engine\CollisionCast.h" />

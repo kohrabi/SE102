@@ -317,11 +317,15 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 				else if (layerObject.getClass() == "CGreenKoopa")
 				{
 					CGreenKoopa* obj = new CGreenKoopa(position.x, position.y);
+					for (const auto& property : layerObject.getProperties())
+					{
+						if (property.getName() == "hasWing" && property.getBoolValue())
+							obj->SetHasWing();
+					}
 					objects.push_back(obj);
 				}
 				else if (layerObject.getClass() == "CRedKoopa")
 				{
-
 					CRedKoopa* obj = new CRedKoopa(position.x, position.y);
 					objects.push_back(obj);
 				}

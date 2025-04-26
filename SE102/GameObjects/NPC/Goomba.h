@@ -63,20 +63,11 @@ public:
 
     void SetRedGoomba() { isRedGoomba = true; }
 
-    void SetHasWing()
-    {
-        SetState(GOOMBA_STATE_WING);
-    }
+    void SetHasWing() { SetState(GOOMBA_STATE_WING); }
 
-    void SetKill()
-    {
-        SetState(GOOMBA_STATE_DEAD);
-    }
+    void SetKill() { SetState(GOOMBA_STATE_DEAD); }
 
-    void DeadBounce()
-    {
-        SetState(GOOMBA_STATE_DEAD_BOUNCE);
-    }
+    void DeadBounce() { SetState(GOOMBA_STATE_DEAD_BOUNCE); }
 
     void OnNoCollision(float dt) override;
     void OnCollisionWith(LPCOLLISIONEVENT e) override;

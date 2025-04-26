@@ -47,6 +47,8 @@ void CGoomba::SetState(int state)
     break;
     case GOOMBA_STATE_DEAD_BOUNCE:
     {
+        if (this->state == GOOMBA_STATE_DEAD || isDeleted)
+            return;
         CGame* const game = CGame::GetInstance();
         game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
         layer = SortingLayer::CORPSE;

@@ -19,6 +19,8 @@
 #include "GameObjects/NPC/GreenKoopa.h"
 #include "GameObjects/NPC/RedKoopa.h"
 
+#include "GameObjects/Powerups/OneUp.h"
+
 #include <iostream>
 using namespace std;
 
@@ -137,7 +139,15 @@ void CQuestionBlock::Hit(int dx)
         }
     }
     break;
-    default:
+    case QUESTION_BLOCK_SPAWN_ONE_UP:
+    {
+        CMario* player = dynamic_cast<CMario*>(game->GetCurrentScene()->GetPlayer());
+        LPGAMEOBJECT powerUp = NULL;
+        powerUp = new COneUp(position.x, position.y);
+        powerUp->SetNx(dx);
+        game->GetCurrentScene()->AddObject(powerUp);
+
+    }
     break;
     }
     isHit = true;

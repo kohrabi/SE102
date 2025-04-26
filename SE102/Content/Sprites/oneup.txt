@@ -1,0 +1,14 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\VS\SE102\SE102\
+# EDITOR startID 18000
+# EDITOR objectName OneUp
+
+[TEXTURES]
+Content\mariotiles.png 0
+
+[SPRITES]
+18001 128 128 143 143 0
+# EDITOR frameName Idle
+
+
+[ANIMATIONS]

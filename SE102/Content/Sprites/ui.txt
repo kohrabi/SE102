@@ -23,6 +23,8 @@ Content\ui.png 0
 # EDITOR frameName 4000
 11008 112 0 127 15 0
 # EDITOR frameName 8000
+11009 128 0 143 15 0
+# EDITOR frameName OneUp
 
 
 [ANIMATIONS]
