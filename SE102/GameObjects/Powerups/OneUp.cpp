@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <Engine/PlayScene.h>
 
 using namespace std;
 
@@ -21,9 +22,13 @@ void COneUp::LoadContent()
     loader.Load(ONEUP_SPRITES_PATH);
 }
 
-void COneUp::OnDelete()
+void COneUp::Eat()
 {
     CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, ScoreType::OneUp));
+    CPlayScene* scene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+    if (scene != NULL)
+        scene->AddOneUp();
+    Delete();
 }
 
 void COneUp::Render() {

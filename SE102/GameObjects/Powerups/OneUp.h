@@ -19,7 +19,7 @@ public:
         LoadContent(); 
     }
 
-    void OnDelete() override;
+    void Eat();
 
 	void Render() override;
 };

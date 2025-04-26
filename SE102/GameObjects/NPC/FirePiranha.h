@@ -44,6 +44,8 @@ public:
         position.y = y + FIRE_PIRANHA_DOWN_POS;
         layer = SortingLayer::NPC;
     }
+
+    void OnDelete() override;
     void SetState(int state) override;
 	int IsCollidable() override { return !isDeleted; };
     int IsBlocking() override { return false; }

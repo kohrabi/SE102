@@ -90,7 +90,7 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
         }
     }
 
-    if (spinTimer > 0)
+    if (spinTimer > 0 && powerUp == MARIO_POWERUP_RACOON)
     {
         LPANIMATION animation = CAnimations::GetInstance()->Get(MARIO_RACOON_ID_ANIMATION_SPIN);
 
@@ -329,9 +329,9 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
     case MARIO_STATE_POWER_UP: marioPowerupUpdate(dt, coObjects); break;
     case MARIO_STATE_DEAD: 
     {
-        float unscaledDT = (float)GetTickCount64() - deadPrev;
-        deadPrev = (float)GetTickCount64();
-        if (deadTimer > 0) deadTimer -= unscaledDT;
+        CGame* const game = CGame::GetInstance();
+        ULONGLONG unscaledDt = game->GetUnscaledDt();
+        if (deadTimer > 0) deadTimer -= unscaledDt;
         else
         {
             if (!deadJump)
@@ -341,7 +341,7 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
             }
             //velocity.y = min(velocity.y + JUMP_GRAVITY / 2.0f, MAX_FALL_SPEED / 2.0f);
             velocity.y = velocity.y + JUMP_GRAVITY / 2.0f;
-            position.y += velocity.y / 2.0f * unscaledDT;
+            position.y += velocity.y / 2.0f * unscaledDt;
         }
 
         if (!IsColliderInCamera())
@@ -352,7 +352,7 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
                 levelResetTimer = DEAD_RESET_TIME;
             }
 
-            if (levelResetTimer > 0) levelResetTimer -= unscaledDT;
+            if (levelResetTimer > 0) levelResetTimer -= unscaledDt;
             else
             {
                 CGame::GetInstance()->SetResetScene(true);
@@ -453,7 +453,6 @@ void CMario::SetState(int state) {
             velocity = Vector2::Zero;
             CGame::GetInstance()->SetTimeScale(0.0f);
             layer = SortingLayer::CORPSE;
-            deadPrev = GetTickCount64();
         }
     }
     break;
@@ -510,8 +509,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     }
     else if (dynamic_cast<COneUp*>(e->obj))
     {
-        e->obj->Delete();
-        dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->AddOneUp();
+        dynamic_cast<COneUp*>(e->obj)->Eat();
 
     }
     else if (dynamic_cast<CMushroom*>(e->obj))

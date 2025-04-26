@@ -22,6 +22,7 @@
 #include "GameObjects/NPC/RedKoopa.h"
 
 #include "GameObjects/TileObjects/CollidableTileLayer.h"
+#include <GameObjects/Level/KillBarrier.h>
 
 using namespace std;
 
@@ -76,6 +77,7 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(float dt)
 {
+	cout << objects.size() << '\n';
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
@@ -327,6 +329,11 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 				else if (layerObject.getClass() == "CRedKoopa")
 				{
 					CRedKoopa* obj = new CRedKoopa(position.x, position.y);
+					objects.push_back(obj);
+				}
+				else if (layerObject.getClass() == "CKillBarrier")
+				{
+					CKillBarrier* obj = new CKillBarrier(layerObject.getAABB().left, layerObject.getAABB().top, layerObject.getAABB().width, layerObject.getAABB().height);
 					objects.push_back(obj);
 				}
 			}

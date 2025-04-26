@@ -133,7 +133,7 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
             onGround = true;
     }
     
-    if (state == KOOPA_STATE_IN_SHELL)
+    if (state == KOOPA_STATE_IN_SHELL && abs(velocity.x) > 0)
     {
         if (dynamic_cast<CGoomba*>(e->obj))
         {
@@ -194,11 +194,11 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
             // Change Goomba direction to player
             else if (changeDirTimer <= 0)
             {
-                LPGAMEOBJECT player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
-                if (player != NULL)
-                {
-                    nx = sign(player->GetPosition().x - position.x);
-                }
+                //LPGAMEOBJECT player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
+                //if (player != NULL)
+                //{
+                    //nx = sign(player->GetPosition().x - position.x);
+                //} 
             }
         }
 

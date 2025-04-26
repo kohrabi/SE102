@@ -151,7 +151,6 @@ private:
 	bool isHolding = false;
 
 	float deadTimer = 0.0f;
-	ULONGLONG deadPrev = 0;
 	bool deadJump = false;
 
 	bool isResetting = false;
@@ -185,6 +184,7 @@ public:
 	int GetPowerUp() const { return powerUp; }
 
 	void SetState(int state) override;
+	void Kill() { powerUp = MARIO_POWERUP_SMALL; SetState(MARIO_STATE_DEAD); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
 		if (powerUp == MARIO_POWERUP_SMALL)

@@ -47,6 +47,8 @@ class CGame
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
 
+	ULONGLONG unscaledDt;
+
 	float timeScale = 1.0f;
 	bool resetScene = false;
 
@@ -62,7 +64,9 @@ public:
 
 	void SetPointSamplerState();
 	void SetTimeScale(float newVal) { timeScale = newVal; }
+	void SetUnscaledDt(ULONGLONG dt) { unscaledDt = dt; }
 	float GetTimeScale() const { return timeScale; }
+	ULONGLONG GetUnscaledDt() const { return unscaledDt; }
 
 	//
 	// Draw a portion or ALL the texture at position (x,y) on the screen

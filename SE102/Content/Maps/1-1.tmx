@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="30" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#aff9f0" nextlayerid="8" nextobjectid="182">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="150" height="30" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#aff9f0" nextlayerid="8" nextobjectid="184">
  <properties>
   <property name="collisionMap" type="file" value="1-1.txt"/>
  </properties>
@@ -315,5 +315,6 @@
     <property name="hasWing" type="bool" value="true"/>
    </properties>
   </object>
+  <object id="183" name="KillBarrier" type="CKillBarrier" x="0" y="496" width="2400" height="93"/>
  </objectgroup>
 </map>

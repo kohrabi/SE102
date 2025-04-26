@@ -52,9 +52,9 @@ void CGoomba::SetState(int state)
     case GOOMBA_STATE_DEAD_BOUNCE:
     {
         if (ignoreDamageTimer > 0) return;
-        CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
         if (this->state == GOOMBA_STATE_DEAD || isDeleted)
             return;
+        CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
         if (this->state == GOOMBA_STATE_WING)
         {
             state = GOOMBA_STATE_NORMAL;
@@ -107,6 +107,7 @@ void CGoomba::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     if (!IsColliderInCamera())
         return;
     if (ignoreDamageTimer > 0) ignoreDamageTimer -= dt;
+   
     switch (state)
     {
     case GOOMBA_STATE_WING:

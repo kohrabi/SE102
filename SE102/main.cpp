@@ -100,8 +100,6 @@ void Update(float dt)
 
 	game->GetCurrentScene()->Update(dt);
 
-
-	DebugOutTitle(L"01 - Skeleton %f", (double)((1.0 / (dt / 1000.0)))); 
 }
 
 /*
@@ -206,17 +204,20 @@ int Run()
 
 		// dt: the time between (beginning of last frame) and now
 		// this frame: the frame we are about to render
-		float dt = (now - frameStart) * CGame::GetInstance()->GetTimeScale();
+		float dt = (now - frameStart) * game->GetTimeScale();
 		dt = clampf(dt, 0.0001f, 50.0f);
 
-		if (dt >= tickPerFrame || CGame::GetInstance()->GetTimeScale() == 0)
+
+		if (dt >= tickPerFrame || game->GetTimeScale() == 0)
 		{
+			game->SetUnscaledDt(now - frameStart);
+			DebugOutTitle(L"01 - Skeleton %f", (double)((1.0 / ((now - frameStart) / 1000.0))));
 			frameStart = now;
 		
 			Update(dt);
 			Render();
 
-			CGame::GetInstance()->SwitchScene();
+			game->SwitchScene();
 		}
 		else
 			Sleep(tickPerFrame - dt);

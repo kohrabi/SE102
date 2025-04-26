@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <GameObjects/ScorePopup.h>
 
 using namespace std;
 
@@ -23,6 +24,11 @@ void CFirePiranha::LoadContent()
     IsContentLoaded = true;
     SpritesLoader loader;
     loader.Load(FIRE_PIRANHA_SPRITES_PATH);
+}
+
+void CFirePiranha::OnDelete()
+{
+    CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, Score100));
 }
 
 void CFirePiranha::SetState(int state)
