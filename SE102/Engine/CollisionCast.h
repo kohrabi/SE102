@@ -44,7 +44,6 @@ public:
 	}
 
 	void RenderBoundingBox();
-	void Render() { RenderBoundingBox(); }
 
 	void CheckOverlap(vector<LPGAMEOBJECT>* coObjects = NULL);
 

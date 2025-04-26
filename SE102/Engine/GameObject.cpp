@@ -43,6 +43,7 @@ bool CGameObject::CompareSortingLayer(const LPGAMEOBJECT a, const LPGAMEOBJECT b
 
 void CGameObject::RenderBoundingBox()
 {
+	//return;
 	D3DXVECTOR3 p(position.x, position.y, 0);
 	RECT rect;
 

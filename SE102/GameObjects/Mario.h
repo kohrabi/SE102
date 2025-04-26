@@ -7,7 +7,7 @@
 #include "Engine/CollisionCast.h"
 #include "NPC/GreenKoopa.h"
 
-#define DEBUG_INVINCIBLE true
+#define DEBUG_INVINCIBLE false
 
 #pragma region X MOVEMENT
 constexpr float MINIMUM_WALK_VELOCITY = 0x00098 * SUBSUBSUBPIXEL_DELTA_TIME;
@@ -175,6 +175,7 @@ public:
 	int GetCoinCount() const { return coinCounter; }
 	int GetPowerCount() const { return powerCounter; }
 	int GetScore() const { return score; }
+	void AddScore(int add) { score += add; }
 
 	int IsCollidable() override { return !isDeleted && (state != MARIO_STATE_DEAD); };
 	void OnNoCollision(float dt) override;

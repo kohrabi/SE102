@@ -20,6 +20,7 @@
 #define KOOPA_WING_HOP_TIME 140
 #define KOOPA_WING_ACTIVATE_TIME 1400
 #define KOOPA_WING_CHANG_DIR 1040
+#define KOOPA_IGNORE_DAMAGE_TIME 200
 
 #define KOOPA_STATE_NORMAL 1
 #define KOOPA_STATE_WING 2
@@ -35,6 +36,7 @@ private:
 protected:
     LPGAMEOBJECT player = NULL;
 
+    float ignoreDamageTimer = 0.0f;
     int hopCount = 0;
     float hopTimer = 0.0f;
     float changeDirTimer = 0.0f;

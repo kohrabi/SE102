@@ -94,7 +94,7 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     {
         LPANIMATION animation = CAnimations::GetInstance()->Get(MARIO_RACOON_ID_ANIMATION_SPIN);
 
-        spinCast.SetBoundingBox(position + Vector2(0.0f, 8.0f), Vector2(34.0f, 15.0f));
+        spinCast.SetBoundingBox(position + Vector2(0.0f, 8.0f), Vector2(40.0f, 15.0f));
         //spinCast.CheckOverlap(coObjects);
         if (animation->GetCurrentFrameIndex() == 0 || animation->GetCurrentFrameIndex() == 4)
         {
@@ -111,7 +111,7 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
         {
             for (LPGAMEOBJECT obj : spinCast.collision)
             {
-                if (obj == NULL) continue;
+                if (obj == NULL || obj->IsDeleted()) continue;
                 if (dynamic_cast<CGoomba*>(obj) != NULL)
                 {
                     CGoomba* goomba = dynamic_cast<CGoomba*>(obj);
@@ -390,6 +390,8 @@ void CMario::Render() {
             yOffset = -8.0f;
         if (animation->GetCurrentFrameIndex() == 0 && nextPowerUp == MARIO_POWERUP_SMALL)
             yOffset = -8.0f;
+        if (nextPowerUp < powerUp && powerUp == MARIO_POWERUP_RACOON)
+            yOffset = -8.0f;
         animation->Render(position.x, position.y + yOffset, GetLayer(layer, orderInLayer), flipX);
     }
     else
@@ -482,14 +484,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         if (questionBlock->GetSpawnType() == QUESTION_BLOCK_SPAWN_COIN && questionBlock->GetSpawnCount() > 0)
         {
             coinCounter++;
-            score += 100;
         }
         questionBlock->Hit(sign(questionBlock->GetPosition().x - position.x));
     }
     else if (dynamic_cast<CCoin*>(e->obj) && e->obj->GetState() == COIN_STATE_NORMAL)
     {
         coinCounter++;
-        score += 100;
         e->obj->Delete();
     }
     else if (dynamic_cast<CGoomba*>(e->obj))
@@ -504,7 +504,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             else
             {
                 goomba->SetKill();
-                score += 100;
                 velocity.y = -ENEMY_BOUNCE;
             }
         }
@@ -524,7 +523,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         else
         {
             CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
-            score += 1000;
         }
     }
     else if (dynamic_cast<CLeaf*>(e->obj))
@@ -536,7 +534,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         else
         {
             CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
-            score += 1000;
         }
        
     }
@@ -550,7 +547,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
                 if (e->ny == 0)
                     kickTimer = KICK_ANIMATION_TIME;
                 CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score200));
-                score += 200;
                 koopa->SetNx(nx);
             }
             else
@@ -563,7 +559,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 
             int posSign = sign(position.x - koopa->GetPosition().x);
             CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score100));
-            score += 100;
             velocity.y = -ENEMY_BOUNCE;
             koopa->PlayerHit(posSign);
         }

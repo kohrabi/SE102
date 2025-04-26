@@ -2,6 +2,7 @@
 #include "Engine/Loaders/SpritesLoader.h"
 #include "ContentIds/UI.h"
 #include <Engine/Graphics/Sprites.h>
+#include "Mario.h"
 
 bool CScorePopup::IsContentLoaded = false;
 void CScorePopup::LoadContent()
@@ -10,6 +11,34 @@ void CScorePopup::LoadContent()
 		return;
 	SpritesLoader loader;
 	loader.Load(UI_SPRITES_PATH);
+}
+
+CScorePopup::CScorePopup(float x, float y, ScoreType scoreType)
+	: CGameObject(x, y, 0.0f)
+{
+	velocity.y = -SCORE_POPUP_RISE_VELOCITY;
+	layer = SortingLayer::CORPSE;
+	this->scoreType = scoreType;
+	LPSCENE currentScene = CGame::GetInstance()->GetCurrentScene();
+	if (currentScene != NULL)
+	{
+		CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+		if (mario != NULL)
+		{
+			switch (scoreType)
+			{
+			case Score100: mario->AddScore(100); break;
+			case Score200: mario->AddScore(200); break;
+			case Score400: mario->AddScore(400); break;
+			case Score800: mario->AddScore(800); break;
+			case Score1000: mario->AddScore(1000); break;
+			case Score2000: mario->AddScore(2000); break;
+			case Score4000: mario->AddScore(4000); break;
+			case Score8000: mario->AddScore(8000); break;
+			}
+		}
+	}
+	LoadContent();
 }
 
 void CScorePopup::Update(float dt, vector<LPGAMEOBJECT>* coObjects)

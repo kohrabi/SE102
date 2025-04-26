@@ -65,5 +65,5 @@ void CRedKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CRedKoopa::Render() {
     CGreenKoopa::Render();
-    holdCast.Render();
+    holdCast.RenderBoundingBox();
 }

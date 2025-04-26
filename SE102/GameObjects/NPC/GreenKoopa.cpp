@@ -50,10 +50,21 @@ void CGreenKoopa::SetState(int state)
     {
     case KOOPA_STATE_DEAD_BOUNCE:
     {
-        CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, Score400));
-        layer = SortingLayer::CORPSE;
-        velocity.y = -OBJECT_DEAD_BOUNCE;
-        velocity.x = OBJECT_DEAD_X_VEL;
+        if (ignoreDamageTimer > 0) return;
+        CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
+        if (this->state == KOOPA_STATE_WING)
+        {
+            state = KOOPA_STATE_NORMAL;
+            velocity.x = 0.0f;
+            ignoreDamageTimer = GOOMA_IGNORE_DAMAGE_TIME;
+        }
+        else
+        {
+            CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, Score400));
+            layer = SortingLayer::CORPSE;
+            velocity.y = -OBJECT_DEAD_BOUNCE;
+            velocity.x = OBJECT_DEAD_X_VEL;
+        }
     }
     break;
     default: break;
@@ -147,13 +158,12 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     if (!IsColliderInCamera())
         return;
 
+    if (ignoreDamageTimer > 0) ignoreDamageTimer -= dt;
+
     if (state == KOOPA_STATE_WING)
         velocity.y = min(velocity.y + OBJECT_FALL / 1.5f, OBJECT_MAX_FALL / 1.5f);
     else
         velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL);
-
-
-    cout << "onGround: " << onGround << '\n';
     switch (state)
     {
     case KOOPA_STATE_WING:
@@ -236,10 +246,7 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
         }
     }
     break;
-    case KOOPA_STATE_DEAD_BOUNCE:
-    {
-    }
-    break;
+    case KOOPA_STATE_DEAD_BOUNCE: break;
     }
 
     if (player != NULL)

@@ -17,6 +17,7 @@
 #define GOOMBA_WING_HOP_TIME 140
 #define GOOMBA_WING_ACTIVATE_TIME 1400
 #define GOOMBA_WING_CHANG_DIR 1040
+#define GOOMA_IGNORE_DAMAGE_TIME 200
 
 #define GOOMBA_STATE_NORMAL 1
 #define GOOMBA_STATE_WING 2
@@ -34,6 +35,7 @@ private:
     float hopTimer = 0.0f;
     float changeDirTimer = 0.0f;
     float wingActivateTimer = GOOMBA_WING_ACTIVATE_TIME;
+    float ignoreDamageTimer = 0.0f;
 
     bool isRedGoomba = false;
 

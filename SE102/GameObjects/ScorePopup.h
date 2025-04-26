@@ -27,14 +27,7 @@ private:
 	float destroyTimer = SCORE_POPUP_DESTROY_TIMER;
 	ScoreType scoreType = ScoreType::Score100;
 public:
-	CScorePopup(float x, float y, ScoreType scoreType = ScoreType::Score100)
-		: CGameObject(x, y, 0.0f)
-	{
-		velocity.y = -SCORE_POPUP_RISE_VELOCITY;
-		layer = SortingLayer::CORPSE;
-		this->scoreType = scoreType;
-		LoadContent();
-	}
+	CScorePopup(float x, float y, ScoreType scoreType = ScoreType::Score100);
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override { left = 0; top = 0; right = 0; bottom = 0; }
 	void Update(float dt, vector<LPGAMEOBJECT>* coObjects) override;
