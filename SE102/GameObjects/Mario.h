@@ -186,35 +186,5 @@ public:
 	void SetState(int state) override;
 	void Kill() { powerUp = MARIO_POWERUP_SMALL; SetState(MARIO_STATE_DEAD); }
 
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
-		if (powerUp == MARIO_POWERUP_SMALL)
-		{
-			const Vector2 marioSize = Vector2(10.f, 16.f) / 2.0f;
-			left = position.x - marioSize.x;
-			top = position.y - marioSize.y;
-			right = position. x + marioSize.x;
-			bottom = position.y + marioSize.y - 1;
-		}
-		else
-		{
-			if (state == MARIO_STATE_SIT)
-			{
-				const float yOffset = 10.0f;
-				const Vector2 marioSize = Vector2(12.f, 12.f) / 2.0f;
-				left = position.x - marioSize.x;
-				top = position.y - marioSize.y + yOffset;
-				right = position.x + marioSize.x;
-				bottom = position.y + marioSize.y + yOffset;
-			}
-			else
-			{
-				const float yOffset = 4.0f;
-				const Vector2 marioSize = Vector2(12.f, 24.f) / 2.0f;
-				left = position.x - marioSize.x;
-				top = position.y - marioSize.y + yOffset;
-				right = position.x + marioSize.x;
-				bottom = position.y + marioSize.y + yOffset;
-			}
-		}
-	}
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override;
 };

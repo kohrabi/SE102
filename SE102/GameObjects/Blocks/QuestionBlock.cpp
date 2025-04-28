@@ -7,11 +7,9 @@
 
 #include "Engine/Loaders/SpritesLoader.h"
 
-#include "QuestionBlock.h"
-
-#include "Coin.h"
-#include "Powerups/Mushroom.h"
-#include "Powerups/Leaf.h"
+#include "GameObjects/Particles/Coin.h"
+#include "GameObjects/Powerups/Mushroom.h"
+#include "GameObjects/Powerups/Leaf.h"
 
 #include "ContentIds/QuestionBlock.h"
 
@@ -41,6 +39,8 @@ CQuestionBlock::CQuestionBlock(float x, float y, int type, int count)
 {
     ASSERT(spawnType > 0 && spawnType <= 3, "Invalid spawn type");
     ASSERT(spawnCount >= 0, "Invalid spawn count");
+
+    holdCast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
     ogYPos = y;
     LoadContent();
     holdCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
@@ -66,7 +66,6 @@ void CQuestionBlock::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
         CCollision::GetInstance()->Process(this, dt, coObjects);
     }
 
-    holdCast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
     if (isHit)
     {
         holdCast.CheckOverlap(coObjects);

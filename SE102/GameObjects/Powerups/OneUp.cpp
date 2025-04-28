@@ -1,7 +1,7 @@
 #include "OneUp.h"
 
 #include "Engine/Loaders/SpritesLoader.h"
-#include "GameObjects/ScorePopup.h"
+#include "GameObjects/Particles/ScorePopup.h"
 
 #include "ContentIds/OneUp.h"
 

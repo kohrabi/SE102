@@ -8,10 +8,11 @@
 #include <Engine/Helper.h>
 
 #include "Goomba.h"
-#include "FirePiranha.h"
-#include "GameObjects/QuestionBlock.h"
+#include "Piranha.h"
+#include "GameObjects/Blocks/QuestionBlock.h"
+#include "GameObjects/Blocks/Brick.h"
 
-#include "GameObjects/ScorePopup.h"
+#include "GameObjects/Particles/ScorePopup.h"
 #include <ContentIds/Wing.h>
 
 using namespace std;
@@ -140,15 +141,20 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
             CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
             goomba->DeadBounce();
         }
-        if (dynamic_cast<CGreenKoopa*>(e->obj))
+        else if (dynamic_cast<CGreenKoopa*>(e->obj))
         {
             CGreenKoopa* koopa = dynamic_cast<CGreenKoopa*>(e->obj);
             koopa->DeadBounce();
         }
-        if (dynamic_cast<CQuestionBlock*>(e->obj) && e->ny == 0)
+        else if (dynamic_cast<CQuestionBlock*>(e->obj) && e->ny == 0)
         {
             CQuestionBlock* questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
             questionBlock->Hit(1);
+        }
+        if (dynamic_cast<CBrick*>(e->obj) && e->ny == 0)
+        {
+            CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+            brick->Hit(1);
         }
     }
 }

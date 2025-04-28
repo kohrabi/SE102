@@ -2,7 +2,7 @@
 #include "Engine/Loaders/SpritesLoader.h"
 #include "ContentIds/UI.h"
 #include <Engine/Graphics/Sprites.h>
-#include "Mario.h"
+#include "GameObjects/Mario.h"
 
 bool CScorePopup::IsContentLoaded = false;
 void CScorePopup::LoadContent()

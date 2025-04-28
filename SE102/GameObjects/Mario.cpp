@@ -11,14 +11,14 @@
 #include "Engine/Helper.h"
 #include <Engine/debug.h>
 
-#include "QuestionBlock.h"
-#include "Coin.h"
+#include "Blocks/QuestionBlock.h"
+#include "Particles/Coin.h"
 #include "NPC/Goomba.h"
 #include "NPC/GreenKoopa.h"
 #include "Powerups/Mushroom.h"
 #include "NPC/Fireball.h"
-#include "NPC/FirePiranha.h"
-#include "ScorePopup.h"
+#include "NPC/Piranha.h"
+#include "Particles/ScorePopup.h"
 
 #include <iostream>
 #include "Powerups/Leaf.h"
@@ -50,7 +50,7 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
     spinCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
         return dynamic_cast<CGreenKoopa*>(obj) != nullptr ||
             dynamic_cast<CGoomba*>(obj) != nullptr || 
-            dynamic_cast<CFirePiranha*>(obj) != nullptr;
+            dynamic_cast<CPiranha*>(obj) != nullptr;
     });
     layer = SortingLayer::MARIO;
     nextPowerUp = MARIO_POWERUP_RACOON;
@@ -94,7 +94,7 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     {
         LPANIMATION animation = CAnimations::GetInstance()->Get(MARIO_RACOON_ID_ANIMATION_SPIN);
 
-        spinCast.SetBoundingBox(position + Vector2(0.0f, 8.0f), Vector2(40.0f, 15.0f));
+        spinCast.SetBoundingBox(position + Vector2(0.0f, 8.0f), Vector2(46.0f, 10.0f));
         //spinCast.CheckOverlap(coObjects);
         if (animation->GetCurrentFrameIndex() == 0 || animation->GetCurrentFrameIndex() == 4)
         {
@@ -122,9 +122,9 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
                     CGreenKoopa* koopa = dynamic_cast<CGreenKoopa*>(obj);
                     koopa->DeadBounce();
                 }
-                else if (dynamic_cast<CFirePiranha*>(obj) != NULL)
+                else if (dynamic_cast<CPiranha*>(obj) != NULL)
                 {
-                    CFirePiranha* piranha = dynamic_cast<CFirePiranha*>(obj);
+                    CPiranha* piranha = dynamic_cast<CPiranha*>(obj);
                     piranha->Delete();
                 }
             }
@@ -336,7 +336,7 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
         {
             if (!deadJump)
             {
-                velocity.y = -0.8f;
+                velocity.y = -0.7f;
                 deadJump = true;
             }
             //velocity.y = min(velocity.y + JUMP_GRAVITY / 2.0f, MAX_FALL_SPEED / 2.0f);
@@ -408,7 +408,7 @@ void CMario::Render() {
         animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
 
     }
-    //RenderBoundingBox();
+    RenderBoundingBox();
     spinCast.RenderBoundingBox();
 }
 
@@ -458,6 +458,38 @@ void CMario::SetState(int state) {
     break;
     }
     this->state = state;
+}
+
+void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom) {
+    if (powerUp == MARIO_POWERUP_SMALL)
+    {
+        const Vector2 marioSize = Vector2(10.f, 16.f) / 2.0f;
+        left = position.x - marioSize.x;
+        top = position.y - marioSize.y;
+        right = position.x + marioSize.x;
+        bottom = position.y + marioSize.y - 1;
+    }
+    else
+    {
+        if (state == MARIO_STATE_SIT)
+        {
+            const float yOffset = 7.0f;
+            const Vector2 marioSize = Vector2(12.f, 18.f) / 2.0f;
+            left = position.x - marioSize.x;
+            top = position.y - marioSize.y + yOffset;
+            right = position.x + marioSize.x;
+            bottom = position.y + marioSize.y + yOffset;
+        }
+        else
+        {
+            const float yOffset = 4.0f;
+            const Vector2 marioSize = Vector2(12.f, 24.f) / 2.0f;
+            left = position.x - marioSize.x;
+            top = position.y - marioSize.y + yOffset;
+            right = position.x + marioSize.x;
+            bottom = position.y + marioSize.y + yOffset;
+        }
+    }
 }
 
 void CMario::OnNoCollision(float dt) {
@@ -565,7 +597,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     {
         SetState(MARIO_STATE_DEAD);
     }
-    else if (dynamic_cast<CFirePiranha*>(e->obj))
+    else if (dynamic_cast<CPiranha*>(e->obj))
     {
         SetState(MARIO_STATE_DEAD);
     }

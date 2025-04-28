@@ -3,7 +3,7 @@
 #include "Engine/Loaders/SpritesLoader.h"
 
 #include "ContentIds/Coin.h"
-#include "GameObjects/ScorePopup.h"
+#include "ScorePopup.h"
 
 #include <iostream>
 #include <algorithm>

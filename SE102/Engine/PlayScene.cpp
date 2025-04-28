@@ -12,12 +12,13 @@
 #include "GameObjects/TileObjects/Tile.h"
 #include "GameObjects/TileObjects/CollidableTile.h"
 #include "GameObjects/Mario.h"
-#include "GameObjects/QuestionBlock.h"
+#include "GameObjects/Blocks/QuestionBlock.h"
+#include "GameObjects/Blocks/Brick.h"
 #include "Engine/Helper.h"
-#include "GameObjects/OneWay.h"
-#include "GameObjects/Coin.h"
+#include "GameObjects/Blocks/OneWay.h"
+#include "GameObjects/Particles/Coin.h"
 #include "GameObjects/NPC/Goomba.h"
-#include "GameObjects/NPC/FirePiranha.h"
+#include "GameObjects/NPC/Piranha.h"
 #include "GameObjects/NPC/GreenKoopa.h"
 #include "GameObjects/NPC/RedKoopa.h"
 
@@ -84,6 +85,7 @@ void CPlayScene::Update(float dt)
 	CGame* const game = CGame::GetInstance();
 	if (game->GetResetScene())
 	{
+		marioLife--;
 		game->ResetScene();
 	}
 
@@ -291,8 +293,14 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 				else if (layerObject.getClass() == "COneWay") 
 				{
 					position = Vector2(aabb.left + aabb.width / 2.0f, aabb.top + aabb.height / 2.0f);
-					COneWay* questionBlock = new COneWay(position.x, position.y, aabb.width, aabb.height);
-					objects.push_back(questionBlock);
+					COneWay* block = new COneWay(position.x, position.y, aabb.width, aabb.height);
+					objects.push_back(block);
+				}
+				else if (layerObject.getClass() == "CBrick")
+				{
+					//position = Vector2(aabb.left + aabb.width / 2.0f, aabb.top + aabb.height / 2.0f);
+					CBrick* brick = new CBrick(position.x, position.y);
+					objects.push_back(brick);
 				}
 				else if (layerObject.getClass() == "CCoin")
 				{
@@ -313,7 +321,28 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 				}
 				else if (layerObject.getClass() == "CFirePiranha")
 				{
-					CFirePiranha* obj = new CFirePiranha(position.x, position.y);
+					int height = -1;
+					for (const auto& property : layerObject.getProperties())
+					{
+						if (property.getName() == "height") {
+							height = property.getIntValue();
+						}
+					}
+					ASSERT(height != -1, "height doesn't exists weird");
+					CPiranha* obj = new CPiranha(position.x, position.y, height, layerObject.getName() == "GreenFirePiranha", true);
+					objects.push_back(obj);
+				}
+				else if (layerObject.getClass() == "CPiranha")
+				{
+					int height = -1;
+					for (const auto& property : layerObject.getProperties())
+					{
+						if (property.getName() == "height") {
+							height = property.getIntValue();
+						}
+					}
+					ASSERT(height != -1, "height doesn't exists weird");
+					CPiranha* obj = new CPiranha(position.x, position.y, height, layerObject.getName() == "GreenPiranha", false);
 					objects.push_back(obj);
 				}
 				else if (layerObject.getClass() == "CGreenKoopa")

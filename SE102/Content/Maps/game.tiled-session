@@ -24,11 +24,11 @@
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 1.5,
+            "scale": 1,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 474,
-                "y": 278.99999999999994
+                "x": 418,
+                "y": 622.5
             }
         },
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx": {
@@ -66,7 +66,7 @@
             "scaleInEditor": 1
         },
         "enemies32.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 3,
             "scaleInEditor": 4
         },
         "mario.tsx": {
@@ -93,7 +93,7 @@
         "1-1.tmx"
     ],
     "project": "game.tiled-project",
-    "property.type": "bool",
+    "property.type": "int",
     "recentFiles": [
         "1-1.tmx",
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx",

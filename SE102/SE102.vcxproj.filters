@@ -63,10 +63,10 @@
     <ClCompile Include="Engine\Helper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\QuestionBlock.cpp">
+    <ClCompile Include="GameObjects\Blocks\QuestionBlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\Coin.cpp">
+    <ClCompile Include="GameObjects\Particles\Coin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\Powerups\Mushroom.cpp">
@@ -75,7 +75,7 @@
     <ClCompile Include="GameObjects\NPC\Goomba.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\NPC\FirePiranha.cpp">
+    <ClCompile Include="GameObjects\NPC\Piranha.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\NPC\GreenKoopa.cpp">
@@ -93,7 +93,7 @@
     <ClCompile Include="Engine\Math\Vector2i.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\ScorePopup.cpp">
+    <ClCompile Include="GameObjects\Particles\ScorePopup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\NPC\Fireball.cpp">
@@ -109,6 +109,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\Level\KillBarrier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Blocks\Brick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -202,13 +205,13 @@
     <ClInclude Include="Engine\Loaders\Loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\QuestionBlock.h">
+    <ClInclude Include="GameObjects\Blocks\QuestionBlock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Coin.h">
+    <ClInclude Include="GameObjects\Particles\Coin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\OneWay.h">
+    <ClInclude Include="GameObjects\Blocks\OneWay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\Powerups\Mushroom.h">
@@ -217,7 +220,7 @@
     <ClInclude Include="GameObjects\NPC\Goomba.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\NPC\FirePiranha.h">
+    <ClInclude Include="GameObjects\NPC\Piranha.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContentIds\Coin.h">
@@ -280,7 +283,7 @@
     <ClInclude Include="ContentIds\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\ScorePopup.h">
+    <ClInclude Include="GameObjects\Particles\ScorePopup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\NPC\Fireball.h">
@@ -314,6 +317,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\Level\KillBarrier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentIds\GreenFirePiranha.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentIds\GreenPiranha.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Blocks\Brick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

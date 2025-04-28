@@ -1,7 +1,7 @@
 #include "Goomba.h"
 
 #include "Engine/Loaders/SpritesLoader.h"
-#include "GameObjects/ScorePopup.h"
+#include "GameObjects/Particles/ScorePopup.h"
 
 #include "ContentIds/Goomba.h"
 #include "ContentIds/Wing.h"

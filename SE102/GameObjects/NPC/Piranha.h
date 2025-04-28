@@ -19,10 +19,12 @@ constexpr float FIRE_PIRANHA_DOWN_POS = 33.0f;
 #define FIRE_PIRANHA_MOVE 2
 #define FIRE_PIRANHA_UP 3
 #define FIRE_PIRANHA_WAIT 4
-class CFirePiranha : public CGameObject {
+class CPiranha : public CGameObject {
 private:
     static void LoadContent();
     static bool IsContentLoaded;
+
+    int GetFireAnimationId();
 
     Vector2 spawnPosition = Vector2::Zero;
     Vector2i lookDir = Vector2i::Zero;
@@ -30,17 +32,27 @@ private:
     float timer = 0.0f;
     float shootTimer = 0.0f;
     bool canShoot = false;
+    bool isFirePiranha = false;
+    bool isUp = false;
+    bool isGreen = false;
+    int heightCount = 2;
 
     float shootAnimation = 0.0f;
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0
-	CFirePiranha(float x, float y) : CGameObject(x, y, 0.0f) 
+	CPiranha(float x, float y, int height, bool isGreen, bool isFire) : CGameObject(x, y, 0.0f) 
     { 
+        this->heightCount = max(height, 1);
+        this->isGreen = isGreen;
+        this->isFirePiranha = isFire;
+
         LoadContent(); 
         nx = -1;
         spawnPosition = position;
         SetState(FIRE_PIRANHA_DOWN);
+        timer /= 2.0f;
+
         position.y = y + FIRE_PIRANHA_DOWN_POS;
         layer = SortingLayer::NPC;
     }

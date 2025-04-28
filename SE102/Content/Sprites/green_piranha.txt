@@ -1,0 +1,19 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\VS\SE102\SE102
+# EDITOR startID 19000
+# EDITOR objectName Green Piranha
+
+[TEXTURES]
+Content\enemies.png 0
+
+[SPRITES]
+
+# NORMAL
+19001 16 64 31 95 0
+19002 0 64 15 95 0
+
+
+[ANIMATIONS]
+19003 19001 100 19002 100 
+# EDITOR animationName Normal
+

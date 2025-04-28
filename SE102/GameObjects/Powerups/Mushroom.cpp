@@ -1,7 +1,7 @@
 #include "Mushroom.h"
 
 #include "Engine/Loaders/SpritesLoader.h"
-#include "GameObjects/ScorePopup.h"
+#include "GameObjects/Particles/ScorePopup.h"
 
 #include "ContentIds/Mushroom.h"
 
