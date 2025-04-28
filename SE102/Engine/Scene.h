@@ -22,7 +22,7 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 
-	AABB levelBounds{};
+	AABB levelBound{};
 	LPGAMEOBJECT player;		
 public: 
 	CScene(int id, wstring filePath)

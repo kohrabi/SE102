@@ -66,13 +66,12 @@ bool CGameObject::IsColliderInCamera()
 	if (game != NULL)
 	{
 		constexpr float BUFFER = 100.0f;
-		float cx, cy;
-		game->GetCamPos(cx, cy);
-		AABB cam, collider;
-		cam.left = cx - BUFFER;
-		cam.right = (cx + game->GetBackBufferWidth()) + BUFFER;
-		cam.top = cy - BUFFER;
-		cam.bottom = (cy + game->GetBackBufferHeight()) + BUFFER;
+		AABB cam = game->GetCameraBound();
+		AABB collider;
+		cam.left -= BUFFER;
+		cam.right += BUFFER;
+		cam.top -= BUFFER;
+		cam.bottom += BUFFER;
 
 		GetBoundingBox(collider.left, collider.top, collider.right, collider.bottom);
 

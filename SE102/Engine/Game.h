@@ -67,6 +67,7 @@ public:
 	void SetUnscaledDt(ULONGLONG dt) { unscaledDt = dt; }
 	float GetTimeScale() const { return timeScale; }
 	ULONGLONG GetUnscaledDt() const { return unscaledDt; }
+	AABB GetCameraBound() const;
 
 	//
 	// Draw a portion or ALL the texture at position (x,y) on the screen

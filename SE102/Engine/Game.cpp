@@ -164,6 +164,16 @@ void CGame::SetPointSamplerState()
 	pD3DDevice->PSSetSamplers(0, 1, &pPointSamplerState);
 }
 
+AABB CGame::GetCameraBound() const
+{
+	AABB cam;
+	cam.left = cam_x;
+	cam.right = (cam_x + backBufferWidth);
+	cam.top = cam_y;
+	cam.bottom = (cam_y + backBufferHeight);
+	return cam;
+}
+
 /*
 	Draw the whole texture or part of texture onto screen
 	NOTE: This function is OBSOLTED in this example. Use Sprite::Render instead 

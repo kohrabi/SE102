@@ -30,6 +30,8 @@ protected:
 	CHUD* hud;
 	float levelTimer = 0.0f;
 	int marioLife = 4;
+
+	vector<AABB> levelBounds;
 public: 
 	CPlayScene(int id, wstring filePath);
 

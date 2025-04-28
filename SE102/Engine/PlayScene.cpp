@@ -90,6 +90,20 @@ void CPlayScene::Update(float dt)
 		game->ResetScene();
 	}
 
+	AABB playerAABB;
+	player->GetBoundingBox(playerAABB.left, playerAABB.top, playerAABB.right, playerAABB.bottom);
+	if (!CCollision::CheckAABBOverlaps(levelBound, playerAABB))
+	{
+		for (auto& bound : levelBounds)
+		{
+			if (CCollision::CheckAABBOverlaps(bound, playerAABB))
+			{
+				levelBound = bound;
+				break;
+			}
+		}
+	}
+
 	levelTimer -= dt;
 
 	vector<LPGAMEOBJECT> coObjects;
@@ -115,8 +129,8 @@ void CPlayScene::Update(float dt)
 	position.y -= game->GetBackBufferHeight() / 2;
 	//position.y = 500.f;
 
-	position.x = clampf(position.x, levelBounds.left, levelBounds.right - game->GetBackBufferWidth());
-	position.y = clampf(position.y, levelBounds.top, levelBounds.bottom - game->GetBackBufferHeight());
+	position.x = clampf(position.x, levelBound.left, levelBound.right - game->GetBackBufferWidth());
+	position.y = clampf(position.y, levelBound.top, levelBound.bottom - game->GetBackBufferHeight());
 
 	game->SetCamPos(position.x, position.y /*cy*/);
 
@@ -245,12 +259,22 @@ void CPlayScene::LoadMap(string path) {
 		int order = 0;
 		LoadLayers(textures, tMap, layers, tilesets, loader, wallObjects, order);
 
-		const auto& bounds = tMap.getBounds();
+		const auto& mapBound = tMap.getBounds();
+		levelBound.left = mapBound.left;
+		levelBound.right = (mapBound.left + mapBound.width);
+		levelBound.top = mapBound.top;
+		levelBound.bottom = (mapBound.top + mapBound.height);
 
-		levelBounds.left = bounds.left;
-		levelBounds.right = (bounds.left + bounds.width);
-		levelBounds.top = bounds.top;
-		levelBounds.bottom = (bounds.top + bounds.height);
+		AABB camBound = game->GetCameraBound();
+		for (auto& bound : levelBounds)
+		{
+			if (CCollision::CheckAABBOverlaps(bound, camBound))
+			{
+				levelBound = bound;
+				break;
+			}
+		}
+
 	}
 }
 
@@ -262,6 +286,24 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 		{
 			const auto& objectLayer = layer->getLayerAs<tmx::ObjectGroup>();
 			const auto& layerObjects = objectLayer.getObjects();
+			if (layer->getName() == "LevelBounds")
+			{
+				for (const auto& layerObject : layerObjects)
+				{
+					if (layerObject.getClass() == "CLevelBound")
+					{
+						const auto& aabb = layerObject.getAABB();
+						AABB bound;
+						bound.left = aabb.left;
+						bound.right = (aabb.left + aabb.width);
+						bound.top = aabb.top;
+						bound.bottom = (aabb.top + aabb.height);
+						levelBounds.push_back(bound);
+					}
+				}
+				continue;
+			}
+
 			for (const auto& layerObject : layerObjects)
 			{
 				const auto& aabb = layerObject.getAABB();
