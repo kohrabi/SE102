@@ -24,11 +24,11 @@
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 1,
+            "scale": 3,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 418,
-                "y": 622.5
+                "x": 1901,
+                "y": 590.8333333333333
             }
         },
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx": {
@@ -78,7 +78,7 @@
             "scaleInEditor": 3
         },
         "mariotiles.tsx": {
-            "scaleInDock": 1.5
+            "scaleInDock": 1
         },
         "mariotiles32.tsx": {
             "scaleInDock": 1.5,
@@ -105,6 +105,7 @@
         "cloud.tsx",
         "mariotiles32.tsx"
     ],
+    "resizeMap.removeObjects": false,
     "tileset.lastUsedFormat": "tsx",
     "tileset.margin": 0,
     "tileset.tileSize": {

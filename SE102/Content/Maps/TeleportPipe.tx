@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+ <object name="TeleportPipe" type="CTeleportPipe" width="32" height="16">
+  <properties>
+   <property name="directionY" type="int" value="1"/>
+   <property name="teleportTo" type="object" value="0"/>
+  </properties>
+ </object>
+</template>

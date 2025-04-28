@@ -36,7 +36,7 @@ constexpr float MAX_FALL_SPEED = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 constexpr float MAX_TAILWAG_FALL_SPDED = 0x01000 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 constexpr float FLY_Y_VELOCITY = -0x01800 * SUBSUBSUBPIXEL_DELTA_TIME;
-
+constexpr float TELEPORT_Y_VELOCITY = 0x00B00 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 constexpr float ENEMY_BOUNCE = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 #pragma endregion
@@ -65,16 +65,18 @@ constexpr float SPIN_TIME = 6 * 50.0f;
 #define MARIO_POWERUP_BIG 1
 #define MARIO_POWERUP_RACOON 2
 
-#define KEY_MOVE_LEFT VK_LEFT
-#define KEY_MOVE_RIGHT VK_RIGHT
+#define KEY_LEFT VK_LEFT
+#define KEY_RIGHT VK_RIGHT
 #define KEY_DOWN VK_DOWN
+#define KEY_UP VK_UP
 #define KEY_RUN 'A'
 #define KEY_JUMP 'S'
 
 #define MARIO_STATE_NORMAL 1
 #define MARIO_STATE_POWER_UP 2
 #define MARIO_STATE_SIT 3
-#define MARIO_STATE_DEAD 4
+#define MARIO_STATE_TELEPORT 4
+#define MARIO_STATE_DEAD 5
 
 // Y ofset
 // Held object Large: -$02
@@ -159,6 +161,10 @@ private:
 	int coinCounter = 0;
 	int score = 0;
 
+	float beforeTeleportY = 0.0f;
+	bool enterPipe = false;
+	Vector2 teleportPosition = Vector2::Zero;
+
 	void marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
 	void marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
 
@@ -176,7 +182,7 @@ public:
 	int GetScore() const { return score; }
 	void AddScore(int add) { score += add; }
 
-	int IsCollidable() override { return !isDeleted && (state != MARIO_STATE_DEAD); };
+	int IsCollidable() override { return !isDeleted && (state != MARIO_STATE_DEAD || state != MARIO_STATE_TELEPORT); };
 	void OnNoCollision(float dt) override;
 	void OnCollisionWith(LPCOLLISIONEVENT e) override;
 	int IsBlocking() override { return 0; }

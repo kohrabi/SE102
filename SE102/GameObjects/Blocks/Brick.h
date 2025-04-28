@@ -5,12 +5,6 @@
 
 #include "Engine/CollisionCast.h"
 
-#define QUESTION_BLOCK_SPAWN_COIN 1
-#define QUESTION_BLOCK_SPAWN_LEAF 2
-#define QUESTION_BLOCK_SPAWN_ONE_UP 3
-#define QUESTION_BLOCK_ANIMATION_TIME 100
-#define QUESTION_BLOCK_ANIMATION_Y_VEL 0.1f
-
 class CBrick : public CGameObject {
 private:
 	bool isHit = false;

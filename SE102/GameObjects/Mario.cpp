@@ -19,6 +19,7 @@
 #include "NPC/Fireball.h"
 #include "NPC/Piranha.h"
 #include "Particles/ScorePopup.h"
+#include "GameObjects/Blocks/TeleportPipe.h"
 
 #include <iostream>
 #include "Powerups/Leaf.h"
@@ -158,11 +159,11 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     if (runBeforeWalkTimer > 0)
         runBeforeWalkTimer -= dt;
 
-    if (game->IsKeyDown(KEY_MOVE_LEFT)) {
+    if (game->IsKeyDown(KEY_LEFT)) {
         accel.x = -(keyRunDown ? RUNNING_ACCELERATION : WALKING_ACCELERATION);
         nx = -1;
     }
-    if (game->IsKeyDown(KEY_MOVE_RIGHT)) {
+    if (game->IsKeyDown(KEY_RIGHT)) {
         accel.x = (keyRunDown ? RUNNING_ACCELERATION : WALKING_ACCELERATION);
         nx = 1;
     }
@@ -271,13 +272,11 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     if (game->IsKeyJustPressed(KEY_JUMP) && isOnGround) {
         float initVel = -JUMP_INIT_VEL;
         float absVelX = abs(velocity.x);
-        if (absVelX <= 0.0f)
-            initVel -= 0x00000 * SUBSUBSUBPIXEL_DELTA_TIME;
-        else if (absVelX <= MAXIMUM_WALK_SPEED)
+        if (absVelX < MAXIMUM_WALK_SPEED)
             initVel -= 0x00200 * SUBSUBSUBPIXEL_DELTA_TIME;
-        else if (absVelX <= MAXIMUM_RUNNING_SPEED)
+        else if (absVelX < MAXIMUM_RUNNING_SPEED)
             initVel -= 0x00400 * SUBSUBSUBPIXEL_DELTA_TIME;
-        else if (absVelX <= MAXIMUM_POWER_SPEED)
+        else if (absVelX < MAXIMUM_POWER_SPEED)
             initVel -= 0x00800 * SUBSUBSUBPIXEL_DELTA_TIME;
 
         wagTimer = 0.0f;
@@ -285,6 +284,8 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
             flying = true;
         if (powerCounter >= MAX_POWER_COUNT)
             superJump = true;
+        cout << "flying: " << flying << '\n';
+        cout << "powerCounter: " << powerCounter << '\n';
 
         accel.y = initVel;
     }
@@ -316,7 +317,6 @@ void CMario::marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
             invincibleTimer = INVINCIBLE_TIME;
     }
 }
-
 
 void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
 
@@ -367,6 +367,47 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
         velocity.x = move_towards(velocity.x, 0, RELEASE_DECELERATION);
         velocity.y = min(velocity.y + JUMP_GRAVITY, MAX_FALL_SPEED);
         CCollision::GetInstance()->Process(this, dt, coObjects);
+    }
+    break;
+    case MARIO_STATE_TELEPORT:
+    {
+        position.y += velocity.y * dt;
+        if (!enterPipe)
+        {
+            if (sign(velocity.y) == 1)
+            {
+                if (position.y >= beforeTeleportY + 32.0f)
+                {
+                    position = teleportPosition + Vector2(0.0f, -16.0f);
+                    enterPipe = true;
+                }
+            }
+            else
+            {
+                if (position.y <= beforeTeleportY - 32.0f)
+                {
+                    position = teleportPosition + Vector2(0.0f, 32.0f);
+                    enterPipe = true;
+                }
+            }
+        }
+        else
+        {
+            if (sign(velocity.y) == 1)
+            {
+                if (position.y >= teleportPosition.y + 16.0f)
+                {
+                    SetState(MARIO_STATE_NORMAL);
+                }
+            }
+            else
+            {
+                if (position.y <= teleportPosition.y - 0.0f)
+                {
+                    SetState(MARIO_STATE_NORMAL);
+                }
+            }
+        }
     }
     break;
     }
@@ -456,6 +497,12 @@ void CMario::SetState(int state) {
         }
     }
     break;
+    case MARIO_STATE_TELEPORT:
+    {
+        enterPipe = false;
+        beforeTeleportY = position.y;
+    }
+    break;
     }
     this->state = state;
 }
@@ -509,6 +556,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 		velocity.x = 0;
 	}
     
+    CGame* const game = CGame::GetInstance();
     if (dynamic_cast<CQuestionBlock*>(e->obj) && e->ny > 0) 
     {
         CQuestionBlock* const questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
@@ -542,7 +590,21 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     else if (dynamic_cast<COneUp*>(e->obj))
     {
         dynamic_cast<COneUp*>(e->obj)->Eat();
-
+    }
+    else if (dynamic_cast<CTeleportPipe*>(e->obj))
+    {
+        CTeleportPipe* pipe = dynamic_cast<CTeleportPipe*>(e->obj);
+        int directionY = pipe->GetDirectionY();
+        if ((game->IsKeyDown(KEY_DOWN) && directionY == 1) || (game->IsKeyDown(KEY_UP) && directionY == -1))
+        {
+            if (pipe->GetTeleportPosition() != Vector2::Zero)
+            {
+                position.x = pipe->GetPosition().x;
+                teleportPosition = pipe->GetTeleportPosition() + Vector2(pipe->GetSize().x / 2.0f, 0.0f) + Vector2(0.0f, 16.0f) * directionY;
+                velocity.y = TELEPORT_Y_VELOCITY * directionY;
+                SetState(MARIO_STATE_TELEPORT);
+            }
+        }
     }
     else if (dynamic_cast<CMushroom*>(e->obj))
     {
@@ -552,7 +614,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             SetState(MARIO_STATE_POWER_UP);
         else
         {
-            CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
+            game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
         }
     }
     else if (dynamic_cast<CLeaf*>(e->obj))
@@ -563,7 +625,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             SetState(MARIO_STATE_POWER_UP);
         else
         {
-            CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
+            game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
         }
        
     }
@@ -576,7 +638,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             {
                 if (e->ny == 0)
                     kickTimer = KICK_ANIMATION_TIME;
-                CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score200));
+                game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score200));
                 koopa->SetNx(nx);
             }
             else
@@ -586,9 +648,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         }
         else
         {
-
             int posSign = sign(position.x - koopa->GetPosition().x);
-            CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score100));
+            game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score100));
             velocity.y = -ENEMY_BOUNCE;
             koopa->PlayerHit(posSign);
         }
@@ -605,6 +666,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 int CMario::GetAnimationIDSmall()
 {
+    if (state == MARIO_STATE_TELEPORT)
+        return MARIO_ID_ANIMATION_ENTER_PIPE;
     if (state == MARIO_STATE_DEAD)
         return MARIO_ID_ANIMATION_DEAD;
     if (state == MARIO_STATE_POWER_UP)
@@ -634,6 +697,8 @@ int CMario::GetAnimationIDSmall()
 
 int CMario::GetAnimationIDBig()
 {
+    if (state == MARIO_STATE_TELEPORT)
+        return MARIO_BIG_ID_ANIMATION_ENTER_PIPE;
     if (state == MARIO_STATE_SIT)
         return MARIO_BIG_ID_ANIMATION_SIT;
     if (state == MARIO_STATE_POWER_UP)
@@ -664,6 +729,8 @@ int CMario::GetAnimationIDBig()
 
 int CMario::GetAnimationIDRacoon()
 {
+    if (state == MARIO_STATE_TELEPORT)
+        return MARIO_RACOON_ID_ANIMATION_ENTER_PIPE;
     if (state == MARIO_STATE_SIT)
         return MARIO_RACOON_ID_ANIMATION_SIT;
     if (state == MARIO_STATE_POWER_UP)

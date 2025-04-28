@@ -24,6 +24,7 @@
 
 #include "GameObjects/TileObjects/CollidableTileLayer.h"
 #include <GameObjects/Level/KillBarrier.h>
+#include <GameObjects/Blocks/TeleportPipe.h>
 
 using namespace std;
 
@@ -78,7 +79,7 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(float dt)
 {
-	cout << objects.size() << '\n';
+	//cout << objects.size() << '\n';
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
@@ -95,7 +96,7 @@ void CPlayScene::Update(float dt)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		LPGAMEOBJECT obj = objects[i];
-		if (obj != NULL && obj->IsCollidable() && obj->IsColliderInCamera())
+		if (obj != NULL && obj->IsCollidable())
 			coObjects.push_back(objects[i]);
 	}
 
@@ -273,6 +274,8 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 					objects.push_back(player);
 					this->player = player;
 				}
+
+				// Blocks
 				else if (layerObject.getClass() == "CQuestionBlock") 
 				{
 					int type = -1;
@@ -296,6 +299,28 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 					COneWay* block = new COneWay(position.x, position.y, aabb.width, aabb.height);
 					objects.push_back(block);
 				}
+				else if (layerObject.getClass() == "CTeleportPipe")
+				{
+					position = Vector2(aabb.left + aabb.width / 2.0f, aabb.top + aabb.height / 2.0f);
+
+					Vector2 teleportTo = Vector2::Zero;
+					int directionY = 0;
+					for (const auto& property : layerObject.getProperties())
+					{
+						if (property.getName() == "teleportTo") {
+							int objId = property.getObjectValue();
+							if (objId == 0)
+								continue;
+							auto teleportToObject = find_if(layerObjects.begin(), layerObjects.end(), [&objId](const tmx::Object& other) { return objId == other.getUID(); });
+							if (teleportToObject != layerObjects.end())
+								teleportTo = Vector2(teleportToObject->getPosition().x, teleportToObject->getPosition().y);
+						}
+						else if (property.getName() == "directionY")
+							directionY = property.getIntValue();
+					}
+					CTeleportPipe* block = new CTeleportPipe(position.x, position.y, aabb.width, aabb.height, teleportTo, directionY);
+					objects.push_back(block);
+				}
 				else if (layerObject.getClass() == "CBrick")
 				{
 					//position = Vector2(aabb.left + aabb.width / 2.0f, aabb.top + aabb.height / 2.0f);
@@ -307,6 +332,13 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 					CCoin* coin = new CCoin(position.x, position.y);
 					objects.push_back(coin);
 				}
+				else if (layerObject.getClass() == "CKillBarrier")
+				{
+					CKillBarrier* obj = new CKillBarrier(layerObject.getAABB().left, layerObject.getAABB().top, layerObject.getAABB().width, layerObject.getAABB().height);
+					objects.push_back(obj);
+				}
+				
+				// NPCs
 				else if (layerObject.getClass() == "CGoomba")
 				{
 					CGoomba* obj = new CGoomba(position.x, position.y);
@@ -358,11 +390,6 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 				else if (layerObject.getClass() == "CRedKoopa")
 				{
 					CRedKoopa* obj = new CRedKoopa(position.x, position.y);
-					objects.push_back(obj);
-				}
-				else if (layerObject.getClass() == "CKillBarrier")
-				{
-					CKillBarrier* obj = new CKillBarrier(layerObject.getAABB().left, layerObject.getAABB().top, layerObject.getAABB().width, layerObject.getAABB().height);
 					objects.push_back(obj);
 				}
 			}
