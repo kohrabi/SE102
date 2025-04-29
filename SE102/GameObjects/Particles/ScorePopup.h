@@ -33,9 +33,9 @@ public:
 	void Update(float dt, vector<LPGAMEOBJECT>* coObjects) override;
 	void Render() override;
 
-	virtual int IsCollidable() { return 0; };
-	virtual int IsBlocking() { return 0; }
-	virtual int IsDirectionColliable(float nx, float ny) { return 0; }
+	int IsCollidable() override { return 0; };
+	int IsBlocking() override { return 0; }
+	int IsDirectionColliable(float nx, float ny) override { return 0; }
 
 
 };

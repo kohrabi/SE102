@@ -159,14 +159,12 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
             CQuestionBlock* questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
             questionBlock->Hit(1);
         }
-        else if (dynamic_cast<CBrick*>(e->obj) && abs(position.y - e->obj->GetPosition().y) < 15.0f)
+        // YEP this has to be checked at two different code i dont know why but it works
+        // This is the bug where the shell decided that it would hit brick that it wasn't supposed to
+        else if (dynamic_cast<CBrick*>(e->obj) && e->ny == 0)
         {
             CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-            brick->Hit(1);
-        }
-        if (dynamic_cast<CBrick*>(e->obj))
-        {
-            cout << abs(position.y - e->obj->GetPosition().y) << "\n";
+            brick->Hit();
         }
     }
 }
@@ -182,6 +180,12 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     {
         constexpr float greenShellY = -0x01000 * SUBSUBSUBPIXEL_DELTA_TIME; // Green koopa is floaty
         velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL) + greenShellY;
+    }
+    else if (state == KOOPA_STATE_IN_SHELL)
+    {
+        constexpr float ShellY = 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME; // Green koopa is floaty
+        velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL) + ShellY;
+
     }
     else
         velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL);

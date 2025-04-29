@@ -26,7 +26,8 @@ public:
 	int IsCollidable() override { return !isDeleted && (state != BRICK_STATE_BREAK); }
 	int IsBlocking() override { return !isDeleted && (state != BRICK_STATE_BREAK); }
 	void SetState(int state) override;
-	void Hit(int dx);
+	void Hit();
+	void OnCollisionWith(LPCOLLISIONEVENT e) override;
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
 		const float size = 16.0f / 2.0f;

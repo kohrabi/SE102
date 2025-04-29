@@ -80,6 +80,7 @@ void CBrick::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
             SetState(BRICK_STATE_BREAK);
             isHit = false;
         }
+        CCollision::GetInstance()->Process(this, dt, coObjects);
     }
     else
     {
@@ -143,8 +144,17 @@ void CBrick::SetState(int state)
     this->state = state;
 }
 
-void CBrick::Hit(int dx)
+void CBrick::Hit()
 {
     SetState(BRICK_STATE_BREAK);
     isHit = true;
+}
+
+void CBrick::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+    if (dynamic_cast<CGreenKoopa*>(e->obj) && e->dy == 0.0f)
+    {
+        dynamic_cast<CGreenKoopa*>(e->obj)->TurnAround();
+        Hit();
+    }
 }

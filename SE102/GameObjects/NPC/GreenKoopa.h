@@ -9,7 +9,7 @@
 #define GREEN_KOOPA_INTRO_Y_VELOCITY 0.03
 
 constexpr float GREEN_KOOPA_X_SPEED = 0x00800 * SUBSUBSUBPIXEL_DELTA_TIME;
-constexpr float GREEN_KOOPA_SHELL_X_SPEED = 0x02800 * SUBSUBSUBPIXEL_DELTA_TIME;
+constexpr float GREEN_KOOPA_SHELL_X_SPEED = 0x02700 * SUBSUBSUBPIXEL_DELTA_TIME;
 constexpr float GREEN_KOOPA_KILL_TIME = 500;
 constexpr float GREEN_KOOPA_SPAWN_TIME = 0xff * 1000.0f / 60.0f;
 constexpr float KOOPA_RESPAWNING_TIME = 2000;
@@ -80,6 +80,7 @@ public:
     void PlayerHit(int nx);
     void AttachHold(LPGAMEOBJECT player, float holdYOffset);
     void DetachHold();
+    void TurnAround() { nx *= -1; }
 
     void DeadBounce() { SetState(KOOPA_STATE_DEAD_BOUNCE); }
 

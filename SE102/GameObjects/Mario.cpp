@@ -575,7 +575,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     else if (dynamic_cast<CBrick*>(e->obj) && e->ny > 0)
     {
         CBrick* const brick = dynamic_cast<CBrick*>(e->obj);
-        brick->Hit(sign(brick->GetPosition().x - position.x));
+        brick->Hit();
     }
     else if (dynamic_cast<CCoin*>(e->obj) && e->obj->GetState() == COIN_STATE_NORMAL)
     {

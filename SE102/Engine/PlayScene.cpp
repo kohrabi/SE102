@@ -95,9 +95,10 @@ void CPlayScene::Update(float dt)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		LPGAMEOBJECT obj = objects[i];
-		if (obj != NULL && obj->IsCollidable())
+		if (obj != NULL && obj->IsCollidable() && obj->IsColliderInCamera())
 			coObjects.push_back(objects[i]);
 	}
+	cout << coObjects.size() << '\n';
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -150,7 +151,7 @@ void CPlayScene::Render()
 	float cx, cy;
 	game->GetCamPos(cx, cy);
 
-	cy += 72.0f / 2.0f;
+	cy += 70.0f / 2.0f;
 	game->SetCamPos(cx, cy);
 
 	if (!is_sorted(objects.begin(), objects.end(), CGameObject::CompareSortingLayer))
