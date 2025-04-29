@@ -2,7 +2,7 @@
 
 
 #include "Engine/GameObject.h"
-
+#include "Engine/CollisionCast.h"
 
 #include "Engine/Graphics/Animations.h"
 
@@ -59,17 +59,13 @@ protected:
 
     int respawnNx = 1;
 
+    CCollisionCast shellCast;
+
     virtual int GetAnimationId();
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0
-	CGreenKoopa(float x, float y) : CGameObject(x, y, 0.0f) 
-    { 
-        LoadContent();
-        nx = -1;
-        layer = SortingLayer::NPC;
-        SetState(KOOPA_STATE_NORMAL);
-    }
+    CGreenKoopa(float x, float y);
 	int IsCollidable() override { return !isDeleted && state != KOOPA_STATE_DEAD_BOUNCE; };
     int IsBlocking() override { return false; }
     int IsDirectionColliable(float nx, float ny) override { return state != KOOPA_STATE_DEAD_BOUNCE; }

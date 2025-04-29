@@ -45,6 +45,17 @@ int CGreenKoopa::GetAnimationId()
     }
 }
 
+CGreenKoopa::CGreenKoopa(float x, float y) : CGameObject(x, y, 0.0f)
+{
+    LoadContent();
+    nx = -1;
+    shellCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
+        return dynamic_cast<CBrick*>(obj) != nullptr;
+        });
+    layer = SortingLayer::NPC;
+    SetState(KOOPA_STATE_NORMAL);
+}
+
 void CGreenKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
     left = position.x - 3;
@@ -161,11 +172,11 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
         }
         // YEP this has to be checked at two different code i dont know why but it works
         // This is the bug where the shell decided that it would hit brick that it wasn't supposed to
-        else if (dynamic_cast<CBrick*>(e->obj) && e->ny == 0)
-        {
-            CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-            brick->Hit();
-        }
+        //else if (dynamic_cast<CBrick*>(e->obj) && e->ny == 0)
+        //{
+        //    CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+        //    brick->Hit();
+        //}
     }
 }
 
@@ -183,8 +194,8 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     }
     else if (state == KOOPA_STATE_IN_SHELL)
     {
-        constexpr float ShellY = 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME; // Green koopa is floaty
-        velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL) + ShellY;
+        //constexpr float ShellY = 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME; // Green koopa is floaty
+        velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL);
 
     }
     else
@@ -254,6 +265,17 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
             {
                 respawnTimer = KOOPA_RESPAWNING_TIME;
                 state = KOOPA_STATE_RESPAWNING;
+            }
+        }
+        shellCast.SetBoundingBox(position + Vector2(8.0f * (nx > 0 ? 1 : -1), +10.0f), Vector2(3.0f, 3.0f));
+        shellCast.CheckOverlap(coObjects);
+        if (shellCast.collision.size() >= 1)
+        {
+            CBrick* brick = dynamic_cast<CBrick*>(shellCast.collision[0]);
+            if (brick != NULL)
+            {
+                brick->Hit();
+                nx *= -1;
             }
         }
     }
@@ -331,5 +353,6 @@ void CGreenKoopa::Render() {
         }
         break;
     }
-    RenderBoundingBox();
+    //RenderBoundingBox();
+    shellCast.RenderBoundingBox();
 }

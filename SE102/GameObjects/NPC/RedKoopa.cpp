@@ -41,7 +41,7 @@ CRedKoopa::CRedKoopa(float x, float y) : CGreenKoopa(x, y)
     LoadContent();
     nx = -1;
     holdCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
-        return !(obj == this || obj->GetVelocity().length() > 0);
+        return !(obj == this || !obj->IsBlocking());
     });
     layer = SortingLayer::NPC;
 }

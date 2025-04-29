@@ -80,7 +80,7 @@ void CBrick::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
             SetState(BRICK_STATE_BREAK);
             isHit = false;
         }
-        CCollision::GetInstance()->Process(this, dt, coObjects);
+        //CCollision::GetInstance()->Process(this, dt, coObjects);
     }
     else
     {

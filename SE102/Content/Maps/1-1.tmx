@@ -331,6 +331,7 @@
   <object id="97" template="Brick.tx" x="2128" y="464"/>
   <object id="99" template="Brick.tx" x="2128" y="448"/>
   <object id="100" template="Brick.tx" x="2144" y="464"/>
+  <object id="189" template="RedKoopa.tx" x="2128" y="432"/>
   <object id="101" name="Mario" type="CMario" gid="2147484543" x="2192" y="416" width="16" height="16"/>
   <object id="113" template="OneWay.tx" x="240" y="416"/>
   <object id="109" template="OneWay.tx" x="272" y="384"/>
@@ -409,7 +410,6 @@
     <property name="height" type="int" value="2"/>
    </properties>
   </object>
-  <object id="189" template="RedKoopa.tx" x="2128" y="432"/>
   <object id="190" template="OneWay.tx" x="2192" y="416"/>
   <object id="191" template="OneWay.tx" x="2224" y="320"/>
   <object id="192" template="KillBarrier.tx" type="CKillBarrier" x="0" y="496"/>
