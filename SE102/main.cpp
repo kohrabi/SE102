@@ -211,6 +211,7 @@ int Run()
 		if (dt >= tickPerFrame || game->GetTimeScale() == 0)
 		{
 			game->SetUnscaledDt(now - frameStart);
+			//game->SetTimeScale(0.4f);
 			DebugOutTitle(L"01 - Skeleton %f", (double)((1.0 / ((now - frameStart) / 1000.0))));
 			frameStart = now;
 		

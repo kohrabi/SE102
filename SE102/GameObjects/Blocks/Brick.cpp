@@ -90,6 +90,7 @@ void CBrick::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
         for (int i = 0; i < 4; i++)
         {
             debrisVel[i].y = debrisVel[i].y + OBJECT_FALL * 2.0f;
+
             debrisPos[i].x += debrisVel[i].x * dt;
             debrisPos[i].y += debrisVel[i].y * dt;
             if (debrisPos[i].y > cy + game->GetBackBufferHeight() + 20.0f)
@@ -117,6 +118,7 @@ void CBrick::Render()
             animations->Get(PARTICLES_ID_ANIMATION_BRICK_DEBRIS)->Render(debrisPos[i].x, debrisPos[i].y, 1.0f);
         }
     }
+    RenderBoundingBox();
 }
 
 void CBrick::SetState(int state)

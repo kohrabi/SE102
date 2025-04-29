@@ -45,6 +45,14 @@ int CGreenKoopa::GetAnimationId()
     }
 }
 
+void CGreenKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+    left = position.x - 3;
+    top = position.y + 4;
+    right = position.x + 3;
+    bottom = position.y + 16;
+}
+
 void CGreenKoopa::SetState(int state)
 {
     switch (state)
@@ -146,15 +154,19 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
             CGreenKoopa* koopa = dynamic_cast<CGreenKoopa*>(e->obj);
             koopa->DeadBounce();
         }
-        else if (dynamic_cast<CQuestionBlock*>(e->obj) && e->ny == 0)
+        if (dynamic_cast<CQuestionBlock*>(e->obj) && e->ny == 0)
         {
             CQuestionBlock* questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
             questionBlock->Hit(1);
         }
-        if (dynamic_cast<CBrick*>(e->obj) && e->ny == 0)
+        else if (dynamic_cast<CBrick*>(e->obj) && abs(position.y - e->obj->GetPosition().y) < 15.0f)
         {
             CBrick* brick = dynamic_cast<CBrick*>(e->obj);
             brick->Hit(1);
+        }
+        if (dynamic_cast<CBrick*>(e->obj))
+        {
+            cout << abs(position.y - e->obj->GetPosition().y) << "\n";
         }
     }
 }
@@ -167,7 +179,10 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     if (ignoreDamageTimer > 0) ignoreDamageTimer -= dt;
 
     if (state == KOOPA_STATE_WING)
-        velocity.y = min(velocity.y + OBJECT_FALL / 1.5f, OBJECT_MAX_FALL / 1.5f);
+    {
+        constexpr float greenShellY = -0x01000 * SUBSUBSUBPIXEL_DELTA_TIME; // Green koopa is floaty
+        velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL) + greenShellY;
+    }
     else
         velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL);
     switch (state)
@@ -312,5 +327,5 @@ void CGreenKoopa::Render() {
         }
         break;
     }
-    //RenderBoundingBox();
+    RenderBoundingBox();
 }
