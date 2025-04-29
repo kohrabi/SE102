@@ -18,17 +18,14 @@
             }
         },
         "1-1.tmx": {
-            "expandedGroupLayers": [
-                6
-            ],
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 3,
-            "selectedLayer": 6,
+            "scale": 1,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 1901,
-                "y": 590.8333333333333
+                "x": 1789,
+                "y": 475.5
             }
         },
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx": {

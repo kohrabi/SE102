@@ -336,12 +336,12 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
         {
             if (!deadJump)
             {
-                velocity.y = -0.7f;
+                velocity.y = -0.4f;
                 deadJump = true;
             }
             //velocity.y = min(velocity.y + JUMP_GRAVITY / 2.0f, MAX_FALL_SPEED / 2.0f);
             velocity.y = velocity.y + JUMP_GRAVITY / 2.0f;
-            position.y += velocity.y / 2.0f * unscaledDt;
+            position.y += velocity.y * unscaledDt;
         }
 
         if (!IsColliderInCamera())

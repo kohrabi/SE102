@@ -89,21 +89,6 @@ void CPlayScene::Update(float dt)
 		marioLife--;
 		game->ResetScene();
 	}
-
-	AABB playerAABB;
-	player->GetBoundingBox(playerAABB.left, playerAABB.top, playerAABB.right, playerAABB.bottom);
-	if (!CCollision::CheckAABBOverlaps(levelBound, playerAABB))
-	{
-		for (auto& bound : levelBounds)
-		{
-			if (CCollision::CheckAABBOverlaps(bound, playerAABB))
-			{
-				levelBound = bound;
-				break;
-			}
-		}
-	}
-
 	levelTimer -= dt;
 
 	vector<LPGAMEOBJECT> coObjects;
@@ -122,17 +107,38 @@ void CPlayScene::Update(float dt)
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
-	// Update camera to follow mario
-	Vector2 position = player->GetPosition();
 
-	position.x -= game->GetBackBufferWidth() / 2;
-	position.y -= game->GetBackBufferHeight() / 2;
-	//position.y = 500.f;
+	AABB playerAABB;
+	if (player->GetState() != MARIO_STATE_DEAD)
+	{
+		player->GetBoundingBox(playerAABB.left, playerAABB.top, playerAABB.right, playerAABB.bottom);
+		if (!CCollision::CheckAABBOverlaps(levelBound, playerAABB))
+		{
+			for (auto& bound : levelBounds)
+			{
+				if (CCollision::CheckAABBOverlaps(bound, playerAABB))
+				{
+					levelBound = bound;
+					break;
+				}
+			}
+		}
+	}
 
-	position.x = clampf(position.x, levelBound.left, levelBound.right - game->GetBackBufferWidth());
-	position.y = clampf(position.y, levelBound.top, levelBound.bottom - game->GetBackBufferHeight());
+	if (player->GetState() != MARIO_STATE_DEAD)
+	{
+		// Update camera to follow mario
+		playerPos = player->GetPosition();
 
-	game->SetCamPos(position.x, position.y /*cy*/);
+		playerPos.x -= game->GetBackBufferWidth() / 2;
+		playerPos.y -= game->GetBackBufferHeight() / 2;
+		//position.y = 500.f;
+
+		playerPos.x = clampf(playerPos.x, levelBound.left, levelBound.right - game->GetBackBufferWidth());
+		playerPos.y = clampf(playerPos.y, levelBound.top, levelBound.bottom - game->GetBackBufferHeight());
+	}
+
+	game->SetCamPos(playerPos.x, playerPos.y /*cy*/);
 
 	PurgeDeletedObjects();
 }

@@ -32,6 +32,8 @@ protected:
 	int marioLife = 4;
 
 	vector<AABB> levelBounds;
+
+	Vector2 playerPos;
 public: 
 	CPlayScene(int id, wstring filePath);
 
