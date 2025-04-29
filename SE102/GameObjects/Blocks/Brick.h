@@ -5,11 +5,16 @@
 
 #include "Engine/CollisionCast.h"
 
+#define BRICK_STATE_NORMAL 1
+#define BRICK_STATE_BREAK 2
+
 class CBrick : public CGameObject {
 private:
 	bool isHit = false;
 	CCollisionCast holdCast;
-	
+	Vector2 debrisPos[4];
+	Vector2 debrisVel[4];
+
 	static bool IsContentLoaded;
 	static void LoadContent();
 public:
@@ -17,7 +22,10 @@ public:
 	CBrick(float x, float y);
 	void Render() override;
 	void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL);
-
+	
+	int IsCollidable() override { return !isDeleted && (state != BRICK_STATE_BREAK); }
+	int IsBlocking() override { return !isDeleted && (state != BRICK_STATE_BREAK); }
+	void SetState(int state) override;
 	void Hit(int dx);
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {

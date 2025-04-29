@@ -24,7 +24,9 @@
 #include <iostream>
 #include "Powerups/Leaf.h"
 #include "Powerups/OneUp.h"
+#include "ContentIds/Particles.h"
 #include <Engine/PlayScene.h>
+#include "Blocks/Brick.h"
 using namespace std;
 
 bool CMario::IsContentLoaded = false;
@@ -39,6 +41,7 @@ void CMario::LoadContent()
     loader.Load(MARIO_SPRITES_PATH);
     loader.Load(MARIO_BIG_SPRITES_PATH);
     loader.Load(MARIO_RACOON_SPRITES_PATH);
+    loader.Load(PARTICLES_SPRITES_PATH);
 }
 
 CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
@@ -54,7 +57,7 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
             dynamic_cast<CPiranha*>(obj) != nullptr;
     });
     layer = SortingLayer::MARIO;
-    nextPowerUp = MARIO_POWERUP_RACOON;
+    nextPowerUp = MARIO_POWERUP_BIG;
     SetState(MARIO_STATE_POWER_UP);
 }
 
@@ -424,7 +427,10 @@ void CMario::Render() {
     if (state == MARIO_STATE_POWER_UP)
     {
         if (nextPowerUp == MARIO_POWERUP_RACOON)
+        {
+            animations->Get(PARTICLES_ID_ANIMATION_PUFF)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
             return;
+        }
         bool flipX = nx > 0 ? true : false;
         float yOffset = 0.0f;
         if (animation->GetCurrentFrameIndex() >= 1 && nextPowerUp != MARIO_POWERUP_SMALL)
@@ -566,6 +572,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         }
         questionBlock->Hit(sign(questionBlock->GetPosition().x - position.x));
     }
+    else if (dynamic_cast<CBrick*>(e->obj) && e->ny > 0)
+    {
+        CBrick* const brick = dynamic_cast<CBrick*>(e->obj);
+        brick->Hit(sign(brick->GetPosition().x - position.x));
+    }
     else if (dynamic_cast<CCoin*>(e->obj) && e->obj->GetState() == COIN_STATE_NORMAL)
     {
         coinCounter++;
@@ -621,6 +632,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     {
         e->obj->Delete();
         nextPowerUp = MARIO_POWERUP_RACOON;
+        LPANIMATION puffAnimation = CAnimations::GetInstance()->Get(PARTICLES_ID_ANIMATION_PUFF);
+        puffAnimation->SetLoop(false);
+        puffAnimation->Reset();
         if (powerUp != nextPowerUp)
             SetState(MARIO_STATE_POWER_UP);
         else

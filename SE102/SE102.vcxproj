@@ -177,6 +177,7 @@
     <Image Include="Content\objectSprites.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ContentIds\Brick.h" />
     <ClInclude Include="ContentIds\Coin.h" />
     <ClInclude Include="ContentIds\Fireball.h" />
     <ClInclude Include="ContentIds\FirePiranha.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="ContentIds\MarioRacoon.h" />
     <ClInclude Include="ContentIds\Mushroom.h" />
     <ClInclude Include="ContentIds\OneUp.h" />
+    <ClInclude Include="ContentIds\Particles.h" />
     <ClInclude Include="ContentIds\QuestionBlock.h" />
     <ClInclude Include="ContentIds\RedGoomba.h" />
     <ClInclude Include="ContentIds\RedKoopa.h" />
@@ -218,6 +220,7 @@
     <ClInclude Include="GameObjects\HUD.h" />
     <ClInclude Include="GameObjects\Level\KillBarrier.h" />
     <ClInclude Include="GameObjects\NPC\Fireball.h" />
+    <ClInclude Include="GameObjects\Particles\ParticlesAutoKill.h" />
     <ClInclude Include="GameObjects\Powerups\Leaf.h" />
     <ClInclude Include="GameObjects\Powerups\OneUp.h" />
     <ClInclude Include="GameObjects\Particles\ScorePopup.h" />

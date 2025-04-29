@@ -18,6 +18,7 @@
 #include "GameObjects/NPC/RedKoopa.h"
 
 #include "GameObjects/Powerups/OneUp.h"
+#include "ContentIds/Particles.h"
 
 #include <iostream>
 using namespace std;
@@ -44,51 +45,104 @@ CBrick::CBrick(float x, float y)
             (dynamic_cast<CRedKoopa*>(obj) != NULL);
         });
     layer = SortingLayer::BLOCK;
+    SetState(BRICK_STATE_NORMAL);
 }
 
 void CBrick::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
-    holdCast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
-    if (isHit)
+    if (state == BRICK_STATE_NORMAL)
     {
-        holdCast.CheckOverlap(coObjects);
-        if (holdCast.collision.size() > 0)
+        holdCast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
+        if (isHit)
         {
-            for (LPGAMEOBJECT obj : holdCast.collision)
+            holdCast.CheckOverlap(coObjects);
+            if (holdCast.collision.size() > 0)
             {
-                if (dynamic_cast<CGoomba*>(obj))
+                for (LPGAMEOBJECT obj : holdCast.collision)
                 {
-                    CGoomba* goomba = dynamic_cast<CGoomba*>(obj);
-                    goomba->DeadBounce();
-                }
-                else if (dynamic_cast<CGreenKoopa*>(obj))
-                {
-                    CGreenKoopa* greenKoopa = dynamic_cast<CGreenKoopa*>(obj);
-                    greenKoopa->DeadBounce();
-                }
-                else if (dynamic_cast<CRedKoopa*>(obj))
-                {
-                    CRedKoopa* redKoopa = dynamic_cast<CRedKoopa*>(obj);
-                    redKoopa->DeadBounce();
+                    if (dynamic_cast<CGoomba*>(obj))
+                    {
+                        CGoomba* goomba = dynamic_cast<CGoomba*>(obj);
+                        goomba->DeadBounce();
+                    }
+                    else if (dynamic_cast<CGreenKoopa*>(obj))
+                    {
+                        CGreenKoopa* greenKoopa = dynamic_cast<CGreenKoopa*>(obj);
+                        greenKoopa->DeadBounce();
+                    }
+                    else if (dynamic_cast<CRedKoopa*>(obj))
+                    {
+                        CRedKoopa* redKoopa = dynamic_cast<CRedKoopa*>(obj);
+                        redKoopa->DeadBounce();
+                    }
                 }
             }
+            SetState(BRICK_STATE_BREAK);
+            isHit = false;
         }
-        Delete();
-        isHit = false;
+    }
+    else
+    {
+        CGame* const game = CGame::GetInstance();
+        float cx, cy;
+        game->GetCamPos(cx, cy);
+        int shouldDestroy = 0;
+        for (int i = 0; i < 4; i++)
+        {
+            debrisVel[i].y = debrisVel[i].y + OBJECT_FALL * 2.0f;
+            debrisPos[i].x += debrisVel[i].x * dt;
+            debrisPos[i].y += debrisVel[i].y * dt;
+            if (debrisPos[i].y > cy + game->GetBackBufferHeight() + 20.0f)
+                shouldDestroy++;
+        }
+        if (shouldDestroy == 4)
+        {
+            Delete();
+        }
     }
 }
 
 void CBrick::Render()
 {
     CAnimations* const animations = CAnimations::GetInstance();
-    animations->Get(BRICK_ID_ANIMATION_IDLE)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
-    holdCast.RenderBoundingBox();
+    if (state == BRICK_STATE_NORMAL)
+    {
+        animations->Get(BRICK_ID_ANIMATION_IDLE)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
+        holdCast.RenderBoundingBox();
+    }
+    else
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            animations->Get(PARTICLES_ID_ANIMATION_BRICK_DEBRIS)->Render(debrisPos[i].x, debrisPos[i].y, 1.0f);
+        }
+    }
+}
+
+void CBrick::SetState(int state)
+{
+    if (this->state == state) return;
+    if (state == BRICK_STATE_BREAK)
+    {
+        layer = SortingLayer::CORPSE;
+        constexpr float offset = 8.0f;
+        debrisPos[0] = position + Vector2(-1.0f, -1.0f) * offset;
+        debrisPos[1] = position + Vector2(1.0f, -1.0f) * offset;
+        debrisPos[2] = position + Vector2(-1.0f, 1.0f) * offset;
+        debrisPos[3] = position + Vector2(1.0f, 1.0f) * offset;
+
+        constexpr float xVel = 0x01400 * SUBSUBSUBPIXEL_DELTA_TIME;
+        constexpr float yVel = 0x06000 * SUBSUBSUBPIXEL_DELTA_TIME;
+        debrisVel[0] = Vector2(-xVel, -yVel);
+        debrisVel[1] = Vector2(xVel, -yVel);
+        debrisVel[2] = Vector2(-xVel, -yVel / 2.0f);
+        debrisVel[3] = Vector2(xVel, -yVel / 2.0f);
+    }
+    this->state = state;
 }
 
 void CBrick::Hit(int dx)
 {
-    if (dx == 0)
-        Delete();
-    else
-        isHit = true;
+    SetState(BRICK_STATE_BREAK);
+    isHit = true;
 }

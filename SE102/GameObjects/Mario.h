@@ -48,7 +48,7 @@ constexpr float POWER_REDUCE_TIME = 23 * 1000.0f / 60.0f;
 constexpr int MAX_POWER_COUNT = 7;
 constexpr float FLY_P_TIMER = 0x80 * 1000.0f / 60.0f;
 
-constexpr float POWER_UP_ANIMATION_TIME = 1500.0f;
+constexpr float POWER_UP_ANIMATION_TIME = 700.0f;
 constexpr float KICK_ANIMATION_TIME = 300.0f;
 
 constexpr float DEAD_STAY_TIME = 1000.0f;

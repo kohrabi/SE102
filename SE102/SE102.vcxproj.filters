@@ -331,6 +331,15 @@
     <ClInclude Include="GameObjects\Blocks\TeleportPipe.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ContentIds\Brick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentIds\Particles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Particles\ParticlesAutoKill.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Content\Scenes\1-1.txt" />
