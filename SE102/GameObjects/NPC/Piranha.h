@@ -64,7 +64,7 @@ public:
     int IsDirectionColliable(float nx, float ny) override { return 1; }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) { 
         left = position.x - 8; 
-        top = position.y - 16; 
+        top = position.y - 10; 
         right = position.x + 8; 
         bottom = position.y + 16; 
     }

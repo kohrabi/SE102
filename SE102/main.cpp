@@ -224,7 +224,7 @@ int Run()
 		else
 		{
 			while (GetTickCount64() - frameStart <= tickPerFrame)
-				Sleep((GetTickCount64() - frameStart) / 2);
+				Sleep((GetTickCount64() - frameStart) / 5);
 		}
 	}
 
