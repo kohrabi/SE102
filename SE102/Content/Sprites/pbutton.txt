@@ -1,0 +1,26 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\VS\SE102\SE102
+# EDITOR startID 24000
+# EDITOR objectName P Button
+
+[TEXTURES]
+Content\objectSprites.png 0
+
+[SPRITES]
+
+# ACTIVE
+24001 80 48 95 63 0
+24002 96 48 111 63 0
+24003 112 48 127 63 0
+
+# INACTIVE
+24004 128 48 143 63 0
+
+
+[ANIMATIONS]
+24005 24001 100 24002 100 24003 10 
+# EDITOR animationName Active
+
+24006 24004 10 
+# EDITOR animationName Inactive
+

@@ -36,6 +36,7 @@ public:
 	virtual void Update(float dt) = 0;
 	virtual void Render() = 0; 
 
+	const vector<LPGAMEOBJECT>& GetObjectList() const { return objects; }
 	LPGAMEOBJECT const GetPlayer() const { return player; } 
 	void AddObject(LPGAMEOBJECT object) { objects.push_back(object); }
 

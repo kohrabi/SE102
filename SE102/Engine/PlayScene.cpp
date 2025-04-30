@@ -340,6 +340,8 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 					}
 					ASSERT(type != -1, "Question Block type is missing");
 					CQuestionBlock* questionBlock = new CQuestionBlock(position.x, position.y, type, spawnCount);
+					if (layerObject.getName() == "QuestionBrick")
+						questionBlock->SetBrick();
 					objects.push_back(questionBlock);
 				}
 				else if (layerObject.getClass() == "COneWay") 

@@ -28,6 +28,7 @@
 #include <Engine/PlayScene.h>
 #include "Blocks/Brick.h"
 #include "Blocks/LevelEnd.h"
+#include "Blocks/PButton.h"
 using namespace std;
 
 bool CMario::IsContentLoaded = false;
@@ -613,6 +614,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     {
         CBrick* const brick = dynamic_cast<CBrick*>(e->obj);
         brick->Hit();
+    }
+    else if (dynamic_cast<CPButton*>(e->obj) && e->ny < 0)
+    {
+        dynamic_cast<CPButton*>(e->obj)->Hit();
     }
     else if (dynamic_cast<CCoin*>(e->obj) && e->obj->GetState() == COIN_STATE_NORMAL)
     {

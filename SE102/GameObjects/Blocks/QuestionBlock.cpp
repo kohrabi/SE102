@@ -20,6 +20,8 @@
 #include "GameObjects/Powerups/OneUp.h"
 
 #include <iostream>
+#include <ContentIds/Brick.h>
+#include "PButton.h"
 using namespace std;
 
 bool CQuestionBlock::IsContentLoaded = false;
@@ -31,13 +33,14 @@ void CQuestionBlock::LoadContent()
     IsContentLoaded = true;
     SpritesLoader loader;
     loader.Load(QUESTION_BLOCK_SPRITES_PATH);
+    loader.Load(BRICK_SPRITES_PATH);
 }
 
 
 CQuestionBlock::CQuestionBlock(float x, float y, int type, int count)
     : CGameObject(x, y, 0.0f), spawnType(type), spawnCount(count)
 {
-    ASSERT(spawnType > 0 && spawnType <= 3, "Invalid spawn type");
+    ASSERT(spawnType > 0 && spawnType <= 4, "Invalid spawn type");
     ASSERT(spawnCount >= 0, "Invalid spawn count");
 
     holdCast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
@@ -99,8 +102,16 @@ void CQuestionBlock::Render()
     CAnimations* const animations = CAnimations::GetInstance();
     CSprites* const sprites = CSprites::GetInstance();
 
-    LPANIMATION animation = animations->Get(spawnCount > 0 ? QUESTION_BLOCK_ID_ANIMATION_IDLE : QUESTION_BLOCK_ID_ANIMATION_EMPTY);
-    animation->Render(position.x, position.y, GetLayer(layer, orderInLayer));
+    if (spawnCount > 0)
+    {
+        LPANIMATION animation = animations->Get(isBrick ? BRICK_ID_ANIMATION_IDLE : QUESTION_BLOCK_ID_ANIMATION_EMPTY);
+        animation->Render(position.x, position.y, GetLayer(layer, orderInLayer));
+    }
+    else
+    {
+        animations->Get(QUESTION_BLOCK_ID_ANIMATION_EMPTY)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
+
+    }
     holdCast.RenderBoundingBox();
 }
 
@@ -145,6 +156,13 @@ void CQuestionBlock::Hit(int dx)
         powerUp = new COneUp(position.x, position.y);
         powerUp->SetNx(dx);
         game->GetCurrentScene()->AddObject(powerUp);
+
+    }
+    break;
+    case QUESTION_BLOCK_SPAWN_P_BUTTON:
+    {
+        CPButton* button = new CPButton(position.x, position.y - 16.0f);
+        game->GetCurrentScene()->AddObject(button);
 
     }
     break;

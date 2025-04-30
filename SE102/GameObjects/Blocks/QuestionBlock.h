@@ -8,6 +8,8 @@
 #define QUESTION_BLOCK_SPAWN_COIN 1
 #define QUESTION_BLOCK_SPAWN_LEAF 2
 #define QUESTION_BLOCK_SPAWN_ONE_UP 3
+#define QUESTION_BLOCK_SPAWN_P_BUTTON 4
+
 #define QUESTION_BLOCK_ANIMATION_TIME 100
 #define QUESTION_BLOCK_ANIMATION_Y_VEL 0.1f
 
@@ -19,6 +21,7 @@ private:
 	float animationTimer = 0.0f;
 	float ogYPos = 0.0f;
 	bool isHit = false;
+	bool isBrick = false;
 	CCollisionCast holdCast;
 	
 	static bool IsContentLoaded;
@@ -31,6 +34,7 @@ public:
 	void Render() override;
     
 	void Hit(int dx);
+	void SetBrick() { isBrick = true; }
 
 	int GetSpawnCount() const { return spawnCount; }
 	int GetSpawnType() const { return spawnType; }

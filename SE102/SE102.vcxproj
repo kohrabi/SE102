@@ -145,6 +145,7 @@
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="GameObjects\Blocks\Brick.cpp" />
     <ClCompile Include="GameObjects\Blocks\LevelEnd.cpp" />
+    <ClCompile Include="GameObjects\Blocks\PButton.cpp" />
     <ClCompile Include="GameObjects\HUD.cpp" />
     <ClCompile Include="GameObjects\Level\KillBarrier.cpp" />
     <ClCompile Include="GameObjects\NPC\Fireball.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="ContentIds\Mushroom.h" />
     <ClInclude Include="ContentIds\OneUp.h" />
     <ClInclude Include="ContentIds\Particles.h" />
+    <ClInclude Include="ContentIds\PButton.h" />
     <ClInclude Include="ContentIds\QuestionBlock.h" />
     <ClInclude Include="ContentIds\RedGoomba.h" />
     <ClInclude Include="ContentIds\RedKoopa.h" />
@@ -219,6 +221,7 @@
     <ClInclude Include="Engine\Helper.h" />
     <ClInclude Include="GameObjects\Blocks\Brick.h" />
     <ClInclude Include="GameObjects\Blocks\LevelEnd.h" />
+    <ClInclude Include="GameObjects\Blocks\PButton.h" />
     <ClInclude Include="GameObjects\Blocks\TeleportPipe.h" />
     <ClInclude Include="GameObjects\GameGlobals.h" />
     <ClInclude Include="GameObjects\HUD.h" />
