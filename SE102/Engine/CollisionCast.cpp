@@ -38,7 +38,7 @@ void CCollisionCast::CheckOverlap(vector<LPGAMEOBJECT>* coObjects)
 
 void CCollisionCast::RenderBoundingBox()
 {
-	//return;
+	return;
 	RECT rect;
 
 	LPTEXTURE bbox = CTextures::GetInstance()->Get(TEXTURE_PATH_BBOX);

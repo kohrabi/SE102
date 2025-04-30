@@ -59,7 +59,7 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
             dynamic_cast<CPiranha*>(obj) != nullptr;
     });
     layer = SortingLayer::MARIO;
-    nextPowerUp = MARIO_POWERUP_BIG;
+    nextPowerUp = MARIO_POWERUP_SMALL;
     SetState(MARIO_STATE_POWER_UP);
 }
 
