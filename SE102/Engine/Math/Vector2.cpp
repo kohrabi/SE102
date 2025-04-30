@@ -13,6 +13,10 @@ Vector2& Vector2::operator+=(const Vector2& a) { x += a.x; y += a.y; return *thi
 Vector2& Vector2::operator-=(const Vector2& a) { x -= a.x; y -= a.y; return *this; }
 Vector2& Vector2::operator*=(const Vector2& a) { x *= a.x; y *= a.y; return *this; }
 Vector2& Vector2::operator/=(const Vector2& a) { x /= a.x; y /= a.y; return *this; }
+Vector2 Vector2::operator*(const float& a) const { return Vector2(x * a, y * a); }
+Vector2 Vector2::operator/(const float& a) const { return Vector2(x / a, y / a); }
+Vector2& Vector2::operator*=(const float& a) { x *= a; y *= a; return *this; }
+Vector2& Vector2::operator/=(const float& a) { x /= a; y /= a; return *this; }
 
 float Vector2::dot() const {
 	return x * x + y * y;

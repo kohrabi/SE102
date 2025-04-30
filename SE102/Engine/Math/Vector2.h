@@ -22,6 +22,10 @@ public:
 	Vector2& operator-=(const Vector2& a);
 	Vector2& operator*=(const Vector2& a);
 	Vector2& operator/=(const Vector2& a);
+	Vector2 operator*(const float& a) const;
+	Vector2 operator/(const float& a) const;
+	Vector2& operator*=(const float& a);
+	Vector2& operator/=(const float& a);
 
 	float length() const;
 	float lengthSquared() const;

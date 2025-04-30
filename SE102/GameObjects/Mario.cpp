@@ -482,8 +482,8 @@ void CMario::Render() {
         animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
 
     }
-    RenderBoundingBox();
-    spinCast.RenderBoundingBox();
+    //RenderBoundingBox();
+    //spinCast.RenderBoundingBox();
 }
 
 void CMario::SetState(int state) {

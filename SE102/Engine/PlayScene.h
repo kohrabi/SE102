@@ -31,12 +31,11 @@ protected:
 	float levelTimer = 0.0f;
 
 	vector<AABB> levelBounds;
-
-	Vector2 playerPos;
 public: 
 	CPlayScene(int id, wstring filePath);
 
 	float GetLevelTime() const { return levelTimer; }
+	const vector<AABB>& GetLevelBounds() const { return levelBounds; }
 
 	virtual void Load();
 	virtual void Update(float dt);

@@ -26,6 +26,7 @@
 #include <GameObjects/Level/KillBarrier.h>
 #include <GameObjects/Blocks/TeleportPipe.h>
 #include <GameObjects/Blocks/LevelEnd.h>
+#include <GameObjects/Camera.h>
 
 using namespace std;
 
@@ -72,6 +73,8 @@ void CPlayScene::Load()
 	CTextures* const textures = CTextures::GetInstance();
 	textures->Add(L"Content/menu.png");
 	hud = new CHUD(this);
+	CCamera* camera = new CCamera();
+	objects.push_back(camera);
 
 	f.close();
 
@@ -95,51 +98,14 @@ void CPlayScene::Update(float dt)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		LPGAMEOBJECT obj = objects[i];
-		if (obj != NULL && obj->IsCollidable() && obj->IsColliderInCamera())
+		if (obj != NULL && obj->IsCollidable())
 			coObjects.push_back(objects[i]);
 	}
-	cout << coObjects.size() << '\n';
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-
-	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL) return; 
-
-
-	AABB playerAABB;
-	if (player->GetState() != MARIO_STATE_DEAD)
-	{
-		player->GetBoundingBox(playerAABB.left, playerAABB.top, playerAABB.right, playerAABB.bottom);
-		if (!CCollision::CheckAABBOverlaps(levelBound, playerAABB))
-		{
-			for (auto& bound : levelBounds)
-			{
-				if (CCollision::CheckAABBOverlaps(bound, playerAABB))
-				{
-					levelBound = bound;
-					break;
-				}
-			}
-		}
-	}
-
-	if (player->GetState() != MARIO_STATE_DEAD)
-	{
-		// Update camera to follow mario
-		playerPos = player->GetPosition();
-
-		playerPos.x -= game->GetBackBufferWidth() / 2;
-		playerPos.y -= game->GetBackBufferHeight() / 2;
-		//position.y = 500.f;
-
-		playerPos.x = clampf(playerPos.x, levelBound.left, levelBound.right - game->GetBackBufferWidth());
-		playerPos.y = clampf(playerPos.y, levelBound.top, levelBound.bottom - game->GetBackBufferHeight());
-	}
-
-	game->SetCamPos(playerPos.x, playerPos.y /*cy*/);
 
 	PurgeDeletedObjects();
 }

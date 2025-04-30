@@ -31,9 +31,9 @@ public:
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) override {
 		const float size = 16.0f / 2.0f;
-		left = position.x - size;
+		left = position.x - size + 2.0f;
 		top = position.y - size;
-		right = position.x + size;
+		right = position.x + size - 2.0f;
 		bottom = position.y + size;
 	}
 };

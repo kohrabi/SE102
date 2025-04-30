@@ -58,10 +58,20 @@ CGreenKoopa::CGreenKoopa(float x, float y) : CGameObject(x, y, 0.0f)
 
 void CGreenKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-    left = position.x - 3;
-    top = position.y + 4;
-    right = position.x + 3;
-    bottom = position.y + 16;
+    if (state == KOOPA_STATE_IN_SHELL)
+    {
+        left = position.x - 3;
+        top = position.y + 8;
+        right = position.x + 3;
+        bottom = position.y + 16;
+    }
+    else
+    {
+        left = position.x - 3;
+        top = position.y + 4;
+        right = position.x + 3;
+        bottom = position.y + 16;
+    }
 }
 
 void CGreenKoopa::SetState(int state)
@@ -145,10 +155,7 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
     }
     if (e->ny != 0 && e->obj->IsBlocking())
     {
-        if (state == KOOPA_STATE_WING && e->ny > 0)
-            velocity.y = 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME;
-        else
-           velocity.y = 0.0f;
+        velocity.y = 0.0f;
         if (e->ny < 0)
             onGround = true;
     }
@@ -172,11 +179,11 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
         }
         // YEP this has to be checked at two different code i dont know why but it works
         // This is the bug where the shell decided that it would hit brick that it wasn't supposed to
-        //else if (dynamic_cast<CBrick*>(e->obj) && e->ny == 0)
-        //{
-        //    CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-        //    brick->Hit();
-        //}
+        else if (dynamic_cast<CBrick*>(e->obj) && e->ny == 0)
+        {
+            CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+            brick->Hit();
+        }
     }
 }
 
@@ -190,7 +197,7 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     if (state == KOOPA_STATE_WING)
     {
         constexpr float greenShellY = -0x01000 * SUBSUBSUBPIXEL_DELTA_TIME; // Green koopa is floaty
-        velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL) + greenShellY;
+        velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL + greenShellY);
     }
     else if (state == KOOPA_STATE_IN_SHELL)
     {

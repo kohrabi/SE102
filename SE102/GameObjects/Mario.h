@@ -186,6 +186,7 @@ public:
 
 	int GetCoinCount() const { return coinCounter; }
 	int GetPowerCount() const { return powerCounter; }
+	bool IsOnGround() const { return isOnGround; }
 	int GetScore() const { return score; }
 	void AddScore(int add) { score += add; }
 

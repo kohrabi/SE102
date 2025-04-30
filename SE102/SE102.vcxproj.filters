@@ -120,6 +120,9 @@
     <ClCompile Include="GameObjects\Blocks\PButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -359,6 +362,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContentIds\PButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -104,7 +104,7 @@ void CQuestionBlock::Render()
 
     if (spawnCount > 0)
     {
-        LPANIMATION animation = animations->Get(isBrick ? BRICK_ID_ANIMATION_IDLE : QUESTION_BLOCK_ID_ANIMATION_EMPTY);
+        LPANIMATION animation = animations->Get(isBrick ? BRICK_ID_ANIMATION_IDLE : QUESTION_BLOCK_ID_ANIMATION_IDLE);
         animation->Render(position.x, position.y, GetLayer(layer, orderInLayer));
     }
     else

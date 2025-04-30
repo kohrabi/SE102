@@ -146,6 +146,7 @@
     <ClCompile Include="GameObjects\Blocks\Brick.cpp" />
     <ClCompile Include="GameObjects\Blocks\LevelEnd.cpp" />
     <ClCompile Include="GameObjects\Blocks\PButton.cpp" />
+    <ClCompile Include="GameObjects\Camera.cpp" />
     <ClCompile Include="GameObjects\HUD.cpp" />
     <ClCompile Include="GameObjects\Level\KillBarrier.cpp" />
     <ClCompile Include="GameObjects\NPC\Fireball.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="GameObjects\Blocks\LevelEnd.h" />
     <ClInclude Include="GameObjects\Blocks\PButton.h" />
     <ClInclude Include="GameObjects\Blocks\TeleportPipe.h" />
+    <ClInclude Include="GameObjects\Camera.h" />
     <ClInclude Include="GameObjects\GameGlobals.h" />
     <ClInclude Include="GameObjects\HUD.h" />
     <ClInclude Include="GameObjects\Level\KillBarrier.h" />
