@@ -290,14 +290,22 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     break;
     case KOOPA_STATE_RESPAWNING:
     {
-
         if (respawnTimer > 0) respawnTimer -= dt;
         else
         {
             DetachHold();
             nx = -1;
-            respawnTimer = KOOPA_RESPAWNING_TIME;
-            state = KOOPA_STATE_NORMAL;
+            insideWallCast.SetBoundingBox(position, Vector2(5.0f, 5.0f));
+            insideWallCast.CheckOverlap(coObjects);
+            if (insideWallCast.collision.size() > 0)
+            {
+                SetState(KOOPA_STATE_DEAD_BOUNCE);
+            }
+            else
+            {
+                respawnTimer = KOOPA_RESPAWNING_TIME;
+                state = KOOPA_STATE_NORMAL;
+            }
         }
     }
     break;

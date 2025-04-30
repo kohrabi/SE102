@@ -60,6 +60,7 @@ protected:
     int respawnNx = 1;
 
     CCollisionCast shellCast;
+    CCollisionCast insideWallCast;
 
     virtual int GetAnimationId();
 public:

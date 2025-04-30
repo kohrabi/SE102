@@ -581,13 +581,6 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
             bottom = position.y + marioSize.y + yOffset;
         }
     }
-    if (holdShell != NULL)
-    {
-        //if (nx == -1)
-            left -= 14.0f;
-        //else if (nx == 1)
-            right += 14.0f;
-    }
 }
 
 void CMario::OnNoCollision(float dt) {
