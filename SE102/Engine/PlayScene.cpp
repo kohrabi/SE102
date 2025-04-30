@@ -73,7 +73,7 @@ void CPlayScene::Load()
 	CTextures* const textures = CTextures::GetInstance();
 	textures->Add(L"Content/menu.png");
 	hud = new CHUD(this);
-	CCamera* camera = new CCamera();
+	camera = new CCamera();
 	objects.push_back(camera);
 
 	f.close();

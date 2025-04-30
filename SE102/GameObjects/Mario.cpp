@@ -483,7 +483,7 @@ void CMario::Render() {
 
     }
     //RenderBoundingBox();
-    //spinCast.RenderBoundingBox();
+    spinCast.RenderBoundingBox();
 }
 
 void CMario::SetState(int state) {
@@ -580,6 +580,13 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
             right = position.x + marioSize.x;
             bottom = position.y + marioSize.y + yOffset;
         }
+    }
+    if (holdShell != NULL)
+    {
+        //if (nx == -1)
+            left -= 14.0f;
+        //else if (nx == 1)
+            right += 14.0f;
     }
 }
 
@@ -697,12 +704,15 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         {
             if (koopa->IsInShell() && koopa->GetVelocity().x == 0.0f)
             {
-                if (e->ny == 0)
-                    kickTimer = KICK_ANIMATION_TIME;
-                game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score200));
-                koopa->SetNx(nx);
+                if (!koopa->IsHeld())
+                {
+                    if (e->ny == 0)
+                        kickTimer = KICK_ANIMATION_TIME;
+                    game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score200));
+                    koopa->SetNx(nx);
+                }
             }
-            else
+            else if (koopa->GetState() != KOOPA_STATE_RESPAWNING)
             {
                 SetState(MARIO_STATE_DEAD);
             }

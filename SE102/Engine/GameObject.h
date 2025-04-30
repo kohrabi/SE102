@@ -44,16 +44,16 @@ class CGameObject
 {
 protected:
 	Vector2 position = Vector2::Zero;
-	Vector2 velocity;
+	Vector2 velocity = Vector2::Zero;
 	int orderInLayer = 0;
 
 	float rotation = 0.0f;
 
 	bool isDeleted = false;
-	SortingLayer layer;
+	SortingLayer layer = SortingLayer::START;
 
-	int nx;
-	int state;
+	int nx = 0;
+	int state = 0;
 public:
 	void SetPosition(float x, float y) { position.x = x; position.y = y; }
 	void SetVelocity(float vx, float vy) { velocity.x = vx, velocity.y = vy; }

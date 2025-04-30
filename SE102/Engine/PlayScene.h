@@ -4,6 +4,7 @@
 #include "Graphics/Textures.h"
 #include "Engine/Loaders/CollisionMapLoader.h"
 #include "GameObjects/TileObjects/CollidableTileLayer.h"
+#include "GameObjects/Camera.h"
 
 #include <string>
 #include <unordered_map>
@@ -28,6 +29,7 @@ protected:
 	// A play scene has to have player, right? 			
 	void _ParseSection_PROPERTIES(string line);
 	CHUD* hud;
+	CCamera* camera = NULL;
 	float levelTimer = 0.0f;
 
 	vector<AABB> levelBounds;
@@ -43,6 +45,7 @@ public:
 	virtual void Unload();
 
 	LPGAMEOBJECT GetPlayer() { return player; }
+	CCamera* GetCamera() { return camera; }
 
 	void LoadMap(string path);
 	void LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, 

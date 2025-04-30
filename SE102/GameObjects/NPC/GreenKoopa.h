@@ -69,6 +69,7 @@ public:
 	int IsCollidable() override { return !isDeleted && state != KOOPA_STATE_DEAD_BOUNCE; };
     int IsBlocking() override { return false; }
     int IsDirectionColliable(float nx, float ny) override { return state != KOOPA_STATE_DEAD_BOUNCE; }
+    int IsHeld() const { return player != NULL; }
     void GetBoundingBox(float& left, float& top, float& right, float& bottom);
     void SetState(int state) override;
 

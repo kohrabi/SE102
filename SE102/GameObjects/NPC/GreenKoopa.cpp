@@ -160,7 +160,7 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
             onGround = true;
     }
     
-    if (state == KOOPA_STATE_IN_SHELL && abs(velocity.x) > 0)
+    if (state == KOOPA_STATE_IN_SHELL && abs(velocity.x) > 0.0f)
     {
         if (dynamic_cast<CGoomba*>(e->obj))
         {
@@ -179,11 +179,11 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
         }
         // YEP this has to be checked at two different code i dont know why but it works
         // This is the bug where the shell decided that it would hit brick that it wasn't supposed to
-        else if (dynamic_cast<CBrick*>(e->obj) && e->ny == 0)
-        {
-            CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-            brick->Hit();
-        }
+        //else if (dynamic_cast<CBrick*>(e->obj) && e->ny == 0)
+        //{
+        //    CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+        //    brick->Hit();
+        //}
     }
 }
 
@@ -207,6 +207,7 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     }
     else
         velocity.y = min(velocity.y + OBJECT_FALL, OBJECT_MAX_FALL);
+
     switch (state)
     {
     case KOOPA_STATE_WING:
@@ -276,7 +277,7 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
         }
         shellCast.SetBoundingBox(position + Vector2(8.0f * (nx > 0 ? 1 : -1), +10.0f), Vector2(3.0f, 3.0f));
         shellCast.CheckOverlap(coObjects);
-        if (shellCast.collision.size() >= 1)
+        if (shellCast.collision.size() >= 1 && abs(velocity.x) > 0)
         {
             CBrick* brick = dynamic_cast<CBrick*>(shellCast.collision[0]);
             if (brick != NULL)

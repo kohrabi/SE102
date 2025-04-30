@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include "Brick.h"
+#include <Engine/PlayScene.h>
 using namespace std;
 
 bool CPButton::IsContentLoaded = false;
@@ -33,6 +34,7 @@ void CPButton::LoadContent()
     IsContentLoaded = true;
     SpritesLoader loader;
     loader.Load(P_BUTTON_SPRITES_PATH);
+    loader.Load(PARTICLES_SPRITES_PATH);
 }
 
 
@@ -40,18 +42,25 @@ CPButton::CPButton(float x, float y)
     : CGameObject(x, y, 0.0f)
 {
     LoadContent();
+    puffTimer = PUFF_TIME;
+    LPANIMATION puff = CAnimations::GetInstance()->Get(PARTICLES_ID_ANIMATION_PUFF);
+    puff->Reset();
+    puff->SetLoop(false);
     layer = SortingLayer::BLOCK;
     SetState(P_BUTTON_STATE_ACTIVE);
 }
 
 void CPButton::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
+    puffTimer -= dt;
 }
 
 void CPButton::Render()
 {
     CAnimations* const animations = CAnimations::GetInstance();
     animations->Get(state == P_BUTTON_STATE_ACTIVE ? P_BUTTON_ID_ANIMATION_ACTIVE : P_BUTTON_ID_ANIMATION_INACTIVE)->Render(position.x, position.y, 1.0f);
+    if (puffTimer > 0)
+        animations->Get(PARTICLES_ID_ANIMATION_PUFF)->Render(position.x, position.y, 1.0f);
 }
 
 void CPButton::SetState(int state)
@@ -63,7 +72,8 @@ void CPButton::SetState(int state)
 void CPButton::Hit()
 {
     SetState(P_BUTTON_STATE_INACTIVE);
-    LPSCENE currentScene = CGame::GetInstance()->GetCurrentScene();
+    CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+    currentScene->GetCamera()->Shake();
     const vector<LPGAMEOBJECT>& objects = currentScene->GetObjectList();
     for (int i = 0; i < objects.size(); i++)
     {

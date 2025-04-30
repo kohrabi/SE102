@@ -64,6 +64,16 @@ void CCamera::Update(float dt, vector<LPGAMEOBJECT>* coObjects)
 	setPos.y -= game->GetBackBufferHeight() / 2;
 	setPos.x = clampf(setPos.x, levelBound.left, levelBound.right - game->GetBackBufferWidth());
 	setPos.y = clampf(setPos.y, levelBound.top, levelBound.bottom - game->GetBackBufferHeight());
+	if (shakeTimer > 0)
+	{
+		if (shakeFrameTimer > 0) shakeFrameTimer -= dt;
+		else
+		{
+			setPos.y += nx * 2.0f;
+			nx *= -1;
+		}
+		shakeTimer -= dt;
+	}
 
 	game->SetCamPos(round(setPos.x), round(setPos.y) /*cy*/);
 }
