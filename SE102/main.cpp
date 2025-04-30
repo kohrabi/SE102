@@ -204,15 +204,16 @@ int Run()
 
 		// dt: the time between (beginning of last frame) and now
 		// this frame: the frame we are about to render
-		float dt = (now - frameStart) * game->GetTimeScale();
+		ULONGLONG unscaledDt = (now - frameStart);
+		float dt = (float)unscaledDt * game->GetTimeScale();
 		dt = clampf(dt, 0.0001f, 50.0f);
 
 
-		if (dt >= tickPerFrame || game->GetTimeScale() == 0)
+		if (unscaledDt >= tickPerFrame || game->GetTimeScale() == 0)
 		{
 			game->SetUnscaledDt(now - frameStart);
 			//game->SetTimeScale(0.4f);
-			DebugOutTitle(L"01 - Skeleton %f", (double)((1.0 / ((now - frameStart) / 1000.0))));
+			DebugOutTitle(L"01 - Skeleton %f", (double)((1.0 / (unscaledDt / 1000.0))));
 			frameStart = now;
 		
 			Update(dt);
@@ -221,7 +222,10 @@ int Run()
 			game->SwitchScene();
 		}
 		else
-			Sleep(tickPerFrame - dt);
+		{
+			while (GetTickCount64() - frameStart <= tickPerFrame)
+				Sleep((GetTickCount64() - frameStart) / 2);
+		}
 	}
 
 	UnloadResources();
