@@ -1,0 +1,22 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\VS\SE102\SE102
+# EDITOR startID 23000
+# EDITOR objectName Level End
+
+[TEXTURES]
+Content\objectSprites.png 0
+
+[SPRITES]
+23001 48 48 79 79 0
+# EDITOR frameName Box
+
+# SLOT
+23002 0 48 15 63 0
+23003 16 48 31 63 0
+23004 32 48 47 63 0
+
+
+[ANIMATIONS]
+23005 23002 100 23003 100 23004 100 
+# EDITOR animationName Slot
+

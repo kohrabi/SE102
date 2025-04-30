@@ -27,6 +27,7 @@
 #include "ContentIds/Particles.h"
 #include <Engine/PlayScene.h>
 #include "Blocks/Brick.h"
+#include "Blocks/LevelEnd.h"
 using namespace std;
 
 bool CMario::IsContentLoaded = false;
@@ -358,6 +359,9 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
             if (levelResetTimer > 0) levelResetTimer -= unscaledDt;
             else
             {
+                if (game->GetMarioLife() - 1 < 0)
+                    exit(0); // LMAO
+                game->SetMarioLife(game->GetMarioLife() - 1);
                 CGame::GetInstance()->SetResetScene(true);
             }
         }
@@ -410,6 +414,28 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
                     SetState(MARIO_STATE_NORMAL);
                 }
             }
+        }
+    }
+    break;
+    case MARIO_STATE_OUTRO:
+    {
+        if (outroStayTimer > 0.0f)
+        {
+            outroStayTimer -= dt;
+            velocity.y = min(velocity.y + JUMP_GRAVITY, MAX_FALL_SPEED);
+            CCollision::GetInstance()->Process(this, dt, coObjects);
+            switchLevelTimer = SWITCH_LEVEL_TIME;
+        }
+        else
+        {
+            if (switchLevelTimer > 0) switchLevelTimer -= dt;
+            else
+            {
+                CGame* const game = CGame::GetInstance();
+                game->SetResetScene(true);
+            }
+            velocity = Vector2(MAXIMUM_WALK_SPEED, 0.0f);
+            position.x += velocity.x * dt;
         }
     }
     break;
@@ -508,6 +534,17 @@ void CMario::SetState(int state) {
         enterPipe = false;
         beforeTeleportY = position.y;
     }
+    break;
+    case MARIO_STATE_OUTRO:
+    {
+        velocity.x = 0.0f; 
+        velocity.y /= 2.0f;
+        outroStayTimer = STAY_OUTRO_TIME;
+        powerCounter = 0;
+        skidding = false;
+        kickTimer = 0.0f;
+        nx = 1;
+    }   
     break;
     }
     this->state = state;
@@ -627,6 +664,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         {
             game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
         }
+    }
+    else if (dynamic_cast<CLevelEnd*>(e->obj))
+    {
+        dynamic_cast<CLevelEnd*>(e->obj)->Hit();
+        SetState(MARIO_STATE_OUTRO);
     }
     else if (dynamic_cast<CLeaf*>(e->obj))
     {

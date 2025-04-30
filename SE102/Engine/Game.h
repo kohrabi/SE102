@@ -8,6 +8,8 @@
 #include "Scene.h"
 #include "Graphics/Texture.h"
 #include "Engine/GameObject.h"
+#include "debug.h"
+#include <GameObjects/GameGlobals.h>
 
 #define MAX_FRAME_RATE 120
 #define KEYBOARD_BUFFER_SIZE 1024
@@ -50,6 +52,7 @@ class CGame
 	ULONGLONG unscaledDt;
 
 	float timeScale = 1.0f;
+	GameGlobals gameGlobals;
 	bool resetScene = false;
 
 public:
@@ -68,6 +71,24 @@ public:
 	float GetTimeScale() const { return timeScale; }
 	ULONGLONG GetUnscaledDt() const { return unscaledDt; }
 	AABB GetCameraBound() const;
+	int GetMarioLife() const { return gameGlobals.marioLife; }
+	int GetItemFrame(int index) const { ASSERT(index >= 0 && index <= 2, "INVALID INDEX"); return gameGlobals.rewardFrames[index]; }
+	int GetNextItemFrame() const { return gameGlobals.nextEmptySlot; }
+
+	void SetMarioLife(int newVal) { gameGlobals.marioLife = newVal; }
+	void SetNextItemFrame(int newVal)
+	{
+		if (gameGlobals.nextEmptySlot >= 0 && gameGlobals.nextEmptySlot <= 2)
+		{
+			SetItemFrame(gameGlobals.nextEmptySlot++, newVal);
+		}
+	}
+	void SetItemFrame(int index, int newVal) 
+	{ 
+		ASSERT(index >= 0 && index <= 2, "INVALID INDEX");
+		ASSERT(newVal >= 1 && newVal <= 3, "INVALID VALUE");
+		gameGlobals.rewardFrames[index] = newVal; 
+	}
 
 	//
 	// Draw a portion or ALL the texture at position (x,y) on the screen

@@ -144,6 +144,7 @@
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GameObject.cpp" />
     <ClCompile Include="GameObjects\Blocks\Brick.cpp" />
+    <ClCompile Include="GameObjects\Blocks\LevelEnd.cpp" />
     <ClCompile Include="GameObjects\HUD.cpp" />
     <ClCompile Include="GameObjects\Level\KillBarrier.cpp" />
     <ClCompile Include="GameObjects\NPC\Fireball.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="ContentIds\GreenPiranha.h" />
     <ClInclude Include="ContentIds\HUD.h" />
     <ClInclude Include="ContentIds\Leaf.h" />
+    <ClInclude Include="ContentIds\LevelEnd.h" />
     <ClInclude Include="ContentIds\Mario.h" />
     <ClInclude Include="ContentIds\MarioBig.h" />
     <ClInclude Include="ContentIds\MarioRacoon.h" />
@@ -216,7 +218,9 @@
     <ClInclude Include="Engine\GameObject.h" />
     <ClInclude Include="Engine\Helper.h" />
     <ClInclude Include="GameObjects\Blocks\Brick.h" />
+    <ClInclude Include="GameObjects\Blocks\LevelEnd.h" />
     <ClInclude Include="GameObjects\Blocks\TeleportPipe.h" />
+    <ClInclude Include="GameObjects\GameGlobals.h" />
     <ClInclude Include="GameObjects\HUD.h" />
     <ClInclude Include="GameObjects\Level\KillBarrier.h" />
     <ClInclude Include="GameObjects\NPC\Fireball.h" />

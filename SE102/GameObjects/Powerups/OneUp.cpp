@@ -24,10 +24,9 @@ void COneUp::LoadContent()
 
 void COneUp::Eat()
 {
-    CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, ScoreType::OneUp));
-    CPlayScene* scene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-    if (scene != NULL)
-        scene->AddOneUp();
+    CGame* const game = CGame::GetInstance();
+    game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, ScoreType::OneUp));
+    game->SetMarioLife(game->GetMarioLife() + 1);
     Delete();
 }
 

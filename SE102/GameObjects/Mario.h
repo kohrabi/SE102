@@ -59,6 +59,9 @@ constexpr float WAG_TIME = 0x10 * 1000.0f / 60.0f;
 
 constexpr float SPIN_TIME = 6 * 50.0f;
 
+constexpr float STAY_OUTRO_TIME = 1000.0f;
+constexpr float SWITCH_LEVEL_TIME = 3000.0f;
+
 #pragma endregion
 
 #define MARIO_POWERUP_SMALL 0
@@ -76,7 +79,8 @@ constexpr float SPIN_TIME = 6 * 50.0f;
 #define MARIO_STATE_POWER_UP 2
 #define MARIO_STATE_SIT 3
 #define MARIO_STATE_TELEPORT 4
-#define MARIO_STATE_DEAD 5
+#define MARIO_STATE_OUTRO 5
+#define MARIO_STATE_DEAD 6
 
 // Y ofset
 // Held object Large: -$02
@@ -160,6 +164,9 @@ private:
 
 	int coinCounter = 0;
 	int score = 0;
+
+	float outroStayTimer = 0.0f;
+	float switchLevelTimer = 0.0f;
 
 	float beforeTeleportY = 0.0f;
 	bool enterPipe = false;

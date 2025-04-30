@@ -59,7 +59,7 @@ void CHUD::Render()
 	LPSPRITE marioLife = sprites->Get(HUD_ID_SPRITE_MARIO_LIFE);
 	marioLife->DrawScreen(16.0f, game->GetBackBufferHeight() - 15.0f, 1.0f);
 	
-	string life = to_string(min(currentScene->GetMarioLife(), 99));
+	string life = to_string(min(game->GetMarioLife(), 99));
 	for (int i = 0; i < life.size(); i++)
 	{
 		sprites->Get(getNumberSpriteId(life[i]))->DrawScreen(44.0f - i * 8.0f, game->GetBackBufferHeight() - 15.0f, 1.0f);
@@ -114,4 +114,16 @@ void CHUD::Render()
 	// World count
 	sprites->Get(getNumberSpriteId('1'))->DrawScreen(44.0f, game->GetBackBufferHeight() - 23.0f, 1.0f);
 
+	for (int i = 0; i < 3; i++)
+	{
+		int currentFrame = game->GetItemFrame(i);
+		int frameId = HUD_ID_SPRITE_REWARDS_FRAME_3;
+		if (currentFrame == REWARD_FRAMES_MUSHROOM)
+			frameId = HUD_ID_SPRITE_REWARDS_FRAME_0;
+		else if (currentFrame == REWARD_FRAMES_FLOWER)
+			frameId = HUD_ID_SPRITE_REWARDS_FRAME_1;
+		else if (currentFrame == REWARD_FRAMES_STAR)
+			frameId = HUD_ID_SPRITE_REWARDS_FRAME_2;
+		sprites->Get(frameId)->DrawScreen(game->GetBackBufferHeight() - 52.0f + 24.0f * i, game->GetBackBufferHeight() - 20.0f, 1.0f);
+	}
 }

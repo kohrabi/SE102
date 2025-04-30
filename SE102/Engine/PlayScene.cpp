@@ -25,6 +25,7 @@
 #include "GameObjects/TileObjects/CollidableTileLayer.h"
 #include <GameObjects/Level/KillBarrier.h>
 #include <GameObjects/Blocks/TeleportPipe.h>
+#include <GameObjects/Blocks/LevelEnd.h>
 
 using namespace std;
 
@@ -86,7 +87,6 @@ void CPlayScene::Update(float dt)
 	CGame* const game = CGame::GetInstance();
 	if (game->GetResetScene())
 	{
-		marioLife--;
 		game->ResetScene();
 	}
 	levelTimer -= dt;
@@ -375,6 +375,12 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 					//position = Vector2(aabb.left + aabb.width / 2.0f, aabb.top + aabb.height / 2.0f);
 					CBrick* brick = new CBrick(position.x, position.y);
 					objects.push_back(brick);
+				}
+				else if (layerObject.getClass() == "CLevelEnd")
+				{
+					//position = Vector2(aabb.left + aabb.width / 2.0f, aabb.top + aabb.height / 2.0f);
+					CLevelEnd* obj = new CLevelEnd(position.x, position.y);
+					objects.push_back(obj);
 				}
 				else if (layerObject.getClass() == "CCoin")
 				{
