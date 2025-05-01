@@ -289,8 +289,6 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
             flying = true;
         if (powerCounter >= MAX_POWER_COUNT)
             superJump = true;
-        cout << "flying: " << flying << '\n';
-        cout << "powerCounter: " << powerCounter << '\n';
 
         accel.y = initVel;
     }
@@ -366,6 +364,8 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
                 if (game->GetMarioLife() - 1 < 0)
                     exit(0); // LMAO
                 game->SetMarioLife(game->GetMarioLife() - 1);
+                LPPLAYSCENE scene = dynamic_cast<LPPLAYSCENE>(game->GetCurrentScene());
+                ASSERT(scene != NULL, "HEY");
                 CGame::GetInstance()->SetResetScene(true);
             }
         }
@@ -436,7 +436,9 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
             else
             {
                 CGame* const game = CGame::GetInstance();
-                game->SetResetScene(true);
+                LPPLAYSCENE scene = dynamic_cast<LPPLAYSCENE>(game->GetCurrentScene());
+                ASSERT(scene != NULL, "HEY");
+                scene->SetSceneState(Outro);
             }
             velocity = Vector2(MAXIMUM_WALK_SPEED, 0.0f);
             position.x += velocity.x * dt;
@@ -541,6 +543,10 @@ void CMario::SetState(int state) {
     break;
     case MARIO_STATE_OUTRO:
     {
+        CGame* const game = CGame::GetInstance();
+        LPPLAYSCENE scene = dynamic_cast<LPPLAYSCENE>(game->GetCurrentScene());
+        ASSERT(scene != NULL, "HEY");
+        scene->SetStopTimer(true);
         velocity.x = 0.0f; 
         velocity.y /= 2.0f;
         outroStayTimer = STAY_OUTRO_TIME;

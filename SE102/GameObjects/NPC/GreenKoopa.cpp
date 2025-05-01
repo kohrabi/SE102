@@ -213,15 +213,10 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     {
         velocity.x = GREEN_KOOPA_X_SPEED * (nx > 0 ? 1 : -1);
 
-        if (wingActivateTimer > 0) wingActivateTimer -= dt;
 
         if (onGround)
         {
-            if (wingActivateTimer <= 0)
-            {
-                velocity.y = -KOOPA_WING_BIG_HOP;
-                wingActivateTimer = KOOPA_WING_ACTIVATE_TIME;
-            }
+            velocity.y = -KOOPA_WING_BIG_HOP;
         }
 
     }

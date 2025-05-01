@@ -86,7 +86,7 @@ void CHUD::Render()
 	}
 
 	// Score
-	string score = to_string(mario->GetScore());
+	string score = to_string(game->GetScore());
 	while (score.size() < 7)
 		score.insert(score.begin(), '0');
 	for (int i = 0; i < 7; i++)
@@ -96,9 +96,11 @@ void CHUD::Render()
 
 	// Timer
 	string currentTime = to_string((int)(currentScene->GetLevelTime() / 1000.0f));
-	for (int i = 0; i < currentTime.size(); i++)
+	while (currentTime.size() < 3)
+		currentTime.insert(currentTime.begin(), '0');
+	for (int i = 0; i < 3; i++)
 	{
-		sprites->Get(getNumberSpriteId(currentTime[i]))->DrawScreen(132.0f + i * 8.0f, game->GetBackBufferHeight() - 15.0f, 1.0f);
+		sprites->Get(getNumberSpriteId(currentTime[currentTime.size() - i - 1]))->DrawScreen(148.0f - i * 8.0f, game->GetBackBufferHeight() - 15.0f, 1.0f);
 	}
 
 	// Money counter

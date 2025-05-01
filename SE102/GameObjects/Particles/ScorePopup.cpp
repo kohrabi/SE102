@@ -18,7 +18,8 @@ CScorePopup::CScorePopup(float x, float y, ScoreType scoreType)
 {
 	velocity.y = -SCORE_POPUP_RISE_VELOCITY;
 	layer = SortingLayer::CORPSE;
-	LPSCENE currentScene = CGame::GetInstance()->GetCurrentScene();
+	LPGAME const game = CGame::GetInstance();
+	LPSCENE currentScene = game->GetCurrentScene();
 	if (currentScene != NULL)
 	{
 		CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
@@ -40,14 +41,14 @@ CScorePopup::CScorePopup(float x, float y, ScoreType scoreType)
 			}
 			switch (scoreType)
 			{
-			case Score100: mario->AddScore(100); break;
-			case Score200: mario->AddScore(200); break;
-			case Score400: mario->AddScore(400); break;
-			case Score800: mario->AddScore(800); break;
-			case Score1000: mario->AddScore(1000); break;
-			case Score2000: mario->AddScore(2000); break;
-			case Score4000: mario->AddScore(4000); break;
-			case Score8000: mario->AddScore(8000); break;
+			case Score100: game->AddScore(100); break;
+			case Score200: game->AddScore(200); break;
+			case Score400: game->AddScore(400); break;
+			case Score800: game->AddScore(800); break;
+			case Score1000: game->AddScore(1000); break;
+			case Score2000: game->AddScore(2000); break;
+			case Score4000: game->AddScore(4000); break;
+			case Score8000: game->AddScore(8000); break;
 			case OneUp: CGame::GetInstance()->AddLife(1); break;
 			}
 		}

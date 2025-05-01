@@ -55,7 +55,6 @@ void CCamera::Update(float dt, vector<LPGAMEOBJECT>* coObjects)
 			position.y = playerPos.y + round(deadzoneOffset.y);
 		else
 			deadzoneOffset.y = -(playerPos.y - camCenter.y);
-		cout << deadzoneOffset.y << '\n';
 
 	}
 

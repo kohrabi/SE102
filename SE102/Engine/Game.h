@@ -11,6 +11,8 @@
 #include "debug.h"
 #include <GameObjects/GameGlobals.h>
 
+#include "Helper.h"
+
 #define MAX_FRAME_RATE 120
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
@@ -68,12 +70,16 @@ public:
 	void SetPointSamplerState();
 	void SetTimeScale(float newVal) { timeScale = newVal; }
 	void SetUnscaledDt(ULONGLONG dt) { unscaledDt = dt; }
+	
 	float GetTimeScale() const { return timeScale; }
 	ULONGLONG GetUnscaledDt() const { return unscaledDt; }
 	AABB GetCameraBound() const;
+
+	void AddScore(int addVal) { gameGlobals.marioScore = clampi(gameGlobals.marioScore + addVal, 0, 9999999); }
 	int GetMarioLife() const { return gameGlobals.marioLife; }
 	int GetItemFrame(int index) const { ASSERT(index >= 0 && index <= 2, "INVALID INDEX"); return gameGlobals.rewardFrames[index]; }
 	int GetNextItemFrame() const { return gameGlobals.nextEmptySlot; }
+	int GetScore() const { return gameGlobals.marioScore; }
 
 	void SetMarioLife(int newVal) { gameGlobals.marioLife = newVal; }
 	void AddLife(int addVal) { gameGlobals.marioLife += addVal; }

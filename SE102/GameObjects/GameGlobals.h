@@ -7,6 +7,7 @@
 
 struct GameGlobals
 {
+	int marioScore = 0;
 	int marioLife = 4;
 	int nextEmptySlot = 0;
 	int rewardFrames[3]{ 0, 0, 0 };

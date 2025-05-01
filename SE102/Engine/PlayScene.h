@@ -21,6 +21,11 @@ using namespace std;
 
 #define LEVEL_TIME 300000
 
+enum LevelState {
+	Normal,
+	Outro,
+};
+
 class CHUD;
 class CPlayScene: public CScene
 {
@@ -30,7 +35,10 @@ protected:
 	void _ParseSection_PROPERTIES(string line);
 	CHUD* hud;
 	CCamera* camera = NULL;
+	bool stopTimer = false;
 	float levelTimer = 0.0f;
+	float outroLevelTimer = 0.0f;
+	LevelState levelState = LevelState::Normal;
 
 	vector<AABB> levelBounds;
 public: 
@@ -46,6 +54,8 @@ public:
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 	CCamera* GetCamera() { return camera; }
+	void SetSceneState(LevelState state) { this->levelState = state; }
+	void SetStopTimer(bool newVal) { this->stopTimer = true; }
 
 	void LoadMap(string path);
 	void LoadLayers(CTextures* const textures, const tmx::Map& tMap, const std::vector<tmx::Layer::Ptr>& layers, 

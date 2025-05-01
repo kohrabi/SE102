@@ -33,7 +33,11 @@ using namespace std;
 CPlayScene::CPlayScene(int id, wstring filePath):
 	CScene(id, filePath)
 {
-	player = NULL;
+	hud = NULL;
+	levelTimer = LEVEL_TIME;
+	stopTimer = false;
+	outroLevelTimer = 0.0f;
+	levelState = LevelState::Normal;
 }
 
 
@@ -44,7 +48,15 @@ CPlayScene::CPlayScene(int id, wstring filePath):
 
 void CPlayScene::Load()
 {
+	hud = NULL;
+	levelTimer = LEVEL_TIME;
+	stopTimer = false;
+	outroLevelTimer = 0.0f;
+	levelState = LevelState::Normal;
+
 	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath.c_str());
+
+	levelState = LevelState::Normal;
 
 	ifstream f;
 	f.open(sceneFilePath.c_str());
@@ -69,7 +81,6 @@ void CPlayScene::Load()
 		}
 	}
 
-	levelTimer = LEVEL_TIME;
 	CTextures* const textures = CTextures::GetInstance();
 	textures->Add(L"Content/menu.png");
 	hud = new CHUD(this);
@@ -92,7 +103,39 @@ void CPlayScene::Update(float dt)
 	{
 		game->ResetScene();
 	}
-	levelTimer -= dt;
+	if (!stopTimer)
+		levelTimer -= dt;
+	else if (levelState == LevelState::Outro)
+	{
+		if (outroLevelTimer > 0) outroLevelTimer -= dt;
+		else
+		{
+			if (levelTimer > 0.0f)
+			{
+				outroLevelTimer = 1000.0f / 60.0f;
+				cout << levelTimer << " " << 100.0f * min(round(levelTimer / 1000.0f), 20.0f) / 2.0f << '\n';
+				if (levelTimer >= 20000.0f)
+				{
+					game->AddScore(100.0f * min(round(levelTimer / 1000.0f), 20.0f) / 2.0f);
+					levelTimer = max(levelTimer - 20000.0f, 0.0f);
+				}
+				else if (levelTimer >= 11000.0f)
+				{
+					game->AddScore(100.0f * min(round(levelTimer / 1000.0f), 20.0f) / 2.0f);
+					levelTimer = max(levelTimer - 11000.0f, 0.0f);
+				}
+				else
+				{
+					game->AddScore(100.0f * min(round(levelTimer / 1000.0f), 20.0f) / 2.0f);
+					levelTimer = max(levelTimer - 2000.0f, 0.0f);
+				}
+				if (levelTimer == 0.0f)
+					outroLevelTimer = 2000.0f;
+			}
+			else
+				game->SetResetScene(true);
+		}
+	}
 
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
@@ -106,6 +149,7 @@ void CPlayScene::Update(float dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
+
 
 	PurgeDeletedObjects();
 }
