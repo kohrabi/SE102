@@ -42,8 +42,21 @@ void CLevelEnd::Render()
     CAnimations* const animations = CAnimations::GetInstance();
     CSprites* const sprites = CSprites::GetInstance();
 
+
     sprites->Get(LEVEL_END_ID_SPRITE_BOX)->Draw(position.x, position.y, 1.0f);
-    animations->Get(LEVEL_END_ID_ANIMATION_SLOT)->Render(position.x, position.y + yOffset, 1.0f);
+    if (currentRewardSlot == 0)
+    {
+        animations->Get(LEVEL_END_ID_ANIMATION_SLOT)->Render(position.x, position.y, 1.0f);
+    }
+    else
+    {
+        if (currentRewardSlot == REWARD_FRAMES_MUSHROOM)
+            animations->Get(LEVEL_END_ID_ANIMATION_MUSHROOM)->Render(position.x, position.y + yOffset, 1.0f);
+        else if (currentRewardSlot == REWARD_FRAMES_FLOWER)
+            animations->Get(LEVEL_END_ID_ANIMATION_FLOWER)->Render(position.x, position.y + yOffset, 1.0f);
+        else
+            animations->Get(LEVEL_END_ID_ANIMATION_STAR)->Render(position.x, position.y + yOffset, 1.0f);
+    }
 }
 
 void CLevelEnd::SetState(int state)
@@ -54,14 +67,23 @@ void CLevelEnd::SetState(int state)
 
 void CLevelEnd::Hit()
 {
-    LPANIMATION currentReward = CAnimations::GetInstance()->Get(LEVEL_END_ID_ANIMATION_SLOT);
-    currentReward->Stop();
-    int currentFrame = currentReward->GetCurrentFrameIndex();
+    LPANIMATION currentRewardAnimation = CAnimations::GetInstance()->Get(LEVEL_END_ID_ANIMATION_SLOT);
+    currentRewardAnimation->Stop();
+    int currentFrame = currentRewardAnimation->GetCurrentFrameIndex();
     if (currentFrame == 0)
-        CGame::GetInstance()->SetNextItemFrame(REWARD_FRAMES_FLOWER);
-    else if (currentFrame == 1)
-        CGame::GetInstance()->SetNextItemFrame(REWARD_FRAMES_STAR);
-    else 
+    {
+        currentRewardSlot = REWARD_FRAMES_MUSHROOM;
         CGame::GetInstance()->SetNextItemFrame(REWARD_FRAMES_MUSHROOM);
+    }
+    else if (currentFrame == 1)
+    {
+        currentRewardSlot = REWARD_FRAMES_FLOWER;
+        CGame::GetInstance()->SetNextItemFrame(REWARD_FRAMES_FLOWER);
+    }
+    else
+    {
+        currentRewardSlot = REWARD_FRAMES_STAR;
+        CGame::GetInstance()->SetNextItemFrame(REWARD_FRAMES_STAR);
+    }
     SetState(LEVEL_END_STATE_EMPTY);
 }

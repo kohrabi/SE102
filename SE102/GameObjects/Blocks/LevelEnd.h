@@ -15,6 +15,7 @@ private:
 	static void LoadContent();
 
 	float yOffset = 0.0f;
+	int currentRewardSlot = 0;
 public:
 
 	CLevelEnd(float x, float y);

@@ -271,7 +271,7 @@
 </data>
  </layer>
  <objectgroup id="3" name="Objects">
-  <object id="101" name="Mario" type="CMario" gid="2147484543" x="16" y="464" width="16" height="16"/>
+  <object id="101" name="Mario" type="CMario" gid="2147484543" x="2630" y="452" width="16" height="16"/>
   <object id="102" template="QuestionBlock.tx" x="176" y="416">
    <properties>
     <property name="spawnCount" type="int" value="1"/>
