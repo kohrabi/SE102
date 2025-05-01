@@ -16,7 +16,8 @@ enum ScoreType
 	Score2000,
 	Score4000,
 	Score8000,
-	OneUp
+	OneUp,
+	ScoreCombo
 };
 
 class CScorePopup : public CGameObject

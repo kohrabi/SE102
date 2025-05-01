@@ -34,7 +34,6 @@ void CGoomba::SetState(int state)
     case GOOMBA_STATE_DEAD:
     {
         if (ignoreDamageTimer > 0) return;
-        CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
         if (this->state == GOOMBA_STATE_WING)
         {
             state = GOOMBA_STATE_NORMAL;
@@ -44,7 +43,7 @@ void CGoomba::SetState(int state)
         else
         {
             CGame* const game = CGame::GetInstance();
-            game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
+            game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, ScoreCombo));
             killTimer = GOOMBA_KILL_TIME;
         }
     }
@@ -54,7 +53,6 @@ void CGoomba::SetState(int state)
         if (ignoreDamageTimer > 0) return;
         if (this->state == GOOMBA_STATE_DEAD || isDeleted)
             return;
-        CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
         if (this->state == GOOMBA_STATE_WING)
         {
             state = GOOMBA_STATE_NORMAL;
@@ -64,7 +62,7 @@ void CGoomba::SetState(int state)
         else
         {
             CGame* const game = CGame::GetInstance();
-            game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
+            game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, ScoreCombo));
             layer = SortingLayer::CORPSE;
             velocity.y = -OBJECT_DEAD_BOUNCE;
             velocity.x = OBJECT_DEAD_X_VEL;

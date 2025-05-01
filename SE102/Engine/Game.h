@@ -76,6 +76,7 @@ public:
 	int GetNextItemFrame() const { return gameGlobals.nextEmptySlot; }
 
 	void SetMarioLife(int newVal) { gameGlobals.marioLife = newVal; }
+	void AddLife(int addVal) { gameGlobals.marioLife += addVal; }
 	void SetNextItemFrame(int newVal)
 	{
 		if (gameGlobals.nextEmptySlot >= 0 && gameGlobals.nextEmptySlot <= 2)

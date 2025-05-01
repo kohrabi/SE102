@@ -328,6 +328,9 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
     if (kickTimer > 0) kickTimer -= dt;
     if (invincibleTimer > 0) invincibleTimer -= dt;
     if (spinTimer > 0) spinTimer -= dt;
+    if (comboTimer > 0) comboTimer -= dt;
+    else comboCounter = 0;
+
     switch (state)
     {
     case MARIO_STATE_NORMAL: marioNormalUpdate(dt, coObjects); break;
@@ -701,7 +704,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
                 {
                     if (e->ny == 0)
                         kickTimer = KICK_ANIMATION_TIME;
-                    game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score200));
+                    comboCounter++;
+                    game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, ScoreCombo));
                     koopa->SetNx(nx);
                 }
             }
@@ -713,7 +717,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         else
         {
             int posSign = sign(position.x - koopa->GetPosition().x);
-            game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score100));
+            game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, ScoreCombo));
             velocity.y = -ENEMY_BOUNCE;
             koopa->PlayerHit(posSign);
         }

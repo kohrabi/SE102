@@ -62,6 +62,8 @@ constexpr float SPIN_TIME = 6 * 50.0f;
 constexpr float STAY_OUTRO_TIME = 1000.0f;
 constexpr float SWITCH_LEVEL_TIME = 3000.0f;
 
+constexpr float COMBO_TIME = 1000.0f;
+
 #pragma endregion
 
 #define MARIO_POWERUP_SMALL 0
@@ -165,6 +167,9 @@ private:
 	int coinCounter = 0;
 	int score = 0;
 
+	int comboCounter = 0;
+	float comboTimer = 0.0f;
+
 	float outroStayTimer = 0.0f;
 	float switchLevelTimer = 0.0f;
 
@@ -184,6 +189,8 @@ public:
     void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;
 
+	int GetComboCount() const { return comboCounter; }
+	void ResetComboTimer() { comboTimer = COMBO_TIME; comboCounter++; }
 	int GetCoinCount() const { return coinCounter; }
 	int GetPowerCount() const { return powerCounter; }
 	bool IsOnGround() const { return isOnGround; }

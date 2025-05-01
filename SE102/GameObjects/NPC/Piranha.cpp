@@ -32,7 +32,7 @@ void CPiranha::LoadContent()
 
 void CPiranha::OnDelete()
 {
-    CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, Score100));
+    CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, ScoreCombo));
 }
 
 void CPiranha::SetState(int state)

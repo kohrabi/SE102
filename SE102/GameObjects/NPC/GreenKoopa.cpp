@@ -60,9 +60,9 @@ void CGreenKoopa::GetBoundingBox(float& left, float& top, float& right, float& b
 {
     if (state == KOOPA_STATE_IN_SHELL)
     {
-        left = position.x - 3;
-        top = position.y + 8;
-        right = position.x + 3;
+        left = position.x - 4;
+        top = position.y + 5;
+        right = position.x + 4;
         bottom = position.y + 16;
     }
     else
@@ -81,7 +81,6 @@ void CGreenKoopa::SetState(int state)
     case KOOPA_STATE_DEAD_BOUNCE:
     {
         if (ignoreDamageTimer > 0) return;
-        CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
         if (this->state == KOOPA_STATE_WING)
         {
             state = KOOPA_STATE_NORMAL;
@@ -90,7 +89,7 @@ void CGreenKoopa::SetState(int state)
         }
         else
         {
-            CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, Score400));
+            CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, ScoreCombo));
             layer = SortingLayer::CORPSE;
             velocity.y = -OBJECT_DEAD_BOUNCE;
             velocity.x = OBJECT_DEAD_X_VEL;
@@ -214,35 +213,14 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     {
         velocity.x = GREEN_KOOPA_X_SPEED * (nx > 0 ? 1 : -1);
 
-        if (hopTimer > 0) hopTimer -= dt;
         if (wingActivateTimer > 0) wingActivateTimer -= dt;
-        if (changeDirTimer > 0) changeDirTimer -= dt;
 
         if (onGround)
         {
             if (wingActivateTimer <= 0)
             {
-                if (hopTimer <= 0)
-                {
-                    hopTimer = KOOPA_WING_HOP_TIME;
-                    hopCount = (hopCount + 1);
-                    velocity.y = -KOOPA_WING_HOP;
-                    if (hopCount == 4)
-                    {
-                        velocity.y = -KOOPA_WING_BIG_HOP;
-                        wingActivateTimer = KOOPA_WING_ACTIVATE_TIME;
-                        hopCount = 0;
-                    }
-                }
-            }
-            // Change Goomba direction to player
-            else if (changeDirTimer <= 0)
-            {
-                //LPGAMEOBJECT player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
-                //if (player != NULL)
-                //{
-                    //nx = sign(player->GetPosition().x - position.x);
-                //} 
+                velocity.y = -KOOPA_WING_BIG_HOP;
+                wingActivateTimer = KOOPA_WING_ACTIVATE_TIME;
             }
         }
 

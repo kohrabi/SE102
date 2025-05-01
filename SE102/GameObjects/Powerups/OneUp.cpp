@@ -26,7 +26,6 @@ void COneUp::Eat()
 {
     CGame* const game = CGame::GetInstance();
     game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, ScoreType::OneUp));
-    game->SetMarioLife(game->GetMarioLife() + 1);
     Delete();
 }
 

@@ -18,13 +18,26 @@ CScorePopup::CScorePopup(float x, float y, ScoreType scoreType)
 {
 	velocity.y = -SCORE_POPUP_RISE_VELOCITY;
 	layer = SortingLayer::CORPSE;
-	this->scoreType = scoreType;
 	LPSCENE currentScene = CGame::GetInstance()->GetCurrentScene();
 	if (currentScene != NULL)
 	{
 		CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
 		if (mario != NULL)
 		{
+			if (scoreType == ScoreCombo)
+			{
+				int combo = mario->GetComboCount();
+				mario->ResetComboTimer();
+				switch (combo)
+				{
+				case 0: scoreType = Score100; break;
+				case 1: scoreType = Score200; break;
+				case 2: scoreType = Score400; break;
+				case 3: scoreType = Score800; break;
+				case 4: scoreType = Score1000; break;
+				case 5: scoreType = OneUp; break;
+				}
+			}
 			switch (scoreType)
 			{
 			case Score100: mario->AddScore(100); break;
@@ -35,9 +48,11 @@ CScorePopup::CScorePopup(float x, float y, ScoreType scoreType)
 			case Score2000: mario->AddScore(2000); break;
 			case Score4000: mario->AddScore(4000); break;
 			case Score8000: mario->AddScore(8000); break;
+			case OneUp: CGame::GetInstance()->AddLife(1); break;
 			}
 		}
 	}
+	this->scoreType = scoreType;
 	LoadContent();
 }
 
