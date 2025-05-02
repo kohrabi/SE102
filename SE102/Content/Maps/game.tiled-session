@@ -21,11 +21,11 @@
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 1,
+            "scale": 0.5,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 2753,
-                "y": 402.5
+                "x": 2388,
+                "y": -33
             }
         },
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx": {

@@ -8,6 +8,8 @@
 #define LEVEL_END_STATE_NORMAL 1
 #define LEVEL_END_STATE_EMPTY 2
 
+constexpr float LEVEL_END_COURSE_TIME = 30 * 1000.0F / 60.0F;
+
 class CLevelEnd : public CGameObject {
 private:
 
@@ -15,6 +17,8 @@ private:
 	static void LoadContent();
 
 	float yOffset = 0.0f;
+	float timer = 0.0f;
+	int course = 0;
 	int currentRewardSlot = 0;
 public:
 
