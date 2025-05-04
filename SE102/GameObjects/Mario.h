@@ -176,6 +176,9 @@ private:
 	bool enterPipe = false;
 	Vector2 teleportPosition = Vector2::Zero;
 
+	float hitParticleTimer = 0.0f;
+	Vector2 hitParticlePosition = Vector2::Zero;
+
 	void marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
 	void marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects);
 

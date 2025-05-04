@@ -229,7 +229,6 @@
     <ClInclude Include="GameObjects\HUD.h" />
     <ClInclude Include="GameObjects\Level\KillBarrier.h" />
     <ClInclude Include="GameObjects\NPC\Fireball.h" />
-    <ClInclude Include="GameObjects\Particles\ParticlesAutoKill.h" />
     <ClInclude Include="GameObjects\Powerups\Leaf.h" />
     <ClInclude Include="GameObjects\Powerups\OneUp.h" />
     <ClInclude Include="GameObjects\Particles\ScorePopup.h" />

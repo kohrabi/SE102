@@ -118,6 +118,8 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
             for (LPGAMEOBJECT obj : spinCast.collision)
             {
                 if (obj == NULL || obj->IsDeleted()) continue;
+                hitParticleTimer = 100.0f;
+                hitParticlePosition = obj->GetPosition();
                 if (dynamic_cast<CGoomba*>(obj) != NULL)
                 {
                     CGoomba* goomba = dynamic_cast<CGoomba*>(obj);
@@ -316,8 +318,8 @@ void CMario::marioPowerupUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
         SetState(MARIO_STATE_NORMAL);
         if (nextPowerUp != MARIO_POWERUP_SMALL)
             position.y -= 9.0f;
-        else
-            invincibleTimer = INVINCIBLE_TIME;
+        //else
+        invincibleTimer = INVINCIBLE_TIME;
     }
 }
 
@@ -326,6 +328,8 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
     if (kickTimer > 0) kickTimer -= dt;
     if (invincibleTimer > 0) invincibleTimer -= dt;
     if (spinTimer > 0) spinTimer -= dt;
+    if (hitParticleTimer > 0.0f) hitParticleTimer -= dt;
+
     if (comboTimer > 0) comboTimer -= dt;
     else comboCounter = 0;
 
@@ -485,8 +489,9 @@ void CMario::Render() {
 
         bool flipX = nx > 0 ? true : false;
         animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX);
-
     }
+    if (hitParticleTimer > 0)
+        animations->Get(PARTICLES_ID_ANIMATION_HIT)->Render(hitParticlePosition.x, hitParticlePosition.y, 1.0f);
     //RenderBoundingBox();
     spinCast.RenderBoundingBox();
 }

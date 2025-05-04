@@ -346,9 +346,6 @@
     <ClInclude Include="ContentIds\Particles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\Particles\ParticlesAutoKill.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ContentIds\LevelEnd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
