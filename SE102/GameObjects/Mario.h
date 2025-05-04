@@ -5,7 +5,7 @@
 #include "Engine/Math/Vector2.h"
 #include "Engine/Game.h"
 #include "Engine/CollisionCast.h"
-#include "NPC/GreenKoopa.h"
+#include "NPC/Koopa.h"
 
 #define DEBUG_INVINCIBLE false
 
@@ -153,9 +153,9 @@ private:
 
 	float spinTimer = 0.0f;
 
-	CCollisionCast holdCast;
+	CCollisionCast turnCast;
 	CCollisionCast spinCast;
-	CGreenKoopa* holdShell;
+	CKoopa* holdShell;
 	bool isHolding = false;
 
 	float deadTimer = 0.0f;

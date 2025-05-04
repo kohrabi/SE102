@@ -33,24 +33,6 @@ CLeaf::CLeaf(float x, float y) : CGameObject(x, y, 0.0f)
     layer = SortingLayer::CORPSE;
 }
 
-void CLeaf::OnNoCollision(float dt)
-{
-    position.x += velocity.x * dt;
-    position.y += velocity.y * dt;
-}
-
-void CLeaf::OnCollisionWith(LPCOLLISIONEVENT e)
-{
-    if (e->nx != 0 && e->obj->IsBlocking())
-    {
-        nx = (int)e->nx;
-    }
-    if (e->ny != 0 && e->obj->IsBlocking())
-    {
-        velocity.y = 0.0f;
-    }
-}
-
 void CLeaf::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
     

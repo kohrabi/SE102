@@ -35,7 +35,7 @@ GroundTroop_XVel:
     .byte $F0, $10, $F4, $0C, $F7, $09
 */
 
-class CGreenKoopa : public CGameObject {
+class CKoopa : public CGameObject {
 private:
     static void LoadContent();
     static bool IsContentLoaded;
@@ -55,15 +55,19 @@ protected:
     float respawnTimer = 0.f;
 
     int respawnNx = 1;
+    bool isRed = false;
 
+    CCollisionCast turnCast;
     CCollisionCast shellCast;
     CCollisionCast insideWallCast;
 
-    virtual int GetAnimationId();
+    int GetAnimationId();
+    int GetAnimationRedId();
+    int GetAnimationGreenId();
 public:
 	// Tile number xTile counting from 0
 	// Tile number yTile counting from 0
-    CGreenKoopa(float x, float y);
+    CKoopa(float x, float y);
 	int IsCollidable() override { return !isDeleted && state != KOOPA_STATE_DEAD_BOUNCE; };
     int IsBlocking() override { return false; }
     int IsDirectionColliable(float nx, float ny) override { return state != KOOPA_STATE_DEAD_BOUNCE; }
@@ -80,6 +84,7 @@ public:
     void DeadBounce() { SetState(KOOPA_STATE_DEAD_BOUNCE); }
 
     void SetHasWing() { SetState(KOOPA_STATE_WING); }
+    void SetRedKoopa() { isRed = true; }
 
     void OnNoCollision(float dt) override;
     void OnCollisionWith(LPCOLLISIONEVENT e) override;

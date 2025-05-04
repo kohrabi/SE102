@@ -1,8 +1,9 @@
-#include "GreenKoopa.h"
+#include "Koopa.h"
 
 #include "Engine/Loaders/SpritesLoader.h"
 
 #include "ContentIds/GreenKoopa.h"
+#include "ContentIds/RedKoopa.h"
 #include <iostream>
 #include <algorithm>
 #include <Engine/Helper.h>
@@ -17,9 +18,9 @@
 
 using namespace std;
 
-bool CGreenKoopa::IsContentLoaded = false;
+bool CKoopa::IsContentLoaded = false;
 
-void CGreenKoopa::LoadContent() 
+void CKoopa::LoadContent() 
 {
     if (IsContentLoaded)
         return;
@@ -27,9 +28,10 @@ void CGreenKoopa::LoadContent()
     SpritesLoader loader;
     loader.Load(WING_SPRITES_PATH);
     loader.Load(GREEN_KOOPA_SPRITES_PATH);
+    loader.Load(RED_KOOPA_SPRITES_PATH);
 }
 
-int CGreenKoopa::GetAnimationId()
+int CKoopa::GetAnimationGreenId()
 {
     if (state == KOOPA_STATE_RESPAWNING)
         return GREEN_KOOPA_ID_ANIMATION_RESPAWN;
@@ -45,18 +47,44 @@ int CGreenKoopa::GetAnimationId()
     }
 }
 
-CGreenKoopa::CGreenKoopa(float x, float y) : CGameObject(x, y, 0.0f)
+int CKoopa::GetAnimationId()
+{
+    if (isRed)
+        return GetAnimationRedId();
+    return GetAnimationGreenId();
+}
+
+int CKoopa::GetAnimationRedId()
+{
+    if (state == KOOPA_STATE_RESPAWNING)
+        return RED_KOOPA_ID_ANIMATION_RESPAWN;
+    if (state == KOOPA_STATE_NORMAL)
+        return RED_KOOPA_ID_ANIMATION_WALK;
+    else
+    {
+        if (state == KOOPA_STATE_DEAD_BOUNCE)
+            return RED_KOOPA_ID_ANIMATION_SHELL_IDLE;
+        if (abs(velocity.x) > 0)
+            return RED_KOOPA_ID_ANIMATION_SHELL;
+        return RED_KOOPA_ID_ANIMATION_SHELL_IDLE;
+    }
+}
+
+CKoopa::CKoopa(float x, float y) : CGameObject(x, y, 0.0f)
 {
     LoadContent();
     nx = -1;
     shellCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
         return dynamic_cast<CBrick*>(obj) != nullptr;
         });
+    turnCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
+        return !(obj == this || !obj->IsBlocking());
+        });
     layer = SortingLayer::NPC;
     SetState(KOOPA_STATE_NORMAL);
 }
 
-void CGreenKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
     if (state == KOOPA_STATE_IN_SHELL)
     {
@@ -74,7 +102,7 @@ void CGreenKoopa::GetBoundingBox(float& left, float& top, float& right, float& b
     }
 }
 
-void CGreenKoopa::SetState(int state)
+void CKoopa::SetState(int state)
 {
     switch (state)
     {
@@ -101,7 +129,7 @@ void CGreenKoopa::SetState(int state)
     this->state = state;
 }
 
-void CGreenKoopa::PlayerHit(int nx)
+void CKoopa::PlayerHit(int nx)
 {
     if (state != KOOPA_STATE_IN_SHELL)
     {
@@ -123,14 +151,14 @@ void CGreenKoopa::PlayerHit(int nx)
     }
 }
 
-void CGreenKoopa::AttachHold(LPGAMEOBJECT player, float holdYOffset)
+void CKoopa::AttachHold(LPGAMEOBJECT player, float holdYOffset)
 {
     if (this->player != NULL) return;
     this->player = player;
     this->holdYOffset = holdYOffset;
 }
 
-void CGreenKoopa::DetachHold()
+void CKoopa::DetachHold()
 {
     if (this->player == NULL) return;
     this->player = NULL;
@@ -139,14 +167,14 @@ void CGreenKoopa::DetachHold()
 
 }
 
-void CGreenKoopa::OnNoCollision(float dt)
+void CKoopa::OnNoCollision(float dt)
 {
     position.x += velocity.x * dt;
     position.y += velocity.y * dt;
     onGround = false;
 }
 
-void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
+void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
     if (e->nx != 0 && e->obj->IsBlocking())
     {
@@ -166,9 +194,9 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
             CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
             goomba->DeadBounce();
         }
-        else if (dynamic_cast<CGreenKoopa*>(e->obj))
+        else if (dynamic_cast<CKoopa*>(e->obj))
         {
-            CGreenKoopa* koopa = dynamic_cast<CGreenKoopa*>(e->obj);
+            CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
             koopa->DeadBounce();
         }
         if (dynamic_cast<CQuestionBlock*>(e->obj) && e->ny == 0)
@@ -186,10 +214,20 @@ void CGreenKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
     }
 }
 
-void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
+void CKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
     if (!IsColliderInCamera())
         return;
+
+    if (state == KOOPA_STATE_NORMAL && isRed)
+    {
+        turnCast.SetBoundingBox(position + Vector2((7.0f) * nx, 16.0f), Vector2(8.0f, 6.0f));
+        turnCast.CheckOverlap(coObjects);
+        if (turnCast.collision.size() <= 0)
+        {
+            nx *= -1;
+        }
+    }
 
     if (ignoreDamageTimer > 0) ignoreDamageTimer -= dt;
 
@@ -296,7 +334,7 @@ void CGreenKoopa::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
-void CGreenKoopa::Render() {
+void CKoopa::Render() {
     CAnimations* const animations = CAnimations::GetInstance();
 
 

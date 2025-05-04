@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template>
  <tileset firstgid="1" source="enemies32.tsx"/>
- <object name="GreenKoopa" type="CGreenKoopa" gid="16" width="16" height="32">
+ <object name="GreenKoopa" type="CKoopa" gid="16" width="16" height="32">
   <properties>
    <property name="hasWing" type="bool" value="false"/>
   </properties>

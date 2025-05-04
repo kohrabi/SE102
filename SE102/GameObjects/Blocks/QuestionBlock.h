@@ -22,7 +22,7 @@ private:
 	float ogYPos = 0.0f;
 	bool isHit = false;
 	bool isBrick = false;
-	CCollisionCast holdCast;
+	CCollisionCast turnCast;
 	
 	static bool IsContentLoaded;
 	static void LoadContent();

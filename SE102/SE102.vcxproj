@@ -157,11 +157,10 @@
     <ClCompile Include="Engine\CollisionCast.cpp" />
     <ClCompile Include="GameObjects\NPC\Piranha.cpp" />
     <ClCompile Include="GameObjects\NPC\Goomba.cpp" />
-    <ClCompile Include="GameObjects\NPC\GreenKoopa.cpp" />
+    <ClCompile Include="GameObjects\NPC\Koopa.cpp" />
     <ClCompile Include="GameObjects\Mario.cpp" />
     <ClCompile Include="GameObjects\Powerups\Mushroom.cpp" />
     <ClCompile Include="GameObjects\Blocks\QuestionBlock.cpp" />
-    <ClCompile Include="GameObjects\NPC\RedKoopa.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Engine\Graphics\Sprite.cpp" />
     <ClCompile Include="Engine\Graphics\Sprites.cpp" />
@@ -236,7 +235,7 @@
     <ClInclude Include="Engine\CollisionCast.h" />
     <ClInclude Include="GameObjects\NPC\Piranha.h" />
     <ClInclude Include="GameObjects\NPC\Goomba.h" />
-    <ClInclude Include="GameObjects\NPC\GreenKoopa.h" />
+    <ClInclude Include="GameObjects\NPC\Koopa.h" />
     <ClInclude Include="GameObjects\Mario.h" />
     <ClInclude Include="GameObjects\TileObjects\CollidableTile.h" />
     <ClInclude Include="Engine\Graphics\Sprite.h" />
@@ -247,7 +246,6 @@
     <ClInclude Include="GameObjects\Powerups\Mushroom.h" />
     <ClInclude Include="GameObjects\Blocks\OneWay.h" />
     <ClInclude Include="GameObjects\Blocks\QuestionBlock.h" />
-    <ClInclude Include="GameObjects\NPC\RedKoopa.h" />
     <ClInclude Include="GameObjects\TileObjects\Tile.h" />
     <ClInclude Include="GameObjects\TileObjects\CollidableTileLayer.h" />
     <ClInclude Include="GameObjects\TileObjects\TileLayer.h" />

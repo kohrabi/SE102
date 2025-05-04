@@ -14,8 +14,7 @@
 #include "ContentIds/QuestionBlock.h"
 
 #include "GameObjects/NPC/Goomba.h"
-#include "GameObjects/NPC/GreenKoopa.h"
-#include "GameObjects/NPC/RedKoopa.h"
+#include "GameObjects/NPC/Koopa.h"
 
 #include "GameObjects/Powerups/OneUp.h"
 
@@ -43,13 +42,12 @@ CQuestionBlock::CQuestionBlock(float x, float y, int type, int count)
     ASSERT(spawnType > 0 && spawnType <= 4, "Invalid spawn type");
     ASSERT(spawnCount >= 0, "Invalid spawn count");
 
-    holdCast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
+    turnCast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
     ogYPos = y;
     LoadContent();
-    holdCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
+    turnCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
         return (dynamic_cast<CGoomba*>(obj) != NULL) ||
-            (dynamic_cast<CGreenKoopa*>(obj) != NULL) ||
-            (dynamic_cast<CRedKoopa*>(obj) != NULL);
+            (dynamic_cast<CKoopa*>(obj) != NULL);
         });
     layer = SortingLayer::BLOCK;
 }
@@ -71,25 +69,20 @@ void CQuestionBlock::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 
     if (isHit)
     {
-        holdCast.CheckOverlap(coObjects);
-        if (holdCast.collision.size() > 0)
+        turnCast.CheckOverlap(coObjects);
+        if (turnCast.collision.size() > 0)
         {
-            for (LPGAMEOBJECT obj : holdCast.collision)
+            for (LPGAMEOBJECT obj : turnCast.collision)
             {
                 if (dynamic_cast<CGoomba*>(obj))
                 {
                     CGoomba* goomba = dynamic_cast<CGoomba*>(obj);
                     goomba->DeadBounce();
                 }
-                else if (dynamic_cast<CGreenKoopa*>(obj))
+                else if (dynamic_cast<CKoopa*>(obj))
                 {
-                    CGreenKoopa* greenKoopa = dynamic_cast<CGreenKoopa*>(obj);
+                    CKoopa* greenKoopa = dynamic_cast<CKoopa*>(obj);
                     greenKoopa->DeadBounce();
-                }
-                else if (dynamic_cast<CRedKoopa*>(obj))
-                {
-                    CRedKoopa* redKoopa = dynamic_cast<CRedKoopa*>(obj);
-                    redKoopa->DeadBounce();
                 }
             }
         }
@@ -112,7 +105,7 @@ void CQuestionBlock::Render()
         animations->Get(QUESTION_BLOCK_ID_ANIMATION_EMPTY)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
 
     }
-    holdCast.RenderBoundingBox();
+    turnCast.RenderBoundingBox();
 }
 
 void CQuestionBlock::Hit(int dx)

@@ -271,7 +271,7 @@
 </data>
  </layer>
  <objectgroup id="3" name="Objects">
-  <object id="101" name="Mario" type="CMario" gid="2147484543" x="16" y="464" width="16" height="16"/>
+  <object id="101" name="Mario" type="CMario" gid="2147484543" x="2304" y="144" width="16" height="16"/>
   <object id="102" template="QuestionBlock.tx" x="176" y="416">
    <properties>
     <property name="spawnCount" type="int" value="1"/>
@@ -345,7 +345,7 @@
   <object id="128" template="Coin.tx" x="1200" y="256"/>
   <object id="130" template="Goomba.tx" type="CGoomba" x="256" y="464"/>
   <object id="133" template="FirePiranha.tx" type="CFirePiranha" x="360" y="416"/>
-  <object id="135" template="RedKoopa.tx" type="CRedKoopa" x="592" y="432"/>
+  <object id="135" template="RedKoopa.tx" x="592" y="432"/>
   <object id="138" template="Goomba.tx" x="832" y="448"/>
   <object id="139" template="Goomba.tx" x="880" y="448"/>
   <object id="141" template="RedGoomba.tx" type="CGoomba" x="944" y="448">
@@ -357,7 +357,7 @@
   <object id="147" template="OneWay.tx" x="1264" y="432" width="112" height="16"/>
   <object id="148" template="OneWay.tx" x="1312" y="400" width="112" height="16"/>
   <object id="149" template="OneWay.tx" x="1344" y="368" width="112" height="16"/>
-  <object id="150" template="GreenKoopa.tx" type="CGreenKoopa" x="1344" y="368">
+  <object id="150" template="GreenKoopa.tx" x="1344" y="368">
    <properties>
     <property name="hasWing" type="bool" value="true"/>
    </properties>
@@ -433,7 +433,7 @@
   </object>
   <object id="210" template="TeleportPipe.tx" x="1808" y="576">
    <properties>
-    <property name="directionY" type="int" value="1"/>
+    <property name="directionY" type="int" value="-1"/>
    </properties>
   </object>
   <object id="211" template="TeleportPipe.tx" x="2032" y="576">
@@ -444,7 +444,8 @@
   </object>
   <object id="212" template="TeleportPipe.tx" x="2368" y="432">
    <properties>
-    <property name="directionY" type="int" value="-1"/>
+    <property name="directionY" type="int" value="1"/>
+    <property name="teleportTo" type="object" value="211"/>
    </properties>
   </object>
   <object id="218" name="LevelEnd" type="CLevelEnd" gid="890" x="2713" y="407" width="32" height="32"/>

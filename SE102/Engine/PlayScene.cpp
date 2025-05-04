@@ -19,8 +19,7 @@
 #include "GameObjects/Particles/Coin.h"
 #include "GameObjects/NPC/Goomba.h"
 #include "GameObjects/NPC/Piranha.h"
-#include "GameObjects/NPC/GreenKoopa.h"
-#include "GameObjects/NPC/RedKoopa.h"
+#include "GameObjects/NPC/Koopa.h"
 
 #include "GameObjects/TileObjects/CollidableTileLayer.h"
 #include <GameObjects/Level/KillBarrier.h>
@@ -444,19 +443,16 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 					CPiranha* obj = new CPiranha(position.x, position.y, height, layerObject.getName() == "GreenPiranha", false);
 					objects.push_back(obj);
 				}
-				else if (layerObject.getClass() == "CGreenKoopa")
+				else if (layerObject.getClass() == "CKoopa")
 				{
-					CGreenKoopa* obj = new CGreenKoopa(position.x, position.y);
+					CKoopa* obj = new CKoopa(position.x, position.y);
 					for (const auto& property : layerObject.getProperties())
 					{
 						if (property.getName() == "hasWing" && property.getBoolValue())
 							obj->SetHasWing();
 					}
-					objects.push_back(obj);
-				}
-				else if (layerObject.getClass() == "CRedKoopa")
-				{
-					CRedKoopa* obj = new CRedKoopa(position.x, position.y);
+					if (layerObject.getName() == "RedKoopa")
+						obj->SetRedKoopa();
 					objects.push_back(obj);
 				}
 			}

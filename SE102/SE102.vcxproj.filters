@@ -78,13 +78,10 @@
     <ClCompile Include="GameObjects\NPC\Piranha.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\NPC\GreenKoopa.cpp">
+    <ClCompile Include="GameObjects\NPC\Koopa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Loaders\CollisionMapLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjects\NPC\RedKoopa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Engine\CollisionCast.cpp">
@@ -262,7 +259,7 @@
     <ClInclude Include="ContentIds\RedKoopa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\NPC\GreenKoopa.h">
+    <ClInclude Include="GameObjects\NPC\Koopa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\TileObjects\CollidableTileLayer.h">
@@ -272,9 +269,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\CollisionCast.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObjects\NPC\RedKoopa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\Vector2i.h">

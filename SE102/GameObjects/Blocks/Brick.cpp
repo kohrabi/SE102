@@ -14,8 +14,7 @@
 #include "ContentIds/Brick.h"
 
 #include "GameObjects/NPC/Goomba.h"
-#include "GameObjects/NPC/GreenKoopa.h"
-#include "GameObjects/NPC/RedKoopa.h"
+#include "GameObjects/NPC/Koopa.h"
 
 #include "GameObjects/Powerups/OneUp.h"
 #include "ContentIds/Particles.h"
@@ -39,10 +38,9 @@ CBrick::CBrick(float x, float y)
     : CGameObject(x, y, 0.0f)
 {
     LoadContent();
-    holdCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
+    turnCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
         return (dynamic_cast<CGoomba*>(obj) != NULL) ||
-            (dynamic_cast<CGreenKoopa*>(obj) != NULL) ||
-            (dynamic_cast<CRedKoopa*>(obj) != NULL);
+            (dynamic_cast<CKoopa*>(obj) != NULL);
         });
     layer = SortingLayer::BLOCK;
     SetState(BRICK_STATE_NORMAL);
@@ -52,28 +50,23 @@ void CBrick::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
     if (state == BRICK_STATE_NORMAL)
     {
-        holdCast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
+        turnCast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
         if (isHit)
         {
-            holdCast.CheckOverlap(coObjects);
-            if (holdCast.collision.size() > 0)
+            turnCast.CheckOverlap(coObjects);
+            if (turnCast.collision.size() > 0)
             {
-                for (LPGAMEOBJECT obj : holdCast.collision)
+                for (LPGAMEOBJECT obj : turnCast.collision)
                 {
                     if (dynamic_cast<CGoomba*>(obj))
                     {
                         CGoomba* goomba = dynamic_cast<CGoomba*>(obj);
                         goomba->DeadBounce();
                     }
-                    else if (dynamic_cast<CGreenKoopa*>(obj))
+                    else if (dynamic_cast<CKoopa*>(obj))
                     {
-                        CGreenKoopa* greenKoopa = dynamic_cast<CGreenKoopa*>(obj);
+                        CKoopa* greenKoopa = dynamic_cast<CKoopa*>(obj);
                         greenKoopa->DeadBounce();
-                    }
-                    else if (dynamic_cast<CRedKoopa*>(obj))
-                    {
-                        CRedKoopa* redKoopa = dynamic_cast<CRedKoopa*>(obj);
-                        redKoopa->DeadBounce();
                     }
                 }
             }
@@ -110,7 +103,7 @@ void CBrick::Render()
     if (state == BRICK_STATE_NORMAL)
     {
         animations->Get(BRICK_ID_ANIMATION_IDLE)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
-        holdCast.RenderBoundingBox();
+        turnCast.RenderBoundingBox();
     }
     else
     {
@@ -152,9 +145,9 @@ void CBrick::Hit()
 
 void CBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-    if (dynamic_cast<CGreenKoopa*>(e->obj) && e->dy == 0.0f)
+    if (dynamic_cast<CKoopa*>(e->obj) && e->dy == 0.0f)
     {
-        dynamic_cast<CGreenKoopa*>(e->obj)->TurnAround();
+        dynamic_cast<CKoopa*>(e->obj)->TurnAround();
         Hit();
     }
 }

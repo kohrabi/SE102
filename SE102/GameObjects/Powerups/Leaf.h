@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 
 #include "Engine/GameObject.h"
@@ -48,9 +48,6 @@ public:
         right = position.x + 4; 
         bottom = position.y + 8; 
     }
-
-    void OnNoCollision(float dt) override;
-    void OnCollisionWith(LPCOLLISIONEVENT e) override;
 
 	void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;

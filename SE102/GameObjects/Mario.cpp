@@ -14,7 +14,7 @@
 #include "Blocks/QuestionBlock.h"
 #include "Particles/Coin.h"
 #include "NPC/Goomba.h"
-#include "NPC/GreenKoopa.h"
+#include "NPC/Koopa.h"
 #include "Powerups/Mushroom.h"
 #include "NPC/Fireball.h"
 #include "NPC/Piranha.h"
@@ -50,11 +50,11 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
 {
     LoadContent();
     nx = 1;
-    holdCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
-        return dynamic_cast<CGreenKoopa*>(obj) != nullptr;
+    turnCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
+        return dynamic_cast<CKoopa*>(obj) != nullptr;
     });
     spinCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
-        return dynamic_cast<CGreenKoopa*>(obj) != nullptr ||
+        return dynamic_cast<CKoopa*>(obj) != nullptr ||
             dynamic_cast<CGoomba*>(obj) != nullptr || 
             dynamic_cast<CPiranha*>(obj) != nullptr;
     });
@@ -72,17 +72,17 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     if (game->IsKeyDown(KEY_RUN))
     {
         if (powerUp == MARIO_POWERUP_SMALL)
-            holdCast.SetBoundingBox(position + Vector2((10.0f) * nx, 0.0f), Vector2(4.0f, 6.0f));
+            turnCast.SetBoundingBox(position + Vector2((10.0f) * nx, 0.0f), Vector2(4.0f, 6.0f));
         else
-            holdCast.SetBoundingBox(position + Vector2((10.0f) * nx, 8.0f), Vector2(4.0f, 6.0f));
+            turnCast.SetBoundingBox(position + Vector2((10.0f) * nx, 8.0f), Vector2(4.0f, 6.0f));
 
-        holdCast.CheckOverlap(coObjects);
-        if (holdCast.collision.size() > 0)
+        turnCast.CheckOverlap(coObjects);
+        if (turnCast.collision.size() > 0)
         {
             isHolding = true;
             if (holdShell == NULL)
             {
-                holdShell = dynamic_cast<CGreenKoopa*>(holdCast.collision[0]);
+                holdShell = dynamic_cast<CKoopa*>(turnCast.collision[0]);
                 if (holdShell->IsInShell() && holdShell->GetVelocity().x == 0.0f)
                 {
                     if (powerUp == MARIO_POWERUP_SMALL)
@@ -125,9 +125,9 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
                     CGoomba* goomba = dynamic_cast<CGoomba*>(obj);
                     goomba->DeadBounce();
                 }
-                else if (dynamic_cast<CGreenKoopa*>(obj) != NULL)
+                else if (dynamic_cast<CKoopa*>(obj) != NULL)
                 {
-                    CGreenKoopa* koopa = dynamic_cast<CGreenKoopa*>(obj);
+                    CKoopa* koopa = dynamic_cast<CKoopa*>(obj);
                     koopa->DeadBounce();
                 }
                 else if (dynamic_cast<CPiranha*>(obj) != NULL)
@@ -410,14 +410,14 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
         {
             if (sign(velocity.y) == 1)
             {
-                if (position.y >= teleportPosition.y + 16.0f)
+                if (position.y >= teleportPosition.y + 0.0f)
                 {
                     SetState(MARIO_STATE_NORMAL);
                 }
             }
             else
             {
-                if (position.y <= teleportPosition.y - 0.0f)
+                if (position.y <= teleportPosition.y + (powerUp == MARIO_POWERUP_SMALL ? 8.0f : 0.0f))
                 {
                     SetState(MARIO_STATE_NORMAL);
                 }
@@ -544,6 +544,7 @@ void CMario::SetState(int state) {
     {
         enterPipe = false;
         beforeTeleportY = position.y;
+        velocity.x = 0.0f;
     }
     break;
     case MARIO_STATE_OUTRO:
@@ -704,9 +705,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         }
        
     }
-    else if (dynamic_cast<CGreenKoopa*>(e->obj))
+    else if (dynamic_cast<CKoopa*>(e->obj))
     {
-        CGreenKoopa* const koopa = dynamic_cast<CGreenKoopa*>(e->obj);
+        CKoopa* const koopa = dynamic_cast<CKoopa*>(e->obj);
         if (e->ny >= 0)
         {
             if (koopa->IsInShell() && koopa->GetVelocity().x == 0.0f)

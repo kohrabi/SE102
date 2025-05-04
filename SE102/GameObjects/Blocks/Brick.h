@@ -11,7 +11,7 @@
 class CBrick : public CGameObject {
 private:
 	bool isHit = false;
-	CCollisionCast holdCast;
+	CCollisionCast turnCast;
 	Vector2 debrisPos[4];
 	Vector2 debrisVel[4];
 

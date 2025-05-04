@@ -14,8 +14,7 @@
 #include "ContentIds/PButton.h"
 
 #include "GameObjects/NPC/Goomba.h"
-#include "GameObjects/NPC/GreenKoopa.h"
-#include "GameObjects/NPC/RedKoopa.h"
+#include "GameObjects/NPC/Koopa.h"
 
 #include "GameObjects/Powerups/OneUp.h"
 #include "ContentIds/Particles.h"

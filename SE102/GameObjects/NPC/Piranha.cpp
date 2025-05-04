@@ -9,7 +9,7 @@
 #include "Engine/Helper.h"
 
 #include "Fireball.h"
-#include "GreenKoopa.h"
+#include "Koopa.h"
 
 #include <iostream>
 #include <algorithm>
@@ -83,9 +83,9 @@ void CPiranha::SetState(int state)
 
 void CPiranha::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-    if (dynamic_cast<CGreenKoopa*>(e->obj))
+    if (dynamic_cast<CKoopa*>(e->obj))
     {
-        CGreenKoopa* koopa = dynamic_cast<CGreenKoopa*>(e->obj);
+        CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
         if (koopa->IsInShell())
             this->Delete();
     }
