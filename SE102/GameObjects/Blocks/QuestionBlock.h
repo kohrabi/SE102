@@ -19,7 +19,7 @@ private:
 	int spawnCount = 0;
 	bool isActive = true;
 	float animationTimer = 0.0f;
-	float ogYPos = 0.0f;
+	float yOffset = 0.0f;
 	bool isHit = false;
 	bool isBrick = false;
 	CCollisionCast turnCast;

@@ -43,7 +43,6 @@ CQuestionBlock::CQuestionBlock(float x, float y, int type, int count)
     ASSERT(spawnCount >= 0, "Invalid spawn count");
 
     turnCast.SetBoundingBox(position - Vector2(0, 16), Vector2(16, 8));
-    ogYPos = y;
     LoadContent();
     turnCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
         return (dynamic_cast<CGoomba*>(obj) != NULL) ||
@@ -58,11 +57,12 @@ void CQuestionBlock::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
     {
         animationTimer -= dt;
         if (animationTimer >= QUESTION_BLOCK_ANIMATION_TIME / 2)
-            position.y -= QUESTION_BLOCK_ANIMATION_Y_VEL * dt;
+            yOffset -= QUESTION_BLOCK_ANIMATION_Y_VEL * dt;
         else
-            position.y += QUESTION_BLOCK_ANIMATION_Y_VEL * dt;
+            yOffset += QUESTION_BLOCK_ANIMATION_Y_VEL * dt;
+        yOffset = min(yOffset, 0);
     }
-    position.y = min(position.y, ogYPos);
+    //position.y = min(position.y, ogYPos);
     if (isActive) {
         CCollision::GetInstance()->Process(this, dt, coObjects);
     }
@@ -98,11 +98,11 @@ void CQuestionBlock::Render()
     if (spawnCount > 0)
     {
         LPANIMATION animation = animations->Get(isBrick ? BRICK_ID_ANIMATION_IDLE : QUESTION_BLOCK_ID_ANIMATION_IDLE);
-        animation->Render(position.x, position.y, GetLayer(layer, orderInLayer));
+        animation->Render(position.x, position.y + yOffset, GetLayer(layer, orderInLayer));
     }
     else
     {
-        animations->Get(QUESTION_BLOCK_ID_ANIMATION_EMPTY)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
+        animations->Get(QUESTION_BLOCK_ID_ANIMATION_EMPTY)->Render(position.x, position.y + yOffset, GetLayer(layer, orderInLayer));
 
     }
     turnCast.RenderBoundingBox();

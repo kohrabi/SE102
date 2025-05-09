@@ -74,7 +74,7 @@ void CCamera::Update(float dt, vector<LPGAMEOBJECT>* coObjects)
 		shakeTimer -= dt;
 	}
 
-	game->SetCamPos(round(setPos.x), round(setPos.y) /*cy*/);
+	game->SetCamPos(round(setPos.x), round(setPos.y));
 }
 
 void CCamera::Render()
