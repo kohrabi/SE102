@@ -145,7 +145,7 @@ void CBrick::Hit()
 
 void CBrick::OnDelete()
 {
-    if (coin != NULL) {
+    if (coin != nullptr && !coin->IsDeleted()) {
         dynamic_cast<CCoin*>(coin)->SetNoScore();
         coin->Delete();
     }
@@ -162,17 +162,23 @@ void CBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CBrick::SwitchToBrick()
 {
-    if (coin == NULL || coin->IsDeleted())
+    if (coin == nullptr || coin->GetState() == 0 || coin->IsDeleted()) {
+        Delete();
         return;
-    if (dynamic_cast<CCoin*>(coin) != nullptr)
-        dynamic_cast<CCoin*>(coin)->SetNoScore();
-    coin->Delete();
+    }
+    CCoin* tempCoin = dynamic_cast<CCoin*>(coin);
+    if (tempCoin == nullptr)
+        return;
+    tempCoin->SetNoScore();
+    tempCoin->Delete();
     coin = NULL;
     SetState(BRICK_STATE_NORMAL);
 }
 
 void CBrick::SwitchToCoin()
 {
+    if (state == BRICK_STATE_BREAK)
+        return;
     SetState(BRICK_STATE_COIN);
     coin = new CCoin(position.x, position.y);
     CGame::GetInstance()->GetCurrentScene()->AddObject(coin);

@@ -63,7 +63,7 @@ void CPButton::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
             if (object == NULL || object->IsDeleted() || !object->IsColliderInCamera()) continue;
             if (object->GetState() == BRICK_STATE_COIN && dynamic_cast<CBrick*>(object) != nullptr)
                 dynamic_cast<CBrick*>(object)->SwitchToBrick();
-            if (object->GetState() == COIN_STATE_BRICK && dynamic_cast<CCoin*>(object) != nullptr)
+            else if (object->GetState() == COIN_STATE_BRICK && dynamic_cast<CCoin*>(object) != nullptr)
                 dynamic_cast<CCoin*>(object)->SwitchToCoin();
         }
 

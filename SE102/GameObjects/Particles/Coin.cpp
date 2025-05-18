@@ -43,7 +43,7 @@ void CCoin::OnDelete()
         CGame* const game = CGame::GetInstance();
         game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
     }
-    if (brick != NULL) {
+    if (brick != NULL && brick->GetState() != 0 && brick->GetState() != BRICK_STATE_BREAK) {
         brick->Delete();
     }
 }
@@ -59,7 +59,13 @@ void CCoin::SwitchToBrick()
 
 void CCoin::SwitchToCoin()
 {
-    if (brick == NULL)
+    if (brick == NULL || brick->GetState() == 0 || brick->GetState() == BRICK_STATE_BREAK || brick->IsDeleted()) {
+        noScore = true;
+        Delete();
+        return;
+    }
+    // Why?? Somehow this has to be here for it to delete itself
+    if (dynamic_cast<CBrick*>(brick) == nullptr)
         return;
     SetState(COIN_STATE_NORMAL);
     brick->Delete();
