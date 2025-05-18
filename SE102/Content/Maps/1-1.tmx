@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="178" height="47" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#aff9f0" nextlayerid="9" nextobjectid="223">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="178" height="47" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#aff9f0" nextlayerid="9" nextobjectid="227">
  <properties>
   <property name="collisionMap" type="file" value="1-1.txt"/>
  </properties>
@@ -454,5 +454,9 @@
     <property name="type" type="int" value="4"/>
    </properties>
   </object>
+  <object id="223" template="Coin.tx" x="2016" y="352"/>
+  <object id="224" template="Coin.tx" x="2032" y="352"/>
+  <object id="225" template="Coin.tx" x="2048" y="352"/>
+  <object id="226" template="Coin.tx" x="2064" y="352"/>
  </objectgroup>
 </map>

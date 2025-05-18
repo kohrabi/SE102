@@ -50,7 +50,9 @@ void CCoin::OnDelete()
 
 void CCoin::SwitchToBrick()
 {
-    state = COIN_STATE_BRICK;
+    if (state == COIN_STATE_INTRO)
+        return;
+    SetState(COIN_STATE_BRICK);
     brick = new CBrick(position.x, position.y);
     CGame::GetInstance()->GetCurrentScene()->AddObject(brick);
 }
@@ -59,13 +61,14 @@ void CCoin::SwitchToCoin()
 {
     if (brick == NULL)
         return;
+    SetState(COIN_STATE_NORMAL);
     brick->Delete();
     brick = NULL;
 }
 
 void CCoin::Update(float dt, vector<LPGAMEOBJECT>* coObjects)
 {
-    if (state != COIN_STATE_INTRO)
+    if (state != COIN_STATE_INTRO || state == COIN_STATE_BRICK)
         return;
 
     velocity.y = min(velocity.y + OBJECT_FALL * 2.0f, OBJECT_MAX_FALL * 2.0f);
@@ -85,7 +88,7 @@ void CCoin::Render() {
 
     if (state == COIN_STATE_INTRO)
         animations->Get(COIN_ID_ANIMATION_INTRO)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
-    else
+    else if (state == COIN_STATE_NORMAL)
         animations->Get(COIN_ID_ANIMATION_NORMAL)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
 
 }
