@@ -57,10 +57,11 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
         return dynamic_cast<CKoopa*>(obj) != nullptr ||
             dynamic_cast<CGoomba*>(obj) != nullptr || 
             dynamic_cast<CPiranha*>(obj) != nullptr ||
-            dynamic_cast<CBrick*>(obj) != nullptr;
+            dynamic_cast<CBrick*>(obj) != nullptr ||
+            dynamic_cast<CQuestionBlock*>(obj) != nullptr;
     });
     layer = SortingLayer::MARIO;
-    nextPowerUp = MARIO_POWERUP_RACOON;
+    nextPowerUp = MARIO_POWERUP_SMALL;
     SetState(MARIO_STATE_POWER_UP);
 }
 
@@ -140,6 +141,11 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
                 {
                     CBrick* brick = dynamic_cast<CBrick*>(obj);
                     brick->Hit();
+                }
+                else if (dynamic_cast<CQuestionBlock*>(obj) != NULL)
+                {
+                    CQuestionBlock* questionBlock = dynamic_cast<CQuestionBlock*>(obj);
+                    questionBlock->Hit(sign(questionBlock->GetPosition().x - position.x));
                 }
             }
         }

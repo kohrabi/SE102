@@ -163,6 +163,7 @@ void CBrick::OnDelete()
 
 void CBrick::SwitchToBrick()
 {
+    // I might have to use smart pointer if some other thing come up
     if (coin == nullptr || coin->GetState() == 0 || coin->IsDeleted()) {
         Delete();
         return;

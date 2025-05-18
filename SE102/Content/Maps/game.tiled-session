@@ -21,11 +21,11 @@
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 4,
+            "scale": 0.75,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 541.5,
-                "y": 425.125
+                "x": 110.66666666666669,
+                "y": 485.99999999999994
             }
         },
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx": {
@@ -75,7 +75,7 @@
             "scaleInEditor": 3
         },
         "mariotiles.tsx": {
-            "scaleInDock": 3
+            "scaleInDock": 1.5
         },
         "mariotiles32.tsx": {
             "scaleInDock": 1.5,
