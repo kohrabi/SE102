@@ -6,6 +6,7 @@
 #include "Engine/CollisionCast.h"
 
 constexpr float PUFF_TIME = 400.0f;
+constexpr float SWITCH_BACK_TIME = 5000.0f;
 
 #define P_BUTTON_STATE_ACTIVE 1
 #define P_BUTTON_STATE_INACTIVE 2
@@ -14,6 +15,8 @@ class CPButton : public CGameObject {
 private:
 	bool isHit = false;
 	float puffTimer = 0.0f;
+	float switchBackTimer = 0.0f;
+	bool switched = false;
 
 	static bool IsContentLoaded;
 	static void LoadContent();

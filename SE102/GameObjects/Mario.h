@@ -43,7 +43,7 @@ constexpr float ENEMY_BOUNCE = 0x04000 * SUBSUBSUBPIXEL_DELTA_TIME;
 
 #pragma region Others
 
-constexpr float POWER_TIME = 8 * 1000.0f / 60.0f * 1.2f;
+constexpr float POWER_TIME = 8 * 1000.0f / 60.0f * 1.0f;
 constexpr float POWER_REDUCE_TIME = 23 * 1000.0f / 60.0f;
 constexpr int MAX_POWER_COUNT = 7;
 constexpr float FLY_P_TIMER = 0x80 * 1000.0f / 60.0f;

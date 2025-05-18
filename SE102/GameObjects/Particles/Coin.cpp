@@ -4,6 +4,7 @@
 
 #include "ContentIds/Coin.h"
 #include "ScorePopup.h"
+#include "GameObjects/Blocks/Brick.h"
 
 #include <iostream>
 #include <algorithm>
@@ -38,8 +39,28 @@ void CCoin::SetState(int state)
 
 void CCoin::OnDelete()
 {
-    CGame* const game = CGame::GetInstance();
-    game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
+    if (!noScore) {
+        CGame* const game = CGame::GetInstance();
+        game->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y));
+    }
+    if (brick != NULL) {
+        brick->Delete();
+    }
+}
+
+void CCoin::SwitchToBrick()
+{
+    state = COIN_STATE_BRICK;
+    brick = new CBrick(position.x, position.y);
+    CGame::GetInstance()->GetCurrentScene()->AddObject(brick);
+}
+
+void CCoin::SwitchToCoin()
+{
+    if (brick == NULL)
+        return;
+    brick->Delete();
+    brick = NULL;
 }
 
 void CCoin::Update(float dt, vector<LPGAMEOBJECT>* coObjects)

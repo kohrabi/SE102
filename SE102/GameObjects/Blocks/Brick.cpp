@@ -75,7 +75,7 @@ void CBrick::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
         }
         //CCollision::GetInstance()->Process(this, dt, coObjects);
     }
-    else
+    else if (state == BRICK_STATE_BREAK)
     {
         CGame* const game = CGame::GetInstance();
         float cx, cy;
@@ -105,7 +105,7 @@ void CBrick::Render()
         animations->Get(BRICK_ID_ANIMATION_IDLE)->Render(position.x, position.y, GetLayer(layer, orderInLayer));
         turnCast.RenderBoundingBox();
     }
-    else
+    else if (state == BRICK_STATE_BREAK)
     {
         for (int i = 0; i < 4; i++)
         {
@@ -143,6 +143,14 @@ void CBrick::Hit()
     isHit = true;
 }
 
+void CBrick::OnDelete()
+{
+    if (coin != NULL) {
+        dynamic_cast<CCoin*>(coin)->SetNoScore();
+        coin->Delete();
+    }
+}
+
 void CBrick::OnCollisionWith(LPCOLLISIONEVENT e)
 {
     if (dynamic_cast<CKoopa*>(e->obj) && e->dy == 0.0f)
@@ -150,4 +158,22 @@ void CBrick::OnCollisionWith(LPCOLLISIONEVENT e)
         dynamic_cast<CKoopa*>(e->obj)->TurnAround();
         Hit();
     }
+}
+
+void CBrick::SwitchToBrick()
+{
+    if (coin == NULL || coin->IsDeleted())
+        return;
+    if (dynamic_cast<CCoin*>(coin) != nullptr)
+        dynamic_cast<CCoin*>(coin)->SetNoScore();
+    coin->Delete();
+    coin = NULL;
+    SetState(BRICK_STATE_NORMAL);
+}
+
+void CBrick::SwitchToCoin()
+{
+    SetState(BRICK_STATE_COIN);
+    coin = new CCoin(position.x, position.y);
+    CGame::GetInstance()->GetCurrentScene()->AddObject(coin);
 }

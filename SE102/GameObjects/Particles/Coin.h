@@ -12,13 +12,16 @@ constexpr float COIN_Y_DESTROY = 0x02000 * SUBSUBSUBPIXEL;
 
 #define COIN_STATE_INTRO 1
 #define COIN_STATE_NORMAL 2
+#define COIN_STATE_BRICK 3
 
 class CCoin : public CGameObject {
 private:
     static void LoadContent();
     static bool IsContentLoaded;
 
+    CGameObject* brick;
     float killTimer = 0.0f;
+    bool noScore = false;
     float maxYPos;
 public:
 	// Tile number xTile counting from 0
@@ -34,8 +37,8 @@ public:
 
     void OnDelete() override;
 
-
-	int IsCollidable() override { return true; };
+    void SetNoScore() { noScore = true; }
+	int IsCollidable() override { return state != COIN_STATE_BRICK; };
     int IsBlocking() override { return false; }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) { 
         left = position.x - 8;
@@ -43,6 +46,8 @@ public:
         right = position.x + 8;
         bottom = position.y + 8; 
     }
+    void SwitchToBrick();
+    void SwitchToCoin();
 
 	void Update(float dt, vector<LPGAMEOBJECT>* coObjects = NULL) override;
 	void Render() override;

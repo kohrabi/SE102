@@ -93,7 +93,7 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(float dt)
 {
-	//cout << objects.size() << '\n';
+	cout << objects.size() << '\n';
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 

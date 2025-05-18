@@ -56,10 +56,11 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
     spinCast.SetConditionFunction([this](LPGAMEOBJECT obj) {
         return dynamic_cast<CKoopa*>(obj) != nullptr ||
             dynamic_cast<CGoomba*>(obj) != nullptr || 
-            dynamic_cast<CPiranha*>(obj) != nullptr;
+            dynamic_cast<CPiranha*>(obj) != nullptr ||
+            dynamic_cast<CBrick*>(obj) != nullptr;
     });
     layer = SortingLayer::MARIO;
-    nextPowerUp = MARIO_POWERUP_SMALL;
+    nextPowerUp = MARIO_POWERUP_RACOON;
     SetState(MARIO_STATE_POWER_UP);
 }
 
@@ -100,7 +101,7 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
     {
         LPANIMATION animation = CAnimations::GetInstance()->Get(MARIO_RACOON_ID_ANIMATION_SPIN);
 
-        spinCast.SetBoundingBox(position + Vector2(0.0f, 8.0f), Vector2(46.0f, 10.0f));
+        spinCast.SetBoundingBox(position + Vector2(0.0f, 8.0f), Vector2(36.0f, 10.0f));
         //spinCast.CheckOverlap(coObjects);
         if (animation->GetCurrentFrameIndex() == 0 || animation->GetCurrentFrameIndex() == 4)
         {
@@ -134,6 +135,11 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
                 {
                     CPiranha* piranha = dynamic_cast<CPiranha*>(obj);
                     piranha->Delete();
+                }
+                else if (dynamic_cast<CBrick*>(obj) != NULL)
+                {
+                    CBrick* brick = dynamic_cast<CBrick*>(obj);
+                    brick->Hit();
                 }
             }
         }

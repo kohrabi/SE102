@@ -52,6 +52,23 @@ CPButton::CPButton(float x, float y)
 void CPButton::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 {
     puffTimer -= dt;
+    if (switchBackTimer > 0) switchBackTimer -= dt;
+    else if (switched) {
+        CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+        const vector<LPGAMEOBJECT>& objects = currentScene->GetObjectList();
+        int size = objects.size();
+
+        for (int i = 0; i < size; i++) {
+            LPGAMEOBJECT object = objects[i];
+            if (object == NULL || object->IsDeleted() || !object->IsColliderInCamera()) continue;
+            if (object->GetState() == BRICK_STATE_COIN && dynamic_cast<CBrick*>(object) != nullptr)
+                dynamic_cast<CBrick*>(object)->SwitchToBrick();
+            if (object->GetState() == COIN_STATE_BRICK && dynamic_cast<CCoin*>(object) != nullptr)
+                dynamic_cast<CCoin*>(object)->SwitchToCoin();
+        }
+
+        switched = false;
+    }
 }
 
 void CPButton::Render()
@@ -70,18 +87,22 @@ void CPButton::SetState(int state)
 
 void CPButton::Hit()
 {
+    if (state == P_BUTTON_STATE_INACTIVE)
+        return;
     SetState(P_BUTTON_STATE_INACTIVE);
     CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
     currentScene->GetCamera()->Shake();
     const vector<LPGAMEOBJECT>& objects = currentScene->GetObjectList();
-    for (int i = 0; i < objects.size(); i++)
+    int size = objects.size();
+    for (int i = 0; i < size; i++)
     {
         LPGAMEOBJECT object = objects[i];
-        if (object == NULL || object->IsDeleted()) continue;
-        if (dynamic_cast<CBrick*>(object) != nullptr && object->IsColliderInCamera())
-        {
-            currentScene->AddObject(new CCoin(object->GetPosition().x, object->GetPosition().y));
-            object->Delete();
-        }
+        if (object == NULL || object->IsDeleted() || !object->IsColliderInCamera()) continue;
+        if (dynamic_cast<CBrick*>(object) != nullptr)
+            dynamic_cast<CBrick*>(object)->SwitchToCoin();
+        else if (dynamic_cast<CCoin*>(object) != nullptr)
+            dynamic_cast<CCoin*>(object)->SwitchToBrick();
     }
+    switched = true;
+    switchBackTimer = SWITCH_BACK_TIME;
 }
