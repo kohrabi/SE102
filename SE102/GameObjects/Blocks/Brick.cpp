@@ -146,7 +146,8 @@ void CBrick::Hit()
 void CBrick::OnDelete()
 {
     if (coin != nullptr && !coin->IsDeleted()) {
-        dynamic_cast<CCoin*>(coin)->SetNoScore();
+        if (dynamic_cast<CCoin*>(coin) != nullptr)
+            dynamic_cast<CCoin*>(coin)->SetNoScore();
         coin->Delete();
     }
 }

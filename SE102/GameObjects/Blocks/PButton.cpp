@@ -60,7 +60,7 @@ void CPButton::Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 
         for (int i = 0; i < size; i++) {
             LPGAMEOBJECT object = objects[i];
-            if (object == NULL || object->IsDeleted() || !object->IsColliderInCamera()) continue;
+            if (object == NULL || object->IsDeleted()/* || !object->IsColliderInCamera()*/) continue;
             if (object->GetState() == BRICK_STATE_COIN && dynamic_cast<CBrick*>(object) != nullptr)
                 dynamic_cast<CBrick*>(object)->SwitchToBrick();
             else if (object->GetState() == COIN_STATE_BRICK && dynamic_cast<CCoin*>(object) != nullptr)
@@ -97,7 +97,7 @@ void CPButton::Hit()
     for (int i = 0; i < size; i++)
     {
         LPGAMEOBJECT object = objects[i];
-        if (object == NULL || object->IsDeleted() || !object->IsColliderInCamera()) continue;
+        if (object == NULL || object->IsDeleted()/* || !object->IsColliderInCamera()*/) continue;
         if (dynamic_cast<CBrick*>(object) != nullptr)
             dynamic_cast<CBrick*>(object)->SwitchToCoin();
         else if (dynamic_cast<CCoin*>(object) != nullptr)
