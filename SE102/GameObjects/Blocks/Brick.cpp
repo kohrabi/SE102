@@ -137,6 +137,15 @@ void CBrick::SetState(int state)
     this->state = state;
 }
 
+void CBrick::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+    if (dynamic_cast<CKoopa*>(e->obj) && e->dy == 0.0f)
+    {
+        dynamic_cast<CKoopa*>(e->obj)->TurnAround();
+        Hit();
+    }
+}
+
 void CBrick::Hit()
 {
     SetState(BRICK_STATE_BREAK);
@@ -145,19 +154,10 @@ void CBrick::Hit()
 
 void CBrick::OnDelete()
 {
-    if (coin != nullptr && !coin->IsDeleted()) {
+    if (coin != nullptr && !coin->IsDeleted() && coin->GetState() != 0) {
         if (dynamic_cast<CCoin*>(coin) != nullptr)
             dynamic_cast<CCoin*>(coin)->SetNoScore();
         coin->Delete();
-    }
-}
-
-void CBrick::OnCollisionWith(LPCOLLISIONEVENT e)
-{
-    if (dynamic_cast<CKoopa*>(e->obj) && e->dy == 0.0f)
-    {
-        dynamic_cast<CKoopa*>(e->obj)->TurnAround();
-        Hit();
     }
 }
 
