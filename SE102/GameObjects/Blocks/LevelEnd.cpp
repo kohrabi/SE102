@@ -100,8 +100,8 @@ void CLevelEnd::Hit()
     int currentFrame = currentRewardAnimation->GetCurrentFrameIndex();
     timer = LEVEL_END_COURSE_TIME * 2;
     course = 1;
-    CGameObject* reward;
-    if (currentFrame == 0)
+    CLevelEndReward* reward;
+    if (true)
     {
         reward = new CLevelEndReward(position.x, position.y, LEVEL_END_ID_ANIMATION_MUSHROOM);
         currentRewardSlot = REWARD_FRAMES_MUSHROOM;
@@ -119,9 +119,19 @@ void CLevelEnd::Hit()
         currentRewardSlot = REWARD_FRAMES_STAR;
         game->SetNextItemFrame(REWARD_FRAMES_STAR);
     }
-    if (game->GetNextItemFrame() >= 0) {
-        CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-        playScene->GetCamera()->SetFollowObject(reward);
+    if (game->GetNextItemFrame() >= 3) {
+        bool firework = true;
+        for (int i = 1; i < 3; i++) {
+            if (game->GetItemFrame(i) != game->GetItemFrame(i - 1)) {
+                firework = false;
+                break;
+            }
+        }
+        if (firework) {
+            reward->SetFirework();
+            CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+            playScene->GetCamera()->SetFollowObject(reward);
+        }
     }
     game->GetCurrentScene()->AddObject(0, reward);
     SetState(LEVEL_END_STATE_EMPTY);

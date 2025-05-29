@@ -149,7 +149,9 @@
     <ClCompile Include="GameObjects\Camera.cpp" />
     <ClCompile Include="GameObjects\HUD.cpp" />
     <ClCompile Include="GameObjects\Level\KillBarrier.cpp" />
+    <ClCompile Include="GameObjects\NPC\Boomerang.cpp" />
     <ClCompile Include="GameObjects\NPC\Fireball.cpp" />
+    <ClCompile Include="GameObjects\NPC\HammerBro.cpp" />
     <ClCompile Include="GameObjects\Particles\Firework.cpp" />
     <ClCompile Include="GameObjects\Particles\FireworkPattern.cpp" />
     <ClCompile Include="GameObjects\Particles\LevelEndReward.cpp" />
@@ -191,6 +193,8 @@
     <ClInclude Include="ContentIds\GreenFirePiranha.h" />
     <ClInclude Include="ContentIds\GreenKoopa.h" />
     <ClInclude Include="ContentIds\GreenPiranha.h" />
+    <ClInclude Include="ContentIds\Hammer.h" />
+    <ClInclude Include="ContentIds\HammerBro.h" />
     <ClInclude Include="ContentIds\HUD.h" />
     <ClInclude Include="ContentIds\Leaf.h" />
     <ClInclude Include="ContentIds\LevelEnd.h" />
@@ -231,7 +235,9 @@
     <ClInclude Include="GameObjects\GameGlobals.h" />
     <ClInclude Include="GameObjects\HUD.h" />
     <ClInclude Include="GameObjects\Level\KillBarrier.h" />
+    <ClInclude Include="GameObjects\NPC\Boomerang.h" />
     <ClInclude Include="GameObjects\NPC\Fireball.h" />
+    <ClInclude Include="GameObjects\NPC\HammerBro.h" />
     <ClInclude Include="GameObjects\Particles\Firework.h" />
     <ClInclude Include="GameObjects\Particles\FireworkPattern.h" />
     <ClInclude Include="GameObjects\Particles\LevelEndReward.h" />

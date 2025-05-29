@@ -22,7 +22,7 @@ void SpawnFireworkPattern(int pattern, Vector2 center)
 		playScene->AddObject(new CFirework(
 			spawnPos.x,
 			spawnPos.y,
-			spawnPos.distance(center) * 5.0f
+			roundf(spawnPos.distance(center) * 5.0f)
 			));
 	}
 	//CAnimation* animation = CAnimations::GetInstance()->Get(FIREWORK_ID_ANIMATION_NORMAL);

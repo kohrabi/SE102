@@ -29,6 +29,8 @@
 #include "Blocks/Brick.h"
 #include "Blocks/LevelEnd.h"
 #include "Blocks/PButton.h"
+#include "NPC/Boomerang.h"
+#include "NPC/HammerBro.h"
 using namespace std;
 
 bool CMario::IsContentLoaded = false;
@@ -58,7 +60,8 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
             dynamic_cast<CGoomba*>(obj) != nullptr || 
             dynamic_cast<CPiranha*>(obj) != nullptr ||
             dynamic_cast<CBrick*>(obj) != nullptr ||
-            dynamic_cast<CQuestionBlock*>(obj) != nullptr;
+            dynamic_cast<CQuestionBlock*>(obj) != nullptr ||
+            dynamic_cast<CHammerBro*>(obj) != nullptr;
     });
     layer = SortingLayer::MARIO;
     nextPowerUp = MARIO_POWERUP_SMALL;
@@ -146,6 +149,11 @@ void CMario::marioNormalUpdate(float dt, vector<LPGAMEOBJECT>* coObjects)
                 {
                     CQuestionBlock* questionBlock = dynamic_cast<CQuestionBlock*>(obj);
                     questionBlock->Hit(sign(questionBlock->GetPosition().x - position.x));
+                }
+                else if (dynamic_cast<CHammerBro*>(obj) != NULL)
+                {
+                    CHammerBro* hammerBro = dynamic_cast<CHammerBro*>(obj);
+                    hammerBro->DeadBounce();
                 }
             }
         }
@@ -667,6 +675,22 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
             }
         }
     }
+    else if (dynamic_cast<CHammerBro*>(e->obj))
+    {
+        CHammerBro* const hammerBro = dynamic_cast<CHammerBro*>(e->obj);
+        if (hammerBro->GetState() != HAMMER_BRO_STATE_DEAD && hammerBro->GetState() != HAMMER_BRO_STATE_DEAD)
+        {
+            if (e->ny >= 0)
+            {
+                SetState(MARIO_STATE_DEAD);
+            }
+            else
+            {
+                hammerBro->SetKill();
+                velocity.y = -ENEMY_BOUNCE;
+            }
+        }
+    }
     else if (dynamic_cast<COneUp*>(e->obj))
     {
         dynamic_cast<COneUp*>(e->obj)->Eat();
@@ -715,7 +739,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
         {
             game->GetCurrentScene()->AddObject(new CScorePopup(e->obj->GetPosition().x, e->obj->GetPosition().y, Score1000));
         }
-       
     }
     else if (dynamic_cast<CKoopa*>(e->obj))
     {
@@ -750,6 +773,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e) {
     {
         SetState(MARIO_STATE_DEAD);
     }
+    else if (dynamic_cast<CBoomerang*>(e->obj))
+    {
+        SetState(MARIO_STATE_DEAD);
+        }
     else if (dynamic_cast<CPiranha*>(e->obj))
     {
         SetState(MARIO_STATE_DEAD);

@@ -16,6 +16,7 @@ private:
 
 	int animationID = 0;
 	float timer = 0.0f;
+	bool firework = false;
 public:
 	CLevelEndReward(float x, float y, int animationID);
 
@@ -24,6 +25,7 @@ public:
 	void Render() override;
 	void SetState(int state) override;
 	void OnDelete() override;
+	void SetFirework() { firework = true; }
 
 	int IsCollidable() override { return 0; };
 	int IsBlocking() override { return 0; }

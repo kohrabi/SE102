@@ -93,7 +93,7 @@ public:
 	void SetItemFrame(int index, int newVal) 
 	{ 
 		ASSERT(index >= 0 && index <= 2, "INVALID INDEX");
-		ASSERT(newVal >= 1 && newVal <= 3, "INVALID VALUE");
+		ASSERT(newVal >= 0 && newVal <= 3, "INVALID VALUE");
 		gameGlobals.rewardFrames[index] = newVal; 
 	}
 

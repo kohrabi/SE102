@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "firework.tsx",
+    "activeFile": "1-1.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -21,11 +21,11 @@
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 2,
+            "scale": 4,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 1424.25,
-                "y": 375.75
+                "x": 2712.875,
+                "y": 437.875
             }
         },
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx": {
@@ -75,10 +75,10 @@
                 2
             ],
             "scale": 5.5,
-            "selectedLayer": -1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 63.54545454545454,
-                "y": 57.9090909090909
+                "x": 69.54545454545453,
+                "y": 74.45454545454547
             }
         },
         "fireworkMushroom.tmx": {
@@ -129,16 +129,15 @@
     "map.tileWidth": 8,
     "map.width": 16,
     "openFiles": [
-        "1-1.tmx",
-        "firework.tsx"
+        "1-1.tmx"
     ],
     "project": "game.tiled-project",
     "property.type": "int",
     "recentFiles": [
         "1-1.tmx",
+        "fireworkFlower.tmx",
         "firework.tsx",
         "fireworkStar.tmx",
-        "fireworkFlower.tmx",
         "fireworkMushroom.tmx",
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx",
         "1-1 - Copy.tmx",

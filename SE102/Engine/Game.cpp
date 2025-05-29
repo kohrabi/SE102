@@ -96,7 +96,7 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 	pD3DDevice->RSSetViewports(1, &viewPort);
 
 	D3D10_SAMPLER_DESC desc;
-	desc.Filter = D3D10_FILTER_MIN_MAG_MIP_POINT; 
+	desc.Filter = D3D10_FILTER_MIN_MAG_MIP_POINT;
 	desc.AddressU = D3D10_TEXTURE_ADDRESS_MIRROR;
 	desc.AddressV = D3D10_TEXTURE_ADDRESS_MIRROR;
 	desc.AddressW = D3D10_TEXTURE_ADDRESS_MIRROR;
@@ -159,8 +159,8 @@ void CGame::Init(HWND hWnd, HINSTANCE hInstance)
 
 void CGame::SetPointSamplerState()
 {
-	// pD3DDevice->VSSetSamplers(0, 1, &pPointSamplerState);
-	// pD3DDevice->GSSetSamplers(0, 1, &pPointSamplerState);
+	pD3DDevice->VSSetSamplers(0, 1, &pPointSamplerState);
+	pD3DDevice->GSSetSamplers(0, 1, &pPointSamplerState);
 	pD3DDevice->PSSetSamplers(0, 1, &pPointSamplerState);
 }
 
@@ -573,8 +573,8 @@ void CGame::SwitchScene()
 
 	scenes[current_scene]->Unload();
 
-	CSprites::GetInstance()->Clear();
-	CAnimations::GetInstance()->Clear();
+//	CSprites::GetInstance()->Clear();
+//	CAnimations::GetInstance()->Clear();
 
 	current_scene = next_scene;
 	LPSCENE s = scenes[next_scene];
@@ -589,6 +589,13 @@ void CGame::ResetScene()
 		DebugOut(L"[ERROR] Cannot reset scene this->resetScene is false\n");
 		return;
 	}
+
+	if (GetNextItemFrame() >= 3) {
+		SetItemFrame(0, 0);
+		SetItemFrame(1, 0);
+		SetItemFrame(2, 0);
+	}
+
 	DebugOut(L"[INFO] Reset scene %d\n", current_scene);
 
 	scenes[current_scene]->Unload();

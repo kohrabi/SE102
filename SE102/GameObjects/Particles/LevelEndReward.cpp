@@ -34,7 +34,8 @@ void CLevelEndReward::Update(float dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	if (state == LEVEL_END_REWARD_STATE_NORMAL) {
-		position.x -= 0x00100 * SUBSUBSUBPIXEL_DELTA_TIME * dt;
+		if (firework)
+			position.x -= 0x000A0 * SUBSUBSUBPIXEL_DELTA_TIME * dt;
 		position.y -= 0x02800 * SUBSUBSUBPIXEL_DELTA_TIME * dt;
 	}
 }
@@ -57,7 +58,9 @@ void CLevelEndReward::SetState(int state)
 		break;
 	case LEVEL_END_REWARD_STATE_END: 
 	{
-		SpawnFireworkPattern(0, position);
+		if (firework) {
+			SpawnFireworkPattern(0, position);
+		}
 		timer = LEVEL_END_REWARD_END_TIMER;
 		CAnimations* const animations = CAnimations::GetInstance();
 		auto animation = animations->GetInstance()->Get(LEVEL_END_ID_ANIMATION_END);

@@ -28,6 +28,7 @@
 #include <GameObjects/Camera.h>
 
 #include <GameObjects/Particles/FireworkPattern.h>
+#include <GameObjects/NPC/HammerBro.h>
 
 using namespace std;
 
@@ -461,6 +462,11 @@ void CPlayScene::LoadLayers(CTextures* const textures, const tmx::Map& tMap, con
 						obj->SetRedKoopa();
 					objects.push_back(obj);
 				}
+				else if (layerObject.getClass() == "CHammerBro")
+				{
+					CHammerBro* obj = new CHammerBro(position.x, position.y);
+					objects.push_back(obj);
+				}	
 			}
 		}
 		else if (layer->getType() == tmx::Layer::Type::Tile)
