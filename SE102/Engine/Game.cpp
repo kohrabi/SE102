@@ -594,6 +594,7 @@ void CGame::ResetScene()
 		SetItemFrame(0, 0);
 		SetItemFrame(1, 0);
 		SetItemFrame(2, 0);
+		gameGlobals.nextEmptySlot = 0;
 	}
 
 	DebugOut(L"[INFO] Reset scene %d\n", current_scene);
