@@ -7,8 +7,10 @@
 
 #include "ContentIds/LevelEnd.h"
 #include "ContentIds/HUD.h"
+#include "GameObjects/Particles/LevelEndReward.h"
 
 #include <iostream>
+#include <Engine/PlayScene.h>
 using namespace std;
 
 bool CLevelEnd::IsContentLoaded = false;
@@ -66,19 +68,16 @@ void CLevelEnd::Render()
         }
         if (currentRewardSlot == REWARD_FRAMES_MUSHROOM)
         {
-            animations->Get(LEVEL_END_ID_ANIMATION_MUSHROOM)->Render(position.x, position.y + yOffset, 1.0f);
             if (course >= 3)
                 sprites->Get(HUD_ID_SPRITE_REWARDS_FRAME_0)->Draw(position.x + 60.0f, position.y - 46.0f, 1.0f);
         }
         else if (currentRewardSlot == REWARD_FRAMES_FLOWER)
         {
-            animations->Get(LEVEL_END_ID_ANIMATION_FLOWER)->Render(position.x, position.y + yOffset, 1.0f);
             if (course >= 3)
                 sprites->Get(HUD_ID_SPRITE_REWARDS_FRAME_1)->Draw(position.x + 60.0f, position.y - 46.0f, 1.0f);
         }
         else
         {
-            animations->Get(LEVEL_END_ID_ANIMATION_STAR)->Render(position.x, position.y + yOffset, 1.0f);
             if (course >= 3)
                 sprites->Get(HUD_ID_SPRITE_REWARDS_FRAME_2)->Draw(position.x + 60.0f, position.y - 46.0f, 1.0f);
 
@@ -95,25 +94,35 @@ void CLevelEnd::SetState(int state)
 
 void CLevelEnd::Hit()
 {
+    CGame* const game = CGame::GetInstance();
     LPANIMATION currentRewardAnimation = CAnimations::GetInstance()->Get(LEVEL_END_ID_ANIMATION_SLOT);
     currentRewardAnimation->Stop();
     int currentFrame = currentRewardAnimation->GetCurrentFrameIndex();
     timer = LEVEL_END_COURSE_TIME * 2;
     course = 1;
+    CGameObject* reward;
     if (currentFrame == 0)
     {
+        reward = new CLevelEndReward(position.x, position.y, LEVEL_END_ID_ANIMATION_MUSHROOM);
         currentRewardSlot = REWARD_FRAMES_MUSHROOM;
-        CGame::GetInstance()->SetNextItemFrame(REWARD_FRAMES_MUSHROOM);
+        game->SetNextItemFrame(REWARD_FRAMES_MUSHROOM);
     }
     else if (currentFrame == 1)
     {
+        reward = new CLevelEndReward(position.x, position.y, LEVEL_END_ID_ANIMATION_FLOWER);
         currentRewardSlot = REWARD_FRAMES_FLOWER;
-        CGame::GetInstance()->SetNextItemFrame(REWARD_FRAMES_FLOWER);
+        game->SetNextItemFrame(REWARD_FRAMES_FLOWER);
     }
     else
     {
+        reward = new CLevelEndReward(position.x, position.y, LEVEL_END_ID_ANIMATION_STAR);
         currentRewardSlot = REWARD_FRAMES_STAR;
-        CGame::GetInstance()->SetNextItemFrame(REWARD_FRAMES_STAR);
+        game->SetNextItemFrame(REWARD_FRAMES_STAR);
     }
+    if (game->GetNextItemFrame() >= 0) {
+        CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+        playScene->GetCamera()->SetFollowObject(reward);
+    }
+    game->GetCurrentScene()->AddObject(0, reward);
     SetState(LEVEL_END_STATE_EMPTY);
 }

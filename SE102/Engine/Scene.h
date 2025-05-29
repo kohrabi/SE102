@@ -40,6 +40,7 @@ public:
 	const vector<LPGAMEOBJECT>& GetObjectList() const { return objects; }
 	LPGAMEOBJECT const GetPlayer() const { return player; } 
 	void AddObject(LPGAMEOBJECT object) { objects.push_back(object); }
+	void AddObject(int position, LPGAMEOBJECT object) { objects.insert(objects.begin() + position, object); }
 
 	D3DXCOLOR GetBackgroundColor() { return backgroundColor; }
 };

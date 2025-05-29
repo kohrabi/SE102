@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "1-1.tmx",
+    "activeFile": "firework.tsx",
     "expandedProjectPaths": [
         "."
     ],
@@ -21,11 +21,11 @@
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 0.75,
+            "scale": 2,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 110.66666666666669,
-                "y": 485.99999999999994
+                "x": 1424.25,
+                "y": 375.75
             }
         },
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx": {
@@ -66,6 +66,43 @@
             "scaleInDock": 3,
             "scaleInEditor": 4
         },
+        "firework.tsx": {
+            "scaleInDock": 23,
+            "scaleInEditor": 23
+        },
+        "fireworkFlower.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 5.5,
+            "selectedLayer": -1,
+            "viewCenter": {
+                "x": 63.54545454545454,
+                "y": 57.9090909090909
+            }
+        },
+        "fireworkMushroom.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 4,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 57.875,
+                "y": 69.875
+            }
+        },
+        "fireworkStar.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 3,
+            "selectedLayer": -1,
+            "viewCenter": {
+                "x": 79.83333333333331,
+                "y": 59.833333333333314
+            }
+        },
         "mario.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 4
@@ -83,30 +120,39 @@
         }
     },
     "last.executablePath": "D:/Code/VS/SE102/SE102/Content/Maps/CollisionGenerator.exe",
-    "last.imagePath": "D:/Code/VS/SE102/SE102/Content",
-    "last.objectTemplatePath": "D:/Code/VS/SE102/SE102/Content/Maps",
+    "last.imagePath": "D:/Code/SE102/SE102/Content",
+    "last.objectTemplatePath": "D:/Code/SE102/SE102/Content/Maps",
     "last.workingDirectory": "D:/Code/VS/SE102/SE102/Content/Maps",
+    "map.height": 16,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 8,
+    "map.tileWidth": 8,
+    "map.width": 16,
     "openFiles": [
-        "1-1.tmx"
+        "1-1.tmx",
+        "firework.tsx"
     ],
     "project": "game.tiled-project",
     "property.type": "int",
     "recentFiles": [
         "1-1.tmx",
+        "firework.tsx",
+        "fireworkStar.tmx",
+        "fireworkFlower.tmx",
+        "fireworkMushroom.tmx",
         "D:/Code/CollisionGenerator/x64/Debug/1-1.tmx",
         "1-1 - Copy.tmx",
         "enemies32.tsx",
         "enemies.tsx",
         "marioTiles32.tsx",
         "mario.tsx",
-        "cloud.tsx",
-        "mariotiles32.tsx"
+        "cloud.tsx"
     ],
     "resizeMap.removeObjects": false,
     "tileset.lastUsedFormat": "tsx",
     "tileset.margin": 0,
     "tileset.tileSize": {
-        "height": 32,
-        "width": 16
+        "height": 8,
+        "width": 8
     }
 }

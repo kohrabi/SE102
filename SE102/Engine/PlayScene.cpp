@@ -27,6 +27,8 @@
 #include <GameObjects/Blocks/LevelEnd.h>
 #include <GameObjects/Camera.h>
 
+#include <GameObjects/Particles/FireworkPattern.h>
+
 using namespace std;
 
 CPlayScene::CPlayScene(int id, wstring filePath):
@@ -80,11 +82,15 @@ void CPlayScene::Load()
 		}
 	}
 
+	LoadFireworkPatterns();
+
 	CTextures* const textures = CTextures::GetInstance();
 	textures->Add(L"Content/menu.png");
 	hud = new CHUD(this);
 	camera = new CCamera();
 	objects.push_back(camera);
+
+	camera->SetFollowObject(player);
 
 	f.close();
 

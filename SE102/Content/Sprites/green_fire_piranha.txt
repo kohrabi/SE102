@@ -1,5 +1,5 @@
 # EDITOR 
-# EDITOR rootPath D:\Code\VS\SE102\SE102
+# EDITOR rootPath D:\Code\SE102\SE102
 # EDITOR startID 21000
 # EDITOR objectName Green Fire Piranha
 

@@ -1,0 +1,21 @@
+# EDITOR 
+# EDITOR rootPath D:\Code\SE102\SE102\
+# EDITOR startID 25000
+# EDITOR objectName Firework
+
+[TEXTURES]
+Content\firework.png 0
+
+[SPRITES]
+
+# NORMAL
+25001 0 0 7 7 0
+25002 8 0 15 7 0
+25003 16 0 23 7 0
+25004 8 0 15 7 0
+
+
+[ANIMATIONS]
+25005 25001 100 25002 100 25003 100 25004 100 
+# EDITOR animationName Normal
+

@@ -120,6 +120,15 @@
     <ClCompile Include="GameObjects\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects\Particles\Firework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Particles\FireworkPattern.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Particles\LevelEndReward.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -358,6 +367,18 @@
     <ClInclude Include="GameObjects\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameObjects\Particles\Firework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentIds\Firework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Particles\FireworkPattern.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Particles\LevelEndReward.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Content\Scenes\1-1.txt" />
@@ -378,5 +399,14 @@
     <Text Include="Content\Sprites\wing.txt" />
     <Text Include="Content\Sprites\leaf.txt" />
     <Text Include="Content\Sprites\marioracoon.txt" />
+    <Text Include="Content\Sprites\brick.txt" />
+    <Text Include="Content\Sprites\firework.txt" />
+    <Text Include="Content\Sprites\green_fire_piranha.txt" />
+    <Text Include="Content\Sprites\green_piranha.txt" />
+    <Text Include="Content\Sprites\hud.txt" />
+    <Text Include="Content\Sprites\levelend.txt" />
+    <Text Include="Content\Sprites\oneup.txt" />
+    <Text Include="Content\Sprites\particles.txt" />
+    <Text Include="Content\Sprites\pbutton.txt" />
   </ItemGroup>
 </Project>
