@@ -64,7 +64,7 @@ CMario::CMario(float x, float y) : CGameObject(x, y, 0.0f)
             dynamic_cast<CHammerBro*>(obj) != nullptr;
     });
     layer = SortingLayer::MARIO;
-    nextPowerUp = MARIO_POWERUP_SMALL;
+    nextPowerUp = MARIO_POWERUP_RACOON;
     SetState(MARIO_STATE_POWER_UP);
 }
 
@@ -370,7 +370,7 @@ void CMario::Update(float dt, vector<LPGAMEOBJECT>* coObjects) {
                 deadJump = true;
             }
             //velocity.y = min(velocity.y + JUMP_GRAVITY / 2.0f, MAX_FALL_SPEED / 2.0f);
-            velocity.y = velocity.y + JUMP_GRAVITY / 2.0f;
+            velocity.y = velocity.y + JUMP_GRAVITY / 5.0f;
             position.y += velocity.y * unscaledDt;
         }
 

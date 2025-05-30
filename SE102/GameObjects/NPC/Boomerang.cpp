@@ -16,7 +16,7 @@ void CBoomerang::LoadContent()
 void CBoomerang::Update(float dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
-	if (abs(parent->GetPosition().x - position.x) <= 16.0f && abs(parent->GetPosition().x - position.x) <= 16.0f && flip)
+	if (abs(parent->GetPosition().x - position.x) <= 16.0f && flip)
 		Delete();
 
 	velocity.x = clampf(velocity.x + BOOMERANG_X_ACCELERATION * nx, -BOOMERANG_X_VELOCITY_LIMIT, BOOMERANG_X_VELOCITY_LIMIT);

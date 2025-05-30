@@ -65,7 +65,7 @@ void CHammerBro::SetState(int state)
         CGame::GetInstance()->GetCurrentScene()->AddObject(new CScorePopup(position.x, position.y, ScoreCombo));
         layer = SortingLayer::CORPSE;
         velocity.y = -OBJECT_DEAD_BOUNCE;
-        position.y += 16.0f;
+        //position.y += 16.0f;
         velocity.x = 0.0f;
     }
     break;
@@ -191,6 +191,6 @@ void CHammerBro::Render() {
         animation->Play();
     else
         animation->Stop();
-    animation->Render(position.x, position.y, GetLayer(layer, orderInLayer), flipX, (state == HAMMER_BRO_STATE_DEAD));
+    animation->Render(position.x, position.y + (state == HAMMER_BRO_STATE_DEAD ? 16.0f : 0.0f), GetLayer(layer, orderInLayer), flipX, (state == HAMMER_BRO_STATE_DEAD));
     //RenderBoundingBox();
 }

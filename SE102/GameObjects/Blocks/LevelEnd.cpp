@@ -101,7 +101,7 @@ void CLevelEnd::Hit()
     timer = LEVEL_END_COURSE_TIME * 2;
     course = 1;
     CLevelEndReward* reward;
-    if (true)
+    if (currentFrame == 0)
     {
         reward = new CLevelEndReward(position.x, position.y, LEVEL_END_ID_ANIMATION_MUSHROOM);
         currentRewardSlot = REWARD_FRAMES_MUSHROOM;
@@ -127,11 +127,16 @@ void CLevelEnd::Hit()
                 break;
             }
         }
-        if (firework) {
-            reward->SetFirework();
-            CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
-            playScene->GetCamera()->SetFollowObject(reward);
-        }
+        //if (firework) {
+        //    reward->SetFirework();
+        //    CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+        //    playScene->GetCamera()->SetFollowObject(reward);
+        //}
+    }
+    if (true) {
+        reward->SetFirework();
+        CPlayScene* playScene = dynamic_cast<CPlayScene*>(game->GetCurrentScene());
+        playScene->GetCamera()->SetFollowObject(reward);
     }
     game->GetCurrentScene()->AddObject(0, reward);
     SetState(LEVEL_END_STATE_EMPTY);

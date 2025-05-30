@@ -59,7 +59,12 @@ void CLevelEndReward::SetState(int state)
 	case LEVEL_END_REWARD_STATE_END: 
 	{
 		if (firework) {
-			SpawnFireworkPattern(0, position);
+			if (animationID == LEVEL_END_ID_ANIMATION_MUSHROOM)
+				SpawnFireworkPattern(0, position);
+			else if (animationID == LEVEL_END_ID_ANIMATION_FLOWER)
+				SpawnFireworkPattern(1, position);
+			else
+				SpawnFireworkPattern(2, position);
 		}
 		timer = LEVEL_END_REWARD_END_TIMER;
 		CAnimations* const animations = CAnimations::GetInstance();
